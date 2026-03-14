@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nearby Healthcare Services</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+  html, body { 
+    height: 100%; 
+    margin: 0; 
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
+  }
+  
+  #map {
+    height: 100vh;
+    width: 100%;
+  }
+
+  /* Search Controls */
+  .controls {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(255,255,255,0.95);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    max-width: 90%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #searchInput { 
+    width: 300px; 
+    max-width: 100%;
+    padding: 10px 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    outline: none; 
+    font-size: 14px; 
+  }
+  
+  #searchInput:focus {
+    border-color: #2d7bff;
+  }
+
+  #searchBtn { 
+    padding: 10px 16px; 
+    border: none; 
+    background: #2d7bff; 
+    color: white; 
+    border-radius: 8px; 
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  #searchBtn:hover { 
+    background: #1a5fd9; 
+  }
+  
+  #searchBtn:disabled { 
+    background: #ccc; 
+    cursor: not-allowed; 
+  }
+
+  #radiusInput { 
+    width: 90px; 
+    padding: 8px; 
+    border-radius: 8px; 
+    border: 1px solid #ccc; 
+    font-size: 14px;
+  }
+
+  /* Category Filter */
+  .category-filters {
+    position: absolute;
+    top: 425px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    gap: 6px;
+    background: rgba(255,255,255,0.95);
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    max-width: 90%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .category-btn {
+    padding: 6px 12px;
+    border: 2px solid;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .category-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .category-btn.active {
+    color: white;
+  }
+
+  /* Loading Indicator */
+  .loading {
+    position: absolute;
+    top: 145px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 14px;
+    display: none;
+    font-weight: 600;
+  }
+  
+  .loading.active { 
+    display: block; 
+  }
+
+  /* Custom Marker Style */
+  .marker-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(-20px);
+  }
+
+  .marker-pin {
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 3px solid white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  .marker-label {
+    background: white;
+    padding: 3px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .muted { 
+    font-size: 12px; 
+    color: #666; 
+    margin-left: 4px; 
+  }
+
+  @media (max-width: 640px) {
+    .controls, .category-filters {
+      font-size: 12px;
+    }
+    #searchInput {
+      width: 200px;
+    }
+  }
+</style>
+</head>
+
+<body>
+<div class="controls" role="search" aria-label="Search controls">
+  <input id="searchInput" placeholder="Search place (city, area, address)" />
+  <input id="radiusInput" type="number" min="500" step="500" value="3000" /> 
+  <span class="muted">meters</span>
+  <button id="searchBtn">🔍 Search</button>
+</div>
+
+<div class="category-filters" id="categoryFilters"></div>
+
+<div class="loading" id="loading">🔄 Loading healthcare services...</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Healthcare Categories
+const categories = [
+  { amenity: "hospital", label: "Hospitals", color: "#dc2626", emoji: "🏥", active: true },
+  { amenity: "dentist", label: "Dentists", color: "#2563eb", emoji: "🦷", active: true },
+  { amenity: "clinic", label: "Clinics", color: "#ea580c", emoji: "🧪", active: true },
+  { amenity: "pharmacy", label: "Pharmacies", color: "#16a34a", emoji: "💊", active: true },
+  { amenity: "doctors", label: "Doctors", color: "#7c3aed", emoji: "👨‍⚕️", active: true }
+];
+
+// Map Setup
+const map = L.map("map").setView([17.6868, 83.2185], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// UI Elements
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const radiusInput = document.getElementById('radiusInput');
+const loadingEl = document.getElementById('loading');
+const categoryFiltersEl = document.getElementById('categoryFilters');
+
+let resultMarkers = [];
+let centerMarker = null;
+let radiusCircle = null;
+
+// Utilities
+function showLoading(show) {
+  loadingEl.classList.toggle('active', show);
+  searchBtn.disabled = show;
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// Custom Icon Generator
+function createHealthcareIcon(label, color, emoji) {
+  return L.divIcon({
+    className: "custom-marker",
+    html: `
+      <div class="marker-wrapper">
+        <div class="marker-pin" style="background: ${color};">
+          <div style="position: absolute; transform: rotate(45deg) translate(7px, -2px); font-size: 20px;">${emoji}</div>
+        </div>
+        <div class="marker-label">${escapeHtml(label)}</div>
+      </div>
+    `,
+    iconSize: [80, 80],
+    iconAnchor: [40, 80]
+  });
+}
+
+// Create Category Filter Buttons
+function createCategoryFilters() {
+  categoryFiltersEl.innerHTML = '';
+  categories.forEach((cat, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'category-btn';
+    btn.style.borderColor = cat.color;
+    if (cat.active) {
+      btn.classList.add('active');
+      btn.style.backgroundColor = cat.color;
+      btn.style.color = 'white';
+    }
+    btn.innerHTML = `${cat.emoji} ${cat.label}`;
+    btn.onclick = () => toggleCategory(idx);
+    categoryFiltersEl.appendChild(btn);
+  });
+}
+
+function toggleCategory(idx) {
+  categories[idx].active = !categories[idx].active;
+  createCategoryFilters();
+  
+  // Re-filter existing markers
+  resultMarkers.forEach(m => {
+    const cat = categories.find(c => c.amenity === m.options.categoryType);
+    if (cat) {
+      if (cat.active) {
+        map.addLayer(m);
+      } else {
+        map.removeLayer(m);
+      }
+    }
+  });
+}
+
+// Fetch from Overpass API
+async function fetchFromOverpass(lat, lon, radiusMeters, amenity) {
+  const query = `
+[out:json][timeout:25];
+(
+  node["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+  way["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+);
+out center;
+  `.trim();
+
+  const url = 'https://overpass-api.de/api/interpreter';
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'data=' + encodeURIComponent(query)
+    });
+
+    if (!res.ok) throw new Error(`Overpass API error: ${res.status}`);
+    const data = await res.json();
+    return data.elements || [];
+  } catch (error) {
+    console.error(`Error fetching ${amenity}:`, error);
+    return [];
+  }
+}
+
+// Geocode Place
+async function geocodePlace(query) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+  
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'HealthcareFinder/1.0' }
+    });
+    
+    if (!res.ok) throw new Error(`Geocoding error: ${res.status}`);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    throw new Error('Failed to find location.');
+  }
+}
+
+// Clear Results
+function clearResults() {
+  resultMarkers.forEach(m => map.removeLayer(m));
+  resultMarkers = [];
+  if (centerMarker) {
+    map.removeLayer(centerMarker);
+    centerMarker = null;
+  }
+  if (radiusCircle) {
+    map.removeLayer(radiusCircle);
+    radiusCircle = null;
+  }
+}
+
+// Show Healthcare Services
+function showHealthcareServices(elements, category) {
+  elements.forEach(el => {
+    let lat = el.lat;
+    let lon = el.lon;
+    
+    if (!lat && el.center) {
+      lat = el.center.lat;
+      lon = el.center.lon;
+    }
+    
+    if (!lat || !lon) return;
+
+    const name = (el.tags && (el.tags.name || el.tags['name:en'])) || category.label;
+    const marker = L.marker([lat, lon], { 
+      icon: createHealthcareIcon(name, category.color, category.emoji),
+      categoryType: category.amenity
+    });
+
+    const addrParts = [];
+    if (el.tags) {
+      if (el.tags['addr:housenumber']) addrParts.push(el.tags['addr:housenumber']);
+      if (el.tags['addr:street']) addrParts.push(el.tags['addr:street']);
+      if (el.tags['addr:city']) addrParts.push(el.tags['addr:city']);
+      if (el.tags['addr:postcode']) addrParts.push(el.tags['addr:postcode']);
+    }
+    const addr = addrParts.length ? escapeHtml(addrParts.join(', ')) : 'Address not available';
+
+    const popupHtml = `
+      <div style="font-weight:700;margin-bottom:6px;font-size:15px;color:${category.color};">${category.emoji} ${escapeHtml(name)}</div>
+      <div style="font-size:13px;margin-bottom:6px;"><strong>Type:</strong> ${category.label}</div>
+      <div style="font-size:13px;margin-bottom:6px;">${addr}</div>
+      <div style="font-size:12px;color:#666;">Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}</div>
+      ${el.tags && el.tags.phone ? `<div style="margin-top:8px;"><strong>Phone:</strong> <a href="tel:${escapeHtml(el.tags.phone)}">${escapeHtml(el.tags.phone)}</a></div>` : ''}
+      ${el.tags && el.tags.opening_hours ? `<div style="margin-top:4px;font-size:12px;"><strong>Hours:</strong> ${escapeHtml(el.tags.opening_hours)}</div>` : ''}
+      ${el.tags && el.tags.website ? `<div style="margin-top:4px;"><a href="${escapeHtml(el.tags.website)}" target="_blank" rel="noopener">🌐 Website</a></div>` : ''}
+      ${el.id ? `<div style="margin-top:6px;"><a href="https://www.openstreetmap.org/${el.type}/${el.id}" target="_blank" rel="noopener" style="color:#2d7bff;">View on OpenStreetMap →</a></div>` : ''}
+    `;
+    
+    marker.bindPopup(popupHtml);
+    
+    if (category.active) {
+      marker.addTo(map);
+    }
+    
+    resultMarkers.push(marker);
+  });
+}
+
+// Main Search Function
+async function searchAndShow(q, radiusMeters) {
+  try {
+    if (!q) {
+      alert('Please enter a place to search');
+      return;
+    }
+
+    showLoading(true);
+
+    // Geocode
+    const places = await geocodePlace(q);
+    if (!places || places.length === 0) {
+      alert('Location not found. Please try a different search term.');
+      showLoading(false);
+      return;
+    }
+
+    const place = places[0];
+    const lat = parseFloat(place.lat);
+    const lon = parseFloat(place.lon);
+
+    // Clear previous results
+    clearResults();
+
+    // Center map
+    const zoom = Math.min(16, Math.max(13, Math.round(16 - Math.log(radiusMeters) / Math.log(2))));
+    map.setView([lat, lon], zoom);
+
+    // Add center marker and radius circle
+    centerMarker = L.marker([lat, lon], {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map).bindPopup(`<strong>📍 Search Center</strong><br>${escapeHtml(place.display_name)}`).openPopup();
+
+    radiusCircle = L.circle([lat, lon], {
+      radius: radiusMeters,
+      color: '#2d7bff',
+      fill: false,
+      weight: 2,
+      dashArray: '6 6'
+    }).addTo(map);
+
+    // Fetch all active categories
+    let totalFound = 0;
+    for (const category of categories) {
+      const elements = await fetchFromOverpass(lat, lon, radiusMeters, category.amenity);
+      if (elements && elements.length > 0) {
+        showHealthcareServices(elements, category);
+        totalFound += elements.length;
+      }
+    }
+
+    if (totalFound === 0) {
+      alert(`No healthcare services found within ${radiusMeters}m. Try increasing the radius.`);
+      showLoading(false);
+      return;
+    }
+
+    // Fit bounds
+    const group = L.featureGroup([radiusCircle, ...resultMarkers.filter(m => map.hasLayer(m))]);
+    map.fitBounds(group.getBounds(), { padding: [60, 60] });
+
+    showLoading(false);
+    console.log(`Found ${totalFound} healthcare services`);
+
+  } catch (err) {
+    console.error(err);
+    alert('Error: ' + err.message);
+    showLoading(false);
+  }
+}
+
+// Event Handlers
+searchBtn.addEventListener('click', () => {
+  const q = searchInput.value.trim();
+  const radius = parseInt(radiusInput.value) || 3000;
+  searchAndShow(q, radius);
+});
+
+searchInput.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    searchBtn.click();
+  }
+});
+
+// Initialize Category Filters
+createCategoryFilters();
+
+// Get User Location
+if (navigator.geolocation) {
+  map.locate({ setView: false, maxZoom: 16 });
+  
+  map.on('locationfound', (e) => {
+    map.setView(e.latlng, 14);
+    if (centerMarker) map.removeLayer(centerMarker);
+    centerMarker = L.marker(e.latlng, {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map).bindPopup('📍 Your Location').openPopup();
+  });
+  
+  map.on('locationerror', () => {
+    console.log('Location access denied or unavailable');
+  });
+}
+</script>
+
+</body>
+</html>

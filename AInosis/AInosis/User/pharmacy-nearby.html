@@ -1,0 +1,622 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospitals Nearby</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: hsl(200, 20%, 98%);
+      overflow: hidden;
+    }
+    
+    #map { 
+      width: 100%; 
+      height: 100vh; 
+    }
+    
+    .leaflet-popup-content-wrapper {
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 15px -3px hsla(210, 40%, 15%, 0.08);
+      min-width: 250px;
+    }
+    
+    .leaflet-popup-content {
+      margin: 1rem;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    
+    .popup-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: hsl(210, 40%, 15%);
+    }
+    
+    .popup-address {
+      font-size: 0.875rem;
+      color: hsl(215, 15%, 50%);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    
+    .popup-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+      color: hsl(215, 15%, 50%);
+    }
+    
+    .popup-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: hsl(30, 90%, 55%);
+      font-weight: 500;
+    }
+    
+    .popup-beds {
+      padding: 0.375rem 0.75rem;
+      background: hsl(160, 60%, 95%);
+      color: hsl(160, 60%, 45%);
+      border-radius: 0.375rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-size: 0.8rem;
+    }
+    
+    .popup-emergency {
+      padding: 0.375rem 0.75rem;
+      background: hsl(0, 72%, 95%);
+      color: hsl(0, 72%, 55%);
+      border-radius: 0.375rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+    }
+    
+    .popup-hours {
+      padding: 0.375rem 0.75rem;
+      background: hsl(174, 72%, 95%);
+      color: hsl(174, 72%, 40%);
+      border-radius: 0.375rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-size: 0.8rem;
+    }
+    
+    .popup-phone {
+      color: hsl(174, 72%, 40%);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    const facilities = [
+      { name: 'Apollo Hospital', type: 'hospital', lat: 12.9716, lng: 77.5946, address: 'Bannerghatta Road', phone: '+91 80 2630 4050', beds: 45, total: 500, rating: 4.8, emergency: true },
+      { name: 'Fortis Hospital', type: 'hospital', lat: 12.9796, lng: 77.6031, address: 'Cunningham Road', phone: '+91 80 6621 4444', beds: 32, total: 400, rating: 4.7, emergency: true },
+      { name: 'Manipal Hospital', type: 'hospital', lat: 12.9636, lng: 77.6111, address: 'HAL Airport Road', phone: '+91 80 2502 4444', beds: 78, total: 600, rating: 4.6, emergency: true },
+      { name: 'Columbia Asia Hospital', type: 'hospital', lat: 12.9516, lng: 77.5746, address: 'Whitefield', phone: '+91 80 6799 1000', beds: 28, total: 250, rating: 4.5, emergency: true },
+      { name: 'Narayana Health', type: 'hospital', lat: 12.9916, lng: 77.6146, address: 'Bommasandra', phone: '+91 80 7122 4444', beds: 55, total: 450, rating: 4.7, emergency: true },
+      { name: 'St. Johns Hospital', type: 'hospital', lat: 12.9456, lng: 77.6186, address: 'Koramangala', phone: '+91 80 2206 6666', beds: 38, total: 300, rating: 4.6, emergency: false },
+      
+      { name: 'Apollo Pharmacy', type: 'pharmacy', lat: 12.9352, lng: 77.6245, address: 'Koramangala', phone: '+91 80 4567 8901', rating: 4.5, hours: '24 Hours' },
+      { name: 'MedPlus', type: 'pharmacy', lat: 12.9716, lng: 77.6412, address: 'Indiranagar', phone: '+91 80 4567 8902', rating: 4.3, hours: '8 AM - 11 PM' },
+      { name: 'Netmeds Store', type: 'pharmacy', lat: 12.9116, lng: 77.6446, address: 'HSR Layout', phone: '+91 80 4567 8903', rating: 4.6, hours: '9 AM - 10 PM' },
+      { name: '1mg Store', type: 'pharmacy', lat: 12.9596, lng: 77.5796, address: 'Jayanagar', phone: '+91 80 4567 8904', rating: 4.4, hours: '24 Hours' },
+      
+      { name: 'Smile Dental Clinic', type: 'dental', lat: 12.9279, lng: 77.6271, address: 'Koramangala 5th Block', phone: '+91 80 4567 1001', rating: 4.7, hours: '9 AM - 8 PM' },
+      { name: 'Perfect Teeth Dental', type: 'dental', lat: 12.9716, lng: 77.6412, address: 'Indiranagar', phone: '+91 80 4567 1002', rating: 4.5, hours: '10 AM - 7 PM' },
+      { name: 'Dr. Smile Dental', type: 'dental', lat: 12.9456, lng: 77.5856, address: 'Jayanagar', phone: '+91 80 4567 1003', rating: 4.8, hours: '9 AM - 6 PM' },
+      
+      { name: 'Vision Plus Eye Hospital', type: 'eye', lat: 12.9757, lng: 77.6067, address: 'MG Road', phone: '+91 80 4567 2001', rating: 4.6, hours: '8 AM - 8 PM' },
+      { name: 'Clear Vision Eye Clinic', type: 'eye', lat: 12.9716, lng: 77.7512, address: 'Whitefield', phone: '+91 80 4567 2002', rating: 4.4, hours: '9 AM - 7 PM' },
+      { name: 'Nethra Eye Care', type: 'eye', lat: 12.9116, lng: 77.6106, address: 'BTM Layout', phone: '+91 80 4567 2003', rating: 4.7, hours: '10 AM - 9 PM' }
+    ];
+
+    const icons = {
+      hospital: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57], iconAnchor: [17, 57], popupAnchor: [1, -50], shadowSize: [57, 57]
+      }),
+      pharmacy: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57], iconAnchor: [17, 57], popupAnchor: [1, -50], shadowSize: [57, 57]
+      }),
+      dental: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57], iconAnchor: [17, 57], popupAnchor: [1, -50], shadowSize: [57, 57]
+      }),
+      eye: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [35, 57], iconAnchor: [17, 57], popupAnchor: [1, -50], shadowSize: [57, 57]
+      })
+    };
+
+    function initMap() {
+      const defaultLat = 12.9716;
+      const defaultLng = 77.5946;
+      
+      const map = L.map('map').setView([defaultLat, defaultLng], 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap',
+        maxZoom: 19
+      }).addTo(map);
+
+      // User location
+      L.marker([defaultLat, defaultLng])
+        .addTo(map)
+        .bindPopup('<div class="popup-title">📍 Your Location</div>')
+        .openPopup();
+
+      // Add facilities
+      facilities.forEach(f => {
+        const emoji = f.type === 'hospital' ? '🏥' : f.type === 'pharmacy' ? '💊' : f.type === 'dental' ? '🦷' : '👁';
+        
+        let popupContent = `
+          <div class="popup-title">${emoji} ${f.name}</div>
+          <div class="popup-address">📍 ${f.address}</div>
+        `;
+        
+        if (f.rating) {
+          popupContent += `<div class="popup-info"><span class="popup-rating">⭐ ${f.rating}</span></div>`;
+        }
+        
+        popupContent += `<div class="popup-info">📞 <a href="tel:${f.phone}" class="popup-phone">Call Now</a></div>`;
+        
+        if (f.beds) {
+          popupContent += `<span class="popup-beds">🛏 ${f.beds}/${f.total} beds available</span>`;
+          if (f.emergency) {
+            popupContent += `<span class="popup-emergency">🚨 ER 24/7</span>`;
+          }
+        }
+        
+        if (f.hours) {
+          popupContent += `<span class="popup-hours">🕐 ${f.hours}</span>`;
+        }
+
+        L.marker([f.lat, f.lng], { icon: icons[f.type] || icons.hospital })
+          .addTo(map)
+          .bindPopup(popupContent);
+      });
+
+      // Try to get user's actual location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const { latitude, longitude } = pos.coords;
+          map.setView([latitude, longitude], 12);
+          
+          L.marker([latitude, longitude])
+            .addTo(map)
+            .bindPopup('<div class="popup-title">📍 Your Location</div>')
+            .openPopup();
+        });
+      }
+    }
+
+    initMap();
+  </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nearby Medical Stores — Search + Radius</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+  html,body { height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  #map { height:100vh; width:100%; }
+
+  /* Search controls */
+  .controls {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    background: rgba(255,255,255,0.95);
+    padding:8px;
+    border-radius:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    max-width: 90%;
+    flex-wrap: wrap;
+  }
+  #searchInput { 
+    width:300px; 
+    max-width: 100%;
+    padding:8px 10px; 
+    border:1px solid #ccc; 
+    border-radius:6px; 
+    outline:none; 
+    font-size:14px; 
+  }
+  #searchBtn { 
+    padding:8px 12px; 
+    border:none; 
+    background:#2d7bff; 
+    color:white; 
+    border-radius:6px; 
+    cursor:pointer;
+    font-size:14px;
+  }
+  #searchBtn:hover { background:#1a5fd9; }
+  #searchBtn:disabled { background:#ccc; cursor:not-allowed; }
+  #radiusInput { 
+    width:90px; 
+    padding:6px; 
+    border-radius:6px; 
+    border:1px solid #ccc; 
+  }
+
+  /* Loading indicator */
+  .loading {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 14px;
+    display: none;
+  }
+  .loading.active { display: block; }
+
+  /* Marker style */
+  .marker-wrapper { 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    transform: translateY(-20px); 
+  }
+  .marker-pin {
+    width:34px; 
+    height:34px; 
+    background:green;
+    border-radius:50% 50% 50% 0; 
+    transform:rotate(-45deg);
+    border:3px solid white; 
+    box-shadow:0 0 5px rgba(0,0,0,0.4); 
+    position:relative;
+  }
+  .marker-pin::after {
+    content:"💊"; 
+    font-size:20px; 
+    position:absolute; 
+    transform: rotate(45deg) translate(7px,-2px);
+  }
+  .marker-label {
+    background:white; 
+    padding:3px 8px; 
+    font-size:14px; 
+    font-weight:600;
+    margin-top:5px; 
+    border-radius:4px; 
+    white-space:nowrap; 
+    box-shadow:0 0 4px rgba(0,0,0,0.2);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .muted { font-size:12px; color:#666; margin-left:6px; }
+</style>
+</head>
+<body>
+
+<div class="controls" role="search" aria-label="Search controls">
+  <input id="searchInput" placeholder="Search place (city, area, address) and press Enter" />
+  <input id="radiusInput" type="number" min="200" step="100" value="2000" /> 
+  <span class="muted">meters</span>
+  <button id="searchBtn">Search</button>
+</div>
+
+<div class="loading" id="loading">Searching...</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ======= Utilities & UI ======= */
+const map = L.map('map').setView([17.6868, 83.2185], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+  maxZoom: 19,
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const radiusInput = document.getElementById('radiusInput');
+const loadingEl = document.getElementById('loading');
+
+let resultMarkers = [];
+let centerMarker = null;
+let radiusCircle = null;
+
+function showLoading(show) {
+  loadingEl.classList.toggle('active', show);
+  searchBtn.disabled = show;
+}
+
+function createPharmacyIcon(label) {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `
+      <div class="marker-wrapper">
+        <div class="marker-pin"></div>
+        <div class="marker-label">${escapeHtml(label)}</div>
+      </div>
+    `,
+    iconSize: [80, 80],
+    iconAnchor: [40, 80]
+  });
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
+
+/* ======= Overpass query with better error handling ======= */
+async function fetchPharmaciesOverpass(lat, lon, radiusMeters) {
+  const query = `
+[out:json][timeout:25];
+(
+  node["amenity"="pharmacy"](around:${radiusMeters},${lat},${lon});
+  way["amenity"="pharmacy"](around:${radiusMeters},${lat},${lon});
+  relation["amenity"="pharmacy"](around:${radiusMeters},${lat},${lon});
+);
+out center;
+  `.trim();
+
+  const url = 'https://overpass-api.de/api/interpreter';
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'data=' + encodeURIComponent(query)
+    });
+
+    if (!res.ok) {
+      throw new Error(`Overpass API error: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    return data.elements || [];
+  } catch (error) {
+    console.error('Overpass error:', error);
+    throw new Error('Failed to fetch pharmacies. Please try again.');
+  }
+}
+
+/* ======= Geocoding with Nominatim ======= */
+async function geocodePlace(query) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+  
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'PharmacyFinder/1.0'
+      }
+    });
+    
+    if (!res.ok) {
+      throw new Error(`Geocoding error: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    throw new Error('Failed to find location. Please try again.');
+  }
+}
+
+/* ======= Clear existing markers ======= */
+function clearResults() {
+  resultMarkers.forEach(m => map.removeLayer(m));
+  resultMarkers = [];
+  if (centerMarker) {
+    map.removeLayer(centerMarker);
+    centerMarker = null;
+  }
+  if (radiusCircle) {
+    map.removeLayer(radiusCircle);
+    radiusCircle = null;
+  }
+}
+
+/* ======= Display pharmacy markers ======= */
+function showPharmacies(elements) {
+  elements.forEach(el => {
+    let lat = el.lat;
+    let lon = el.lon;
+    
+    if (!lat && el.center) {
+      lat = el.center.lat;
+      lon = el.center.lon;
+    }
+    
+    if (!lat || !lon) return;
+
+    const name = (el.tags && (el.tags.name || el.tags['name:en'])) || 'Pharmacy';
+    const marker = L.marker([lat, lon], { 
+      icon: createPharmacyIcon(name) 
+    }).addTo(map);
+
+    const addrParts = [];
+    if (el.tags) {
+      if (el.tags['addr:housenumber']) addrParts.push(el.tags['addr:housenumber']);
+      if (el.tags['addr:street']) addrParts.push(el.tags['addr:street']);
+      if (el.tags['addr:city']) addrParts.push(el.tags['addr:city']);
+      if (el.tags['addr:postcode']) addrParts.push(el.tags['addr:postcode']);
+    }
+    const addr = addrParts.length ? escapeHtml(addrParts.join(', ')) : 'Address not available';
+
+    const popupHtml = `
+      <div style="font-weight:700;margin-bottom:4px;font-size:15px;">${escapeHtml(name)}</div>
+      <div style="font-size:13px;margin-bottom:6px;">${addr}</div>
+      <div style="font-size:12px;color:#666;">Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}</div>
+      ${el.tags && el.tags.phone ? `<div style="margin-top:8px;"><strong>Phone:</strong> <a href="tel:${escapeHtml(el.tags.phone)}">${escapeHtml(el.tags.phone)}</a></div>` : ''}
+      ${el.tags && el.tags.opening_hours ? `<div style="margin-top:4px;font-size:12px;"><strong>Hours:</strong> ${escapeHtml(el.tags.opening_hours)}</div>` : ''}
+      ${el.id ? `<div style="margin-top:8px;"><a href="https://www.openstreetmap.org/${el.type}/${el.id}" target="_blank" rel="noopener" style="color:#2d7bff;">View on OpenStreetMap →</a></div>` : ''}
+    `;
+    
+    marker.bindPopup(popupHtml);
+    resultMarkers.push(marker);
+  });
+}
+
+/* ======= Main search function ======= */
+async function searchAndShow(q, radiusMeters) {
+  try {
+    if (!q) {
+      alert('Please enter a place to search');
+      return;
+    }
+
+    showLoading(true);
+
+    // Geocode the place
+    const places = await geocodePlace(q);
+    if (!places || places.length === 0) {
+      alert('Location not found. Please try a different search term.');
+      showLoading(false);
+      return;
+    }
+
+    const place = places[0];
+    const lat = parseFloat(place.lat);
+    const lon = parseFloat(place.lon);
+
+    // Clear previous results
+    clearResults();
+
+    // Center map
+    const zoom = Math.min(16, Math.max(13, Math.round(16 - Math.log(radiusMeters) / Math.log(2))));
+    map.setView([lat, lon], zoom);
+
+    // Add center marker and radius circle
+    centerMarker = L.marker([lat, lon], {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map).bindPopup(`<strong>Search Center</strong><br>${escapeHtml(place.display_name)}`).openPopup();
+
+    radiusCircle = L.circle([lat, lon], {
+      radius: radiusMeters,
+      color: '#2d7bff',
+      fill: false,
+      weight: 2,
+      dashArray: '6 6'
+    }).addTo(map);
+
+    // Fetch pharmacies
+    const elements = await fetchPharmaciesOverpass(lat, lon, radiusMeters);
+    
+    if (!elements || elements.length === 0) {
+      alert(`No pharmacies found within ${radiusMeters}m of this location. Try increasing the radius.`);
+      showLoading(false);
+      return;
+    }
+
+    showPharmacies(elements);
+
+    // Fit bounds to show all results
+    const group = L.featureGroup([radiusCircle, ...resultMarkers]);
+    map.fitBounds(group.getBounds(), { padding: [60, 60] });
+
+    showLoading(false);
+    
+    console.log(`Found ${elements.length} pharmacies`);
+
+  } catch (err) {
+    console.error(err);
+    alert('Error: ' + err.message);
+    showLoading(false);
+  }
+}
+
+/* ======= Event handlers ======= */
+searchBtn.addEventListener('click', () => {
+  const q = searchInput.value.trim();
+  const radius = parseInt(radiusInput.value) || 2000;
+  searchAndShow(q, radius);
+});
+
+searchInput.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    searchBtn.click();
+  }
+});
+
+/* ======= Optional: Get user location ======= */
+if (navigator.geolocation) {
+  map.locate({ setView: false, maxZoom: 16 });
+  
+  map.on('locationfound', (e) => {
+    map.setView(e.latlng, 14);
+    if (centerMarker) map.removeLayer(centerMarker);
+    centerMarker = L.marker(e.latlng, {
+      icon: L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      })
+    }).addTo(map).bindPopup('📍 Your Location').openPopup();
+  });
+  
+  map.on('locationerror', (e) => {
+    console.log('Location access denied or unavailable');
+  });
+}
+
+</script>
+</body>
+</html>

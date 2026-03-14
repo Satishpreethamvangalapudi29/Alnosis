@@ -1,0 +1,3880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AInosis - AI-Powered Healthcare Platform</title>
+  <meta name="description" content="AInosis is an AI-powered medical app providing symptom assessment, doctor appointments, emergency tutorials, and comprehensive healthcare services.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --background: hsl(200, 20%, 98%);
+    --foreground: hsl(210, 40%, 15%);
+    --card: hsl(0, 0%, 100%);
+    --card-foreground: hsl(210, 40%, 15%);
+    --primary: hsl(174, 72%, 40%);
+    --primary-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(200, 25%, 94%);
+    --secondary-foreground: hsl(210, 40%, 20%);
+    --muted: hsl(200, 20%, 96%);
+    --muted-foreground: hsl(215, 15%, 50%);
+    --accent: hsl(160, 60%, 45%);
+    --border: hsl(200, 20%, 90%);
+    --destructive: hsl(0, 72%, 55%);
+    
+    --medical-teal: hsl(174, 72%, 40%);
+    --medical-teal-light: hsl(174, 72%, 95%);
+    --medical-blue: hsl(210, 80%, 50%);
+    --medical-blue-light: hsl(210, 80%, 95%);
+    --medical-green: hsl(160, 60%, 45%);
+    --medical-green-light: hsl(160, 60%, 95%);
+    --medical-orange: hsl(30, 90%, 55%);
+    --medical-orange-light: hsl(30, 90%, 95%);
+    --medical-red: hsl(0, 72%, 55%);
+    --medical-red-light: hsl(0, 72%, 95%);
+    --medical-purple: hsl(270, 60%, 55%);
+    --medical-purple-light: hsl(270, 60%, 95%);
+    
+    --radius: 0.75rem;
+    --shadow-sm: 0 1px 2px 0 hsla(210, 40%, 15%, 0.05);
+    --shadow-md: 0 4px 6px -1px hsla(210, 40%, 15%, 0.07), 0 2px 4px -2px hsla(210, 40%, 15%, 0.05);
+    --shadow-lg: 0 10px 15px -3px hsla(210, 40%, 15%, 0.08), 0 4px 6px -4px hsla(210, 40%, 15%, 0.05);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  }
+
+  /* Utility Classes */
+  .hidden { display: none !important; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-center { justify-content: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-2 { gap: 0.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .gap-6 { gap: 1.5rem; }
+  .flex-1 { flex: 1; }
+  .w-full { width: 100%; }
+  .text-center { text-align: center; }
+  .text-right { text-align: right; }
+  .text-sm { font-size: 0.875rem; }
+  .text-xs { font-size: 0.75rem; }
+  .text-lg { font-size: 1.125rem; }
+  .text-xl { font-size: 1.25rem; }
+  .text-2xl { font-size: 1.5rem; }
+  .text-3xl { font-size: 1.875rem; }
+  .font-medium { font-weight: 500; }
+  .font-semibold { font-weight: 600; }
+  .font-bold { font-weight: 700; }
+  .mb-2 { margin-bottom: 0.5rem; }
+  .mb-3 { margin-bottom: 0.75rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  .mb-6 { margin-bottom: 1.5rem; }
+  .mt-2 { margin-top: 0.5rem; }
+  .mt-4 { margin-top: 1rem; }
+  .p-3 { padding: 0.75rem; }
+  .p-4 { padding: 1rem; }
+  .p-6 { padding: 1.5rem; }
+  .px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .rounded-lg { border-radius: var(--radius); }
+  .rounded-xl { border-radius: calc(var(--radius) + 4px); }
+  .rounded-2xl { border-radius: calc(var(--radius) + 8px); }
+  .rounded-full { border-radius: 9999px; }
+  .overflow-hidden { overflow: hidden; }
+  .overflow-y-auto { overflow-y: auto; }
+  .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .grid { display: grid; }
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+  /* Medical Card */
+  .medical-card {
+    background: var(--card);
+    border-radius: calc(var(--radius) + 4px);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+
+  .medical-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: hsl(221, 65%, 51%);
+  }
+
+  .btn-medical {
+    background: linear-gradient(135deg, blue 0%,rgb(119, 119, 240) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-medical:hover:not(:disabled) {
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.98);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--foreground);
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background: var(--muted);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted-foreground);
+  }
+
+  .btn-ghost:hover {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  /* Input */
+  .input {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--background);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px hsla(174, 72%, 40%, 0.1);
+  }
+
+  .input-icon {
+    position: relative;
+  }
+
+  .input-icon .icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .input-icon .input {
+    padding-left: 3rem;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .status-available {
+    background: var(--medical-green-light);
+    color: var(--medical-green);
+  }
+
+  .status-busy {
+    background: var(--medical-orange-light);
+    color: var(--medical-orange);
+  }
+
+  .status-emergency {
+    background: var(--medical-red-light);
+    color: var(--medical-red);
+  }
+
+  /* Feature Icon */
+  .feature-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .feature-icon:hover {
+    transform: scale(1.1);
+  }
+
+  .feature-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* ==================== LOGIN PAGE ==================== */
+  .login-container {
+    min-height: 100vh;
+    display: flex;
+  }
+
+  .login-left {
+    display: none;
+    width: 50%;
+    background: linear-gradient(135deg, hsl(238, 100%, 40%) 0%, hsl(210, 74%, 54%) 100%);
+    padding: 3rem;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    color: white;
+  }
+
+  .login-left::before {
+    content: '';
+    position: absolute;
+    top: 5rem;
+    right: 5rem;
+    width: 16rem;
+    height: 16rem;
+    border: 0px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+  }
+
+  .login-left::after {
+    content: '';
+    position: absolute;
+    bottom: 10rem;
+    left: 2rem;
+    width: 24rem;
+    height: 24rem;
+    border: 0px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+  }
+
+  .login-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-logo-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-logo-icon svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .login-logo h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+
+  .login-logo p {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .login-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .login-content p {
+    font-size: 1.125rem;
+    opacity: 0.8;
+    max-width: 28rem;
+  }
+
+  .login-features {
+    margin-top: 2rem;
+  }
+
+  .login-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+  }
+
+  .login-feature-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-feature-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .login-footer {
+    font-size: 0.875rem;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-right {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  .login-mobile-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .login-mobile-logo .logo-icon {
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%);
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px hsla(174, 72%, 40%, 0.3);
+  }
+
+  .login-mobile-logo .logo-icon svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: white;
+  }
+
+  .login-mobile-logo h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .login-mobile-logo p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .login-form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .login-form-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .login-form-header p {
+    color: var(--muted-foreground);
+  }
+
+  .login-security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--muted);
+    border-radius: calc(var(--radius) + 4px);
+    margin-bottom: 1.5rem;
+  }
+
+  .login-security-icon {
+    width: 3rem;
+    height: 3rem;
+    background: hsla(174, 72%, 40%, 0.1);
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-security-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--primary);
+  }
+
+  .login-security-text h4 {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .login-security-text p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .login-form label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .login-form .help-text {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-top: 0.5rem;
+  }
+
+  .otp-success {
+    padding: 1rem;
+    background: var(--medical-green-light);
+    border-radius: calc(var(--radius) + 4px);
+    text-align: center;
+  }
+
+  .otp-success p {
+    font-size: 0.875rem;
+    color: var(--medical-green);
+    font-weight: 500;
+  }
+
+  .login-terms {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-top: 1rem;
+  }
+
+  .login-terms a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .login-terms a:hover {
+    text-decoration: underline;
+  }
+
+  /* ==================== DASHBOARD LAYOUT ==================== */
+  .dashboard-container {
+    min-height: 100vh;
+    background: var(--background);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 18rem;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: hsla(210, 40%, 15%, 0.5);
+    z-index: 40;
+    display: none;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  .sidebar-header {
+    height: 4rem;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .sidebar-logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%);
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+  }
+
+  .sidebar-logo-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: white;
+  }
+
+  .sidebar-logo h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .sidebar-logo p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .sidebar-close {
+    display: block;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  .sidebar-close:hover {
+    background: var(--muted);
+  }
+
+  .sidebar-close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .sidebar-user {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-user-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--muted);
+    border-radius: calc(var(--radius) + 4px);
+  }
+
+  .sidebar-user-card img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .sidebar-user-card h4 {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .sidebar-user-card p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .sidebar-nav ul {
+    list-style: none;
+  }
+
+  .sidebar-nav-item {
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: calc(var(--radius) + 4px);
+    text-decoration: none;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+  }
+
+  .sidebar-nav-link:hover {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  .sidebar-nav-link.active {
+    background: hsl(240.87deg 75.78% 61.18%);
+    color: var(--primary-foreground);
+    box-shadow: var(--shadow-md);
+  }
+
+  .sidebar-nav-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Mobile Header */
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    z-index: 30;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobile-header-btn {
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  .mobile-header-btn:hover {
+    background: var(--muted);
+  }
+
+  .mobile-header-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .mobile-header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-header-logo .logo-icon {
+    width: 2rem;
+    height: 2rem;
+    background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-header-logo .logo-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+  }
+
+  .mobile-header-logo span {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .notification-btn {
+    position: relative;
+  }
+
+  .notification-dot {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--medical-red);
+    border-radius: 50%;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding-top: 4rem;
+    min-height: 100vh;
+  }
+
+  .main-content-inner {
+    padding: 1rem;
+  }
+
+  /* ==================== DASHBOARD PAGE ==================== */
+  .welcome-card {
+    background: linear-gradient(135deg, hsl(221.11deg 62.6% 46.44%) 0%, hsl(210, 80%, 50%) 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16rem;
+    height: 16rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+  }
+
+  .welcome-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 12rem;
+    height: 12rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    transform: translateY(50%);
+  }
+
+  .welcome-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .welcome-date {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-bottom: 0.25rem;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .welcome-subtitle {
+    opacity: 0.8;
+  }
+
+  .welcome-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .welcome-user img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+
+  .welcome-user h4 {
+    font-weight: 500;
+  }
+
+  .welcome-user p {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .stat-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stat-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* Features Grid */
+  .features-section {
+    margin-top: 2rem;
+  }
+
+  .features-section h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  .feature-card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .feature-card-content h3 {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s ease;
+  }
+
+  .feature-card:hover .feature-card-content h3 {
+    color: var(--primary);
+  }
+
+  .feature-card-content p {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .feature-arrow {
+    color: var(--muted-foreground);
+    transition: all 0.2s ease;
+  }
+
+  .feature-card:hover .feature-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+  }
+
+  .feature-arrow svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* ==================== PAGE HEADER ==================== */
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .page-header p {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* ==================== CHAT INTERFACE ==================== */
+  .chat-container {
+    height: calc(100vh - 10rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: calc(var(--radius) + 4px);
+    margin-bottom: 1rem;
+  }
+
+  .chat-disclaimer svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .chat-disclaimer p {
+    font-size: 0.875rem;
+  }
+
+  .chat-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .chat-message {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .chat-message.user {
+    flex-direction: row-reverse;
+  }
+
+  .chat-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .chat-avatar svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+  }
+
+  .chat-bubble {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    max-width: 80%;
+  }
+
+  .chat-message.assistant .chat-bubble {
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .chat-message.user .chat-bubble {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  .chat-bubble p {
+    margin-bottom: 0.5rem;
+  }
+
+  .chat-bubble p:last-child {
+    margin-bottom: 0;
+  }
+
+  .chat-bubble strong {
+    display: block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .chat-time {
+    font-size: 0.625rem;
+    opacity: 0.5;
+    margin-top: 0.5rem;
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .typing-indicator span {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--muted-foreground);
+    border-radius: 50%;
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+  }
+
+  .chat-suggestions {
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .chat-suggestions p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.5rem;
+  }
+
+  .chat-suggestions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chat-suggestion-btn {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    background: var(--muted);
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .chat-suggestion-btn:hover {
+    background: var(--secondary);
+  }
+
+  .chat-input-area {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .chat-input-area .input {
+    flex: 1;
+  }
+
+  /* ==================== EMERGENCY TUTORIALS ==================== */
+  .emergency-banner {
+    background: var(--medical-red);
+    color: white;
+  }
+
+  .emergency-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .emergency-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emergency-icon svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  .filter-tab.active {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .filter-tab:hover:not(.active) {
+    background: var(--secondary);
+  }
+
+  .tutorial-card {
+    cursor: pointer;
+  }
+
+  .tutorial-thumbnail {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: calc(var(--radius) + 4px);
+    overflow: hidden;
+  }
+
+  .tutorial-thumbnail img {
+    width: 100%;
+    height: 10rem;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .tutorial-card:hover .tutorial-thumbnail img {
+    transform: scale(1.05);
+  }
+
+  .tutorial-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+  }
+
+  .tutorial-badge.video {
+    background: var(--medical-red);
+  }
+
+  .tutorial-badge.article {
+    background: var(--medical-blue);
+  }
+
+  .tutorial-duration {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(0,0,0,0.8);
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: white;
+  }
+
+  .tutorial-duration svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .tutorial-category {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+  }
+
+  .tutorial-title {
+    font-weight: 700;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .tutorial-card:hover .tutorial-title {
+    color: var(--primary);
+  }
+
+  .tutorial-desc {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tutorial-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  .tutorial-link svg {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .tutorial-card:hover .tutorial-link svg {
+    transform: translateX(4px);
+  }
+
+  /* ==================== DOCTORS ==================== */
+  .doctor-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .doctor-info {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .doctor-avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: calc(var(--radius) + 4px);
+    object-fit: cover;
+  }
+
+  .doctor-details h3 {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .doctor-specialty {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .doctor-qualifications {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .doctor-qual {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--muted);
+    border-radius: 0.25rem;
+  }
+
+  .doctor-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--medical-orange);
+  }
+
+  .doctor-rating svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  .doctor-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .doctor-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .doctor-meta svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .doctor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .doctor-fee {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .doctor-fee span {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    font-weight: 400;
+    display: block;
+  }
+
+  .doctor-booking {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .doctor-slot {
+    font-size: 0.875rem;
+  }
+
+  .doctor-slot span {
+    color: var(--muted-foreground);
+  }
+
+  /* ==================== MAP SECTION ==================== */
+  .map-section {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .map-container {
+    height: 20rem;
+    border-radius: calc(var(--radius) + 4px);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, hsl(200, 30%, 95%) 0%, hsl(210, 25%, 92%) 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-placeholder {
+    text-align: center;
+  }
+
+  .map-placeholder-icon {
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto 1rem;
+    background: hsla(174, 72%, 40%, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-placeholder-icon svg {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--primary);
+  }
+
+  .map-placeholder h3 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .map-placeholder p {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    max-width: 16rem;
+  }
+
+  .location-badge {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--card);
+    border-radius: 9999px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .location-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--medical-blue);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .location-badge span {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* Store/Hospital Card */
+  .location-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .location-card.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px hsla(174, 72%, 40%, 0.1);
+  }
+
+  .location-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .location-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .location-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .location-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .location-name {
+    font-weight: 700;
+  }
+
+  .location-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .location-rating svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    color: var(--medical-orange);
+    fill: currentColor;
+  }
+
+  .location-rating span {
+    color: var(--muted-foreground);
+  }
+
+  .location-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+  }
+
+  .location-meta p {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .location-meta svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .location-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .location-actions .btn {
+    flex: 1;
+  }
+
+  /* Bed Availability */
+  .bed-availability {
+    text-align: right;
+  }
+
+  .bed-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .bed-count svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .bed-count strong {
+    font-size: 1.125rem;
+  }
+
+  .bed-count span {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .bed-label {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .specialties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .specialty-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--muted);
+    border-radius: 0.25rem;
+  }
+
+  /* ==================== LONG TERM CARE ==================== */
+  .care-card {
+    cursor: default;
+  }
+
+  .care-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .care-emoji {
+    width: 4rem;
+    height: 4rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .care-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .care-desc {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .care-specialist {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--muted);
+    border-radius: calc(var(--radius) + 4px);
+    margin-bottom: 1rem;
+  }
+
+  .care-specialist img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    object-fit: cover;
+  }
+
+  .care-specialist h4 {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .care-specialist p {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .care-programs-title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .care-program {
+    width: 100%;
+    padding: 1rem;
+    background: var(--muted);
+    border: none;
+    border-radius: calc(var(--radius) + 4px);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-bottom: 0.75rem;
+  }
+
+  .care-program:hover {
+    background: var(--secondary);
+  }
+
+  .care-program-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .care-program-header h5 {
+    font-weight: 500;
+  }
+
+  .care-program-header svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--muted-foreground);
+    transition: all 0.2s ease;
+  }
+
+  .care-program:hover .care-program-header svg {
+    color: var(--primary);
+    transform: translateX(4px);
+  }
+
+  .care-program-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .care-program-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .care-program-meta svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .care-program-meta .price {
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  /* ==================== HOME DELIVERY ==================== */
+  .delivery-types {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .delivery-type-card {
+    text-align: center;
+  }
+
+  .delivery-type-card.emergency {
+    background: var(--medical-red-light);
+    border-color: hsla(0, 72%, 55%, 0.2);
+  }
+
+  .delivery-type-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 0.75rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .delivery-type-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .delivery-type-card h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .delivery-type-card .time {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.5rem;
+  }
+
+  .delivery-type-card .price {
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .delivery-type-card.emergency .price {
+    color: var(--medical-red);
+  }
+
+  .medicine-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .medicine-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .medicine-category {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--muted);
+    border-radius: 0.25rem;
+  }
+
+  .medicine-name {
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+
+  .medicine-manufacturer {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .medicine-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .medicine-dosage {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.75rem;
+  }
+
+  .cart-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: var(--muted);
+    border-radius: calc(var(--radius) + 4px);
+  }
+
+  .cart-btn {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius);
+    background: var(--background);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+
+  .cart-btn:hover {
+    background: var(--card);
+  }
+
+  .cart-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .cart-qty {
+    font-weight: 500;
+  }
+
+  /* Floating Cart */
+  .floating-cart {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 50;
+  }
+
+  .floating-cart-btn {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .floating-cart-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: white;
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: white;
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ==================== MEDICAL HISTORY ==================== */
+  .history-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .history-stat {
+    text-align: center;
+  }
+
+  .history-stat .value {
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+
+  .history-stat .label {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .history-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .history-item {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .history-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .history-marker-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--radius) + 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .history-marker-icon.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .history-marker-icon.inactive {
+    background: var(--muted);
+    color: var(--muted-foreground);
+  }
+
+  .history-marker-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .history-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin-top: 0.5rem;
+  }
+
+  .history-content {
+    flex: 1;
+    padding-bottom: 1rem;
+  }
+
+  .history-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .history-diagnosis {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .history-doctor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+  }
+
+  .history-doctor svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .history-date {
+    text-align: right;
+  }
+
+  .history-date .date {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .history-date .day {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .history-hospital {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.75rem;
+  }
+
+  .history-prescription {
+    padding: 0.75rem;
+    background: var(--muted);
+    border-radius: calc(var(--radius) + 4px);
+    margin-bottom: 0.75rem;
+  }
+
+  .history-prescription-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .history-prescription-header svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--primary);
+  }
+
+  .history-prescription-header span {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .history-meds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .history-med {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--background);
+    border-radius: 0.25rem;
+  }
+
+  .history-notes {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+
+  .history-followup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--primary);
+  }
+
+  .history-followup svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* ==================== MODAL ==================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: hsla(210, 40%, 15%, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal {
+    background: var(--card);
+    border-radius: calc(var(--radius) + 8px);
+    max-width: 32rem;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px hsla(210, 40%, 15%, 0.25);
+    animation: modalIn 0.3s ease;
+  }
+
+  @keyframes modalIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-header h2 {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .modal-close {
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--muted);
+  }
+
+  .modal-close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 8rem);
+  }
+
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ==================== TOAST ==================== */
+  .toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+  }
+
+  .toast {
+    padding: 1rem 1.5rem;
+    background: var(--foreground);
+    color: var(--background);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-xl);
+    animation: toastIn 0.3s ease;
+  }
+
+  .toast.success {
+    background: var(--medical-green);
+    color: white;
+  }
+
+  .toast.error {
+    background: var(--medical-red);
+    color: white;
+  }
+
+  @keyframes toastIn {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+  @media (min-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .delivery-types {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .history-stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .map-section {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .map-container {
+      height: 30rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .login-left {
+      display: flex;
+    }
+    
+    .login-right {
+      width: 50%;
+    }
+    
+    .login-mobile-logo {
+      display: none;
+    }
+    
+    .login-form-header {
+      text-align: left;
+    }
+    
+    .sidebar {
+      transform: translateX(0);
+    }
+    
+    .sidebar-close {
+      display: none;
+    }
+    
+    .mobile-header {
+      display: none;
+    }
+    
+    .main-content {
+      margin-left: 18rem;
+      padding-top: 0;
+    }
+    
+    .main-content-inner {
+      padding: 2rem;
+    }
+    
+    .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .welcome-card .welcome-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .welcome-user {
+      margin-top: 0;
+    }
+  }
+  /* ==================== GLOBAL ANIMATIONS (APPENDED) ==================== */
+  /* Lightweight, non-invasive animations and transitions. Does not change colors or structure. */
+  :root {
+    --ani-fast: 140ms;
+    --ani-medium: 260ms;
+    --ani-slow: 520ms;
+    --ani-ease: cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* Global interactive transitions (buttons, links, chips) */
+  :is(button, a, .btn, .sidebar-nav-link, .filter-tab, .chat-suggestion-btn, .care-program, .location-card, .doctor-booking .btn) {
+    transition: transform var(--ani-medium) var(--ani-ease),
+                box-shadow var(--ani-medium) var(--ani-ease),
+                opacity var(--ani-fast) var(--ani-ease),
+                background-color var(--ani-medium) var(--ani-ease);
+    will-change: transform, box-shadow, opacity;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth hover scale + shadow (subtle) */
+  :is(.btn, button, .sidebar-nav-link, .filter-tab):hover:not(:disabled),
+  :is(.btn, button, .sidebar-nav-link, .filter-tab):focus-visible {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 28px rgba(18,24,40,0.06);
+  }
+
+  :is(.btn, button):active:not(:disabled) {
+    transform: translateY(0) scale(0.995);
+  }
+
+  /* Card lift on hover */
+  :is(.medical-card, .feature-card, .doctor-card, .location-card, .care-card):hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 48px rgba(18,24,40,0.06);
+  }
+
+  /* Images and avatars subtle scale */
+  :is(img, .doctor-avatar, .sidebar-user-card img, .welcome-user img, .care-specialist img) {
+    transition: transform var(--ani-medium) var(--ani-ease), filter var(--ani-medium) var(--ani-ease);
+    will-change: transform, filter;
+  }
+  :is(img, .doctor-avatar):hover { transform: scale(1.03); }
+
+  /* Fade in sections on load */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .page-content:not(.hidden) { animation: fadeInUp var(--ani-slow) var(--ani-ease) both; }
+
+  /* Slide-up for cards with gentle stagger (initial render) */
+  @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  :is(.medical-card, .feature-card, .location-card, .doctor-card) { animation: slideUp var(--ani-slow) var(--ani-ease) both; }
+
+  /* Stagger children in common grids */
+  .features-grid > * { animation-delay: 40ms; }
+  .features-grid > *:nth-child(2) { animation-delay: 80ms; }
+  .features-grid > *:nth-child(3) { animation-delay: 120ms; }
+  .features-grid > *:nth-child(4) { animation-delay: 160ms; }
+  .stats-grid > * { animation-delay: 60ms; }
+
+  /* Subtle animated overlay: very low opacity gradient movement (does not change underlying colors) */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.00) 100%);
+    mix-blend-mode: overlay;
+    opacity: 0.02;
+    transform: translateZ(0);
+    animation: subtleFloat 12s linear infinite;
+  }
+  @keyframes subtleFloat { 0% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-6px) translateX(6px); } 100% { transform: translateY(0) translateX(0); } }
+
+  /* Links - subtle underline/scale on hover without changing color */
+  a { transition: text-decoration-color var(--ani-medium) var(--ani-ease), opacity var(--ani-medium) var(--ani-ease); }
+  a:hover, a:focus { opacity: 0.95; text-decoration-thickness: 1.5px; }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    :is(.page-content:not(.hidden), .medical-card, .feature-card, .location-card, .doctor-card, .features-grid > *, .stats-grid > *, body::after) {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* ==================== SIDEBAR LEFT-SIDED SCROLLBAR ==================== */
+  /* Append this block to enable a smooth, left-side vertical scrollbar only on the page sidebar.
+     Targets common sidebar selectors and keeps inner content direction intact. */
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar) {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; /* firefox */
+    scrollbar-color: rgba(0,0,0,0.14) transparent;
+    direction: rtl; /* places vertical scrollbar on the left in most browsers */
+    box-sizing: border-box;
+    /* keep content clear of the scrollbar visually */
+    padding-left: 10px;
+  }
+
+  /* Ensure all internal content keeps normal left-to-right flow */
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar) * {
+    direction: ltr;
+  }
+
+  /* WebKit/Blink scrollbar styling (width, thumb) */
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar)::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+  }
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar)::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar)::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.12);
+    border-radius: 8px;
+    border: 2px solid transparent; /* keep thumb away from content */
+    background-clip: padding-box;
+  }
+
+  /* Small visual tweak on hover for discoverability */
+  :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar):hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.18);
+  }
+
+  /* Respect reduced motion and avoid direction flips when user prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    :is(.sidebar, #sidebar, aside.sidebar, .app-sidebar) { direction: ltr; }
+  }
+  </style>
+</head>
+<body>
+  <!-- LOGIN PAGE -->
+  <div id="login-page" class="login-container">
+    <div class="login-left">
+      <div class="login-logo">
+        <div class="login-logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </div>
+        <div>
+          <h1>AInosis</h1>
+          <p>AI-Powered Healthcare</p>
+        </div>
+      </div>
+      <div class="login-content">
+        <h2>Your Health, Our Priority</h2>
+        <p>Experience the future of healthcare with AI-powered diagnosis, instant doctor consultations, and secure medical records.</p>
+        <div class="login-features">
+          <div class="login-feature">
+            <div class="login-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span>Secure blockchain-based authentication</span>
+          </div>
+          <div class="login-feature">
+            <div class="login-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span>End-to-end encrypted health records</span>
+          </div>
+          <div class="login-feature">
+            <div class="login-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span>UIDAI verified identity</span>
+          </div>
+          <div class="login-feature">
+            <div class="login-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span>Instant access to medical services</span>
+          </div>
+        </div>
+      </div>
+      <div class="login-footer">Use the right Panel for Login and Registration</div>
+    </div>
+    <div class="login-right">
+      <div class="login-form-container">
+        <div class="login-mobile-logo">
+          <div class="logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+          <div>
+            <h1>AInosis</h1>
+            <p>AI-Powered Healthcare</p>
+          </div>
+        </div>
+        <div class="login-form-header">
+          <h2>Welcome Back</h2>
+          <p>Login with your Aadhaar for secure access</p>
+        </div>
+        <div class="medical-card">
+          <div class="login-security-badge">
+            <div class="login-security-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            </div>
+            <div class="login-security-text">
+              <h4>Blockchain Secured</h4>
+              <p>Aadhaar-based decentralized verification</p>
+            </div>
+          </div>
+          <form id="login-form" class="login-form">
+            <div id="aadhaar-step">
+              <label for="aadhaar">Aadhaar Number</label>
+              <div class="input-icon">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10a2 2 0 0 0-2 2c0 1.02.77 2 2 2s2-.98 2-2a2 2 0 0 0-2-2z"/><path d="M12 3c-4.97 0-9 2.69-9 6v6c0 3.31 4.03 6 9 6s9-2.69 9-6V9c0-3.31-4.03-6-9-6z"/></svg>
+                <input type="text" id="aadhaar" class="input" placeholder="XXXX-XXXX-XXXX" maxlength="14">
+              </div>
+              <p class="help-text">Enter your 12-digit Aadhaar number</p>
+            </div>
+            <div id="otp-step" class="hidden">
+              <div class="otp-success">
+                <p>OTP sent to mobile linked with Aadhaar</p>
+              </div>
+              <div style="margin-top: 1.5rem;">
+                <label for="otp">Enter OTP</label>
+                <input type="text" id="otp" class="input" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align: center; letter-spacing: 0.5em; font-size: 1.125rem;">
+                <p class="help-text" style="text-align: center;">Demo OTP: <strong>123456</strong></p>
+              </div>
+            </div>
+            <button type="submit" id="login-btn" class="btn btn-medical w-full" style="height: 3rem;">
+              <span id="btn-text">Send OTP</span>
+              <svg id="btn-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+            <button type="button" id="change-aadhaar-btn" class="btn btn-ghost w-full hidden">Change Aadhaar Number</button>
+          </form>
+        </div>
+        <p class="login-terms">By logging in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard-page" class="dashboard-container hidden">
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-logo" onclick="navigateTo('dashboard')">
+          <div class="sidebar-logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+          <div>
+            <h1>AInosis</h1>
+            <p>Medical Assistant</p>
+          </div>
+        </a>
+        <button class="sidebar-close" onclick="closeSidebar()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-card">
+          <img src="pro.jpg" alt="User">
+          <div>
+            <h4>SATISH PREETHAM VANGALAPUDI</h4>
+            <p>Blood: O+</p>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link active" data-page="dashboard" onclick="navigateTo('dashboard')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Dashboard</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="symptoms" onclick="navigateTo('symptoms')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>AI Symptom Assistant</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="emergency" onclick="navigateTo('emergency')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Emergency Tutorials</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="appointments" onclick="navigateTo('appointments')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Doctor Appointments</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="stores" onclick="navigateTo('stores')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Medical Stores</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="hospitals" onclick="navigateTo('hospitals')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Hospitals Nearby</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="longterm" onclick="navigateTo('longterm')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Long-term Care</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="delivery" onclick="navigateTo('delivery')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>Home Delivery</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="medicine" onclick="navigateTo('medicine')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Medicine Info</button></li>
+          <li class="sidebar-nav-item"><button class="sidebar-nav-link" data-page="history" onclick="navigateTo('history')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Medical History</button></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline w-full" onclick="logout()" style="justify-content: flex-start; gap: 0.75rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+      <button class="mobile-header-btn" onclick="openSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      </button>
+      <div class="mobile-header-logo">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </div>
+        <span>AInosis</span>
+      </div>
+      <button class="mobile-header-btn notification-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="notification-dot"></span>
+      </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="main-content-inner">
+        <!-- Dashboard Home -->
+        <div id="page-dashboard" class="page-content">
+          <div class="welcome-card medical-card">
+            <div class="welcome-content">
+              <div>
+                <p class="welcome-date" id="current-date"></p>
+                <h1 class="welcome-title">Welcome back, Preetham!</h1>
+                <p class="welcome-subtitle">Your health dashboard is ready. How can we help you today?</p>
+              </div>
+              <div class="welcome-user">
+                <img src="pro.jpg" alt="User">
+                <div>
+                  <h4>Satish Preetham</h4>
+                  <p>Blood Group: O+</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="medical-card stat-card">
+              <div class="stat-icon" style="background: var(--medical-green-light);"><svg style="color: var(--medical-green);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
+              <div><p class="stat-value">4</p><p class="stat-label">Health Records</p></div>
+            </div>
+            <div class="medical-card stat-card">
+              <div class="stat-icon" style="background: var(--medical-blue-light);"><svg style="color: var(--medical-blue);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+              <div><p class="stat-value">3</p><p class="stat-label">Available Now</p></div>
+            </div>
+            <div class="medical-card stat-card">
+              <div class="stat-icon" style="background: var(--medical-orange-light);"><svg style="color: var(--medical-orange);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div><p class="stat-value">24/7</p><p class="stat-label">AI Support</p></div>
+            </div>
+            <div class="medical-card stat-card">
+              <div class="stat-icon" style="background: var(--medical-purple-light);"><svg style="color: var(--medical-purple);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+              <div><p class="stat-value">Active</p><p class="stat-label">Health Status</p></div>
+            </div>
+          </div>
+          <div class="features-section">
+            <h2>Quick Access</h2>
+            <div class="features-grid" id="features-grid"></div>
+          </div>
+        </div>
+
+        <!-- Symptom Assistant -->
+        <div id="page-symptoms" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-teal-light);"><svg style="color: var(--medical-teal);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div>
+            <div><h1>AI Symptom Assistant</h1><p>Describe your symptoms for risk assessment</p></div>
+          </div>
+          <div class="chat-disclaimer" style="background: var(--medical-orange-light);">
+            <svg style="color: var(--medical-orange);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <p style="color: var(--medical-orange);"><strong>Disclaimer:</strong> This AI assistant provides preliminary symptom assessment only. It is not a substitute for professional medical advice.</p>
+          </div>
+          <div class="chat-container medical-card chat-box">
+            <div class="chat-messages" id="symptom-messages"></div>
+            <div class="chat-suggestions">
+              <p>Quick symptoms:</p>
+              <div class="chat-suggestions-list">
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have fever')">Fever</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have headache')">Headache</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have cough')">Cough</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have chest pain')">Chest Pain</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have sore throat')">Sore Throat</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have fatigue')">Fatigue</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have dizziness')">Dizziness</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have shortness of breath')">Shortness of Breath</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have nausea')">Nausea</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have diarrhea')">Diarrhea</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have joint pain')">Joint Pain</button>
+  <button class="chat-suggestion-btn" onclick="setSymptomInput('I have back pain')">Back Pain</button>
+</div>
+
+            </div>
+            <div class="chat-input-area">
+              <input type="text" id="symptom-input" class="input" placeholder="Describe your symptoms...">
+              <button class="btn btn-medical" onclick="sendSymptomMessage()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Tutorials -->
+        <div id="page-emergency" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-red-light);"><svg style="color: var(--medical-red);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+            <div><h1>Emergency Tutorials</h1><p>Life-saving first aid guides</p></div>
+          </div>
+          <div class="emergency-banner medical-card">
+            <div class="emergency-banner-content">
+              <div class="emergency-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+              <div style="flex: 1;"><h2 style="font-weight: 700; font-size: 1.125rem;">Emergency Numbers</h2><p style="opacity: 0.8; font-size: 0.875rem;">Ambulance: 108 | Police: 100 | Fire: 101 | Emergency: 112</p></div>
+            </div>
+          </div>
+          <div class="filter-tabs" style="margin-top: 1.5rem;">
+            <button class="filter-tab active" onclick="filterTutorials('all')">All</button>
+            <button class="filter-tab" onclick="filterTutorials('video')">Videos</button>
+            <button class="filter-tab" onclick="filterTutorials('article')">Articles</button>
+          </div>
+          <div class="features-grid" id="tutorials-grid" style="margin-top: 1rem;"></div>
+        </div>
+
+        <!-- Doctor Appointments -->
+        <div id="page-appointments" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-blue-light);"><svg style="color: var(--medical-blue);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+            <div><h1>Doctor Appointments</h1><p>Book consultations with specialists</p></div>
+          </div>
+          <div class="filter-tabs" id="specialty-filters"></div>
+          <div id="doctors-list" style="margin-top: 1rem;"></div>
+        </div>
+
+        <!-- Medical Stores -->
+        <!-- <div id="page-stores" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-green-light);"><svg style="color: var(--medical-green);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><h1>Medical Stores Nearby</h1><p>Find pharmacies near your location</p></div>
+          </div>
+          <div class="map-section">
+            <div class="map-container">
+              <div class="map-placeholder">
+                <div class="map-placeholder-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div>
+                <h3>Interactive Map</h3>
+                <p>Map showing 3 medical stores in your area</p>
+              </div>
+              <div class="location-badge"><div class="location-dot"></div><span>Your Location</span></div>
+            </div>
+            <div id="stores-list"></div>
+          </div>
+        </div> -->
+        <!-- Medical Stores -->
+        <div id="page-stores" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-green-light);">
+              <svg style="color: var(--medical-green);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <h1>Medical Stores Nearby</h1>
+              <p>Find pharmacies near your location</p>
+            </div>
+          </div>
+          <div class="map-section">
+            <div class="map-container">
+              <iframe 
+                src="pharmacy-nearby.html" 
+                style="width: 100%; height: 100%; border: none; border-radius: 12px;"
+                title="Medical Stores Map"
+                loading="lazy">
+              </iframe>
+              <div class="location-badge">
+                <div class="location-dot"></div>
+                <span>Your Location</span>
+              </div>
+            </div>
+            <div id="stores-list"></div>
+          </div>
+        </div>
+
+        <!-- Hospitals
+        <div id="page-hospitals" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-orange-light);"><svg style="color: var(--medical-orange);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></div>
+            <div><h1>Hospitals Nearby</h1><p>Find hospitals with bed availability</p></div>
+          </div>
+          <div class="emergency-banner medical-card" style="margin-bottom: 1.5rem;">
+            <div class="emergency-banner-content">
+              <div class="emergency-icon" style="animation: pulse 2s ease-in-out infinite;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+              <div style="flex: 1;"><h2 style="font-weight: 700; font-size: 1.125rem;">Emergency? Call 108</h2><p style="opacity: 0.8; font-size: 0.875rem;">For immediate medical emergencies, call the ambulance helpline</p></div>
+              <button class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);" onclick="window.open('tel:108')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call 108</button>
+            </div>
+          </div>
+          <div class="map-section">
+            <div class="map-container">
+              <div class="map-placeholder">
+                <div class="map-placeholder-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></div>
+                <h3>Hospital Map</h3>
+                <p>Map showing 3 hospitals in your area</p>
+              </div>
+              <div class="location-badge"><div class="location-dot"></div><span>Your Location</span></div>
+            </div>
+            <div id="hospitals-list"></div>
+          </div>
+        </div> -->
+        <!-- Hospitals -->
+        <div id="page-hospitals" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-orange-light);">
+              <svg style="color: var(--medical-orange);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+                <path d="M10 6h4"/>
+                <path d="M10 10h4"/>
+                <path d="M10 14h4"/>
+                <path d="M10 18h4"/>
+              </svg>
+            </div>
+            <div>
+              <h1>Hospitals Nearby</h1>
+              <p>Find hospitals with bed availability</p>
+            </div>
+          </div>
+          
+          <div class="emergency-banner medical-card" style="margin-bottom: 1.5rem;">
+            <div class="emergency-banner-content">
+              <div class="emergency-icon" style="animation: pulse 2s ease-in-out infinite;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                  <path d="M12 9v4"/>
+                  <path d="M12 17h.01"/>
+                </svg>
+              </div>
+              <div style="flex: 1;">
+                <h2 style="font-weight: 700; font-size: 1.125rem;">Emergency? Call 108</h2>
+                <p style="opacity: 0.8; font-size: 0.875rem;">For immediate medical emergencies, call the ambulance helpline</p>
+              </div>
+              <button class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);" onclick="window.open('tel:108')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                Call 108
+              </button>
+            </div>
+          </div>
+          
+          <!-- Map Container with Iframe -->
+          <div class="medical-card" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+            <iframe 
+              src="hospitals-nearby.html" 
+              style="width: 100%; height: 30rem; border: none; display: block;"
+              title="Nearby Hospitals Map"
+              allow="geolocation">
+            </iframe>
+          </div>
+          
+          <!-- Optional: Hospital List Section -->
+          <div id="hospitals-list" style="display: grid; gap: 1rem;">
+            <!-- You can add additional hospital cards here if needed -->
+          </div>
+        </div>
+
+
+
+        <!-- Long Term Care -->
+        <div id="page-longterm" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-purple-light);"><svg style="color: var(--medical-purple);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+            <div><h1>Long-term Care Programs</h1><p>Specialized care for chronic conditions</p></div>
+          </div>
+          <div class="medical-card" style="background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%); color: white; margin-bottom: 1.5rem;">
+            <h2 style="font-weight: 700; font-size: 1.125rem; margin-bottom: 0.5rem;">Personalized Long-term Care</h2>
+            <p style="opacity: 0.8; font-size: 0.875rem;">Our specialized programs provide continuous monitoring, expert consultations, and comprehensive care plans for managing chronic conditions effectively.</p>
+          </div>
+          <div class="features-grid" id="care-programs-grid"></div>
+        </div>
+
+        <!-- Home Delivery -->
+        <div id="page-delivery" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-teal-light);"><svg style="color: var(--medical-teal);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></div>
+            <div><h1>Home Delivery</h1><p>Get medicines delivered to your doorstep</p></div>
+          </div>
+          <div class="delivery-types">
+            <div class="medical-card delivery-type-card">
+              <div class="delivery-type-icon" style="background: hsla(174, 72%, 40%, 0.1); color: var(--medical-teal);"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></div>
+              <h3>Regular</h3>
+              <p class="time">2-4 hours</p>
+              <p class="price">₹40</p>
+            </div>
+            <div class="medical-card delivery-type-card emergency">
+              <div class="delivery-type-icon" style="background: var(--medical-red); color: white;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+              <h3>Emergency</h3>
+              <p class="time">30-60 mins</p>
+              <p class="price">₹100</p>
+            </div>
+            <div class="medical-card delivery-type-card">
+              <div class="delivery-type-icon" style="background: hsla(174, 72%, 40%, 0.1); color: var(--medical-teal);"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+              <h3>Senior (55+)</h3>
+              <p class="time">2-4 hours</p>
+              <p class="price">₹20</p>
+            </div>
+            <div class="medical-card delivery-type-card">
+              <div class="delivery-type-icon" style="background: hsla(174, 72%, 40%, 0.1); color: var(--medical-teal);"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+              <h3>Disabled</h3>
+              <p class="time">2-4 hours</p>
+              <p class="price">FREE</p>
+            </div>
+          </div>
+          <h2 style="font-weight: 700; font-size: 1.125rem; margin: 1.5rem 0 1rem;">Available Medicines</h2>
+          <div class="features-grid" id="medicines-grid"></div>
+          <div id="floating-cart" class="floating-cart hidden">
+            <button class="floating-cart-btn" onclick="showCart()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+              <span class="cart-count" id="cart-count">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Medicine Info -->
+        <div id="page-medicine" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-blue-light);"><svg style="color: var(--medical-blue);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></div>
+            <div><h1>Medicine Information</h1><p>Learn about your medications</p></div>
+          </div>
+          <div class="chat-disclaimer" style="background: var(--medical-blue-light);">
+            <svg style="color: var(--medical-blue);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <p style="color: var(--medical-blue);"><strong>Safety First:</strong> This bot only provides medicine information. It will not respond to non-medical queries.</p>
+          </div>
+          <div class="chat-container medical-card chat-box">
+            <div class="chat-messages" id="medicine-messages"></div>
+            <div class="chat-suggestions">
+              <p>Common medicines:</p>
+              <div class="chat-suggestions-list">
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Paracetamol')">💊 Paracetamol</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Aspirin')">💊 Aspirin</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Metformin')">💊 Metformin</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Salbutamol Inhaler')">💊 Salbutamol Inhaler</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Atorvastatin')">💊 Atorvastatin</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Losartan')">💊 Losartan</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Levothyroxine')">💊 Levothyroxine</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Ibuprofen')">💊 Ibuprofen</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Omeprazole')">💊 Omeprazole</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Amlodipine')">💊 Amlodipine</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Lorazepam')">💊 Lorazepam</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Montelukast')">💊 Montelukast</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Glimepiride')">💊 Glimepiride</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Prednisolone')">💊 Prednisolone</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Cetirizine')">💊 Cetirizine</button>
+  <button class="chat-suggestion-btn" onclick="setMedicineInput('Tell me about Clopidogrel')">💊 Clopidogrel</button>
+</div>
+
+            </div>
+            <div class="chat-input-area">
+              <input type="text" id="medicine-input" class="input" placeholder="Enter medicine name...">
+              <button class="btn btn-medical" onclick="sendMedicineMessage()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medical History -->
+        <div id="page-history" class="page-content hidden">
+          <div class="page-header">
+            <div class="page-icon" style="background: var(--medical-green-light);"><svg style="color: var(--medical-green);" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><h1>Medical History</h1><p>Your complete health records</p></div>
+          </div>
+          <div class="history-stats">
+            <div class="medical-card history-stat"><p class="value" style="color: var(--primary);">4</p><p class="label">Total Visits</p></div>
+            <div class="medical-card history-stat"><p class="value" style="color: var(--medical-blue);">3</p><p class="label">Doctors</p></div>
+            <div class="medical-card history-stat"><p class="value" style="color: var(--medical-green);">8</p><p class="label">Prescriptions</p></div>
+            <div class="medical-card history-stat"><p class="value" style="color: var(--medical-orange);">1</p><p class="label">Follow-ups</p></div>
+          </div>
+          <h2 style="font-weight: 700; font-size: 1.125rem; margin-bottom: 1rem;">Visit History</h2>
+          <div class="history-timeline" id="history-timeline"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+
+  <script>
+    // ==================== DATA ====================
+    const userData = {
+      name: 'Rajesh Kumar',
+      aadhaarNumber: '1234-5678-9012',
+      phone: '+91 98765 43210',
+      bloodGroup: 'O+',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
+    };
+
+    const doctors = [
+      { id: '1', name: 'Dr. Priya Sharma', specialty: 'General Physician', hospital: 'Apollo Hospital', location: 'Koramangala, Bangalore', rating: 4.8, experience: 15, fee: 500, avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '10:30 AM Today', qualifications: ['MBBS', 'MD'] },
+      { id: '2', name: 'Dr. Amit Verma', specialty: 'Cardiologist', hospital: 'Fortis Hospital', location: 'Whitefield, Bangalore', rating: 4.9, experience: 20, fee: 1200, avatar: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:00 PM Today', qualifications: ['MBBS', 'DM', 'FACC'] },
+      { id: '3', name: 'Dr. Sunita Reddy', specialty: 'Pulmonologist', hospital: 'Manipal Hospital', location: 'HAL, Bangalore', rating: 4.7, experience: 12, fee: 800, avatar: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '11:00 AM Tomorrow', qualifications: ['MBBS', 'MD'] },
+      { id: '4', name: 'Dr. Vikram Singh', specialty: 'Neurologist', hospital: 'NIMHANS', location: 'Hosur Road, Bangalore', rating: 4.9, experience: 25, fee: 1500, avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:30 PM Today', qualifications: ['MBBS', 'DM', 'FRCP'] },
+      { id: '5', name: 'Dr. Meera Krishnan', specialty: 'Endocrinologist', hospital: 'Narayana Health', location: 'Bommasandra, Bangalore', rating: 4.6, experience: 10, fee: 900, avatar: 'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '9:00 AM Tomorrow', qualifications: ['MBBS', 'DM'] },
+      { id: '6', name: 'Dr. Rajesh Iyer', specialty: 'General Physician', hospital: 'Columbia Asia Hospital', location: 'Hebbal, Bangalore', rating: 4.9, experience: 18, fee: 600, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:00 PM Today', qualifications: ['MBBS', 'MD'] },
+      { id: '7', name: 'Dr. Karthik Reddy', specialty: 'General Physician', hospital: 'BGS Global Hospital', location: 'Kengeri, Bangalore', rating: 4.4, experience: 11, fee: 300, avatar: 'https://images.unsplash.com/photo-1527613426441-4da17471b66d?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '04:00 PM Today', qualifications: ['MBBS'] },
+      { id: '8', name: 'Dr. Anjali Menon', specialty: 'General Physician', hospital: 'Narayana Health City', location: 'Bommasandra, Bangalore', rating: 4.8, experience: 13, fee: 550, avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:45 PM Today', qualifications: ['MBBS', 'DNB'] },
+      { id: '9', name: 'Dr. Suresh Gowda', specialty: 'General Physician', hospital: 'St. John\'s Medical College Hospital', location: 'Koramangala, Bangalore', rating: 4.9, experience: 20, fee: 650, avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '09:45 AM Today', qualifications: ['MBBS'] },
+      { id: '10', name: 'Dr. Meera Nair', specialty: 'Endocrinologist', hospital: 'Sakra World Hospital', location: 'Marathahalli, Bangalore', rating: 4.6, experience: 9, fee: 400, avatar: 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '03:00 PM Today', qualifications: ['MBBS', 'MD'] },
+      { id: '11', name: 'Dr. Arjun Malhotra', specialty: 'Cardiologist', hospital: 'Apollo Hospital', location: 'Bannerghatta Road, Bangalore', rating: 4.7, experience: 14, fee: 1100, avatar: 'https://images.unsplash.com/photo-1545996124-1e74d9a5b3a1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '5:00 PM Today', qualifications: ['MBBS', 'MD', 'DM'] },
+
+    { id: '12', name: 'Dr. Shalini Desai', specialty: 'Dermatologist', hospital: 'Fortis La Femme', location: 'Richmond Town, Bangalore', rating: 4.8, experience: 11, fee: 700, avatar: 'https://images.unsplash.com/photo-1544003433-53d6e84d86f6?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '10:00 AM Tomorrow', qualifications: ['MBBS', 'MD', 'DDVL'] },
+
+    { id: '13', name: 'Dr. Rohit Nambiar', specialty: 'Orthopedic Surgeon', hospital: 'Aster CMI Hospital', location: 'Hebbal, Bangalore', rating: 4.6, experience: 9, fee: 850, avatar: 'https://images.unsplash.com/photo-1531123415162-0c0cf1f1f5c6?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '11:15 AM Today', qualifications: ['MBBS', 'MS Ortho'] },
+
+    { id: '14', name: 'Dr. Kavitha Suresh', specialty: 'Pediatrician', hospital: 'Cloudnine Hospital', location: 'Jayanagar, Bangalore', rating: 4.9, experience: 16, fee: 650, avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '02:30 PM Today', qualifications: ['MBBS', 'MD Pediatrics'] },
+
+    { id: '15', name: 'Dr. Manoj Varma', specialty: 'Gastroenterologist', hospital: 'Manipal Hospital', location: 'Old Airport Road, Bangalore', rating: 4.8, experience: 19, fee: 1300, avatar: 'https://images.unsplash.com/photo-1524503033411-0c2d5d7760e8?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '6:00 PM Today', qualifications: ['MBBS', 'DM Gastro'] },
+
+    { id: '16', name: 'Dr. Priyanka Hegde', specialty: 'Neurologist', hospital: 'NIMHANS', location: 'Hosur Road, Bangalore', rating: 4.7, experience: 13, fee: 1400, avatar: 'https://images.unsplash.com/photo-1556487688-9a14f3f7d6d0?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '01:00 PM Today', qualifications: ['MBBS', 'DM Neuro'] },
+
+    { id: '17', name: 'Dr. Vivek Shankar', specialty: 'Psychiatrist', hospital: 'Spandana Hospital', location: 'Rajajinagar, Bangalore', rating: 4.5, experience: 8, fee: 750, avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:45 PM Today', qualifications: ['MBBS', 'MD Psychiatry'] },
+
+    { id: '18', name: 'Dr. Aishwarya Menon', specialty: 'Gynecologist', hospital: 'Motherhood Hospital', location: 'Indiranagar, Bangalore', rating: 4.9, experience: 17, fee: 900, avatar: 'https://images.unsplash.com/photo-1524507336988-7d3d2f8b0e5e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:15 PM Today', qualifications: ['MBBS', 'MD OBG'] },
+
+    { id: '19', name: 'Dr. Nikhil Rao', specialty: 'ENT Specialist', hospital: 'Columbia Asia Hospital', location: 'Yeshwanthpur, Bangalore', rating: 4.6, experience: 10, fee: 600, avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '09:00 AM Tomorrow', qualifications: ['MBBS', 'MS ENT'] },
+
+    { id: '20', name: 'Dr. Sneha Kulkarni', specialty: 'Ophthalmologist', hospital: 'Narayan Nethralaya', location: 'Rajajinagar, Bangalore', rating: 4.8, experience: 12, fee: 700, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:00 PM Today', qualifications: ['MBBS', 'MS Ophthalmology'] },
+   { id:'21', name:'Dr. Harsha Venkatesh', specialty:'General Physician', hospital:'Apollo Clinic', location:'Indiranagar, Bangalore', rating:4.7, experience:14, fee:500, avatar:'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face', available:true, nextSlot:'11:30 AM Today', qualifications:['MBBS','MD'] },
+{ id:'22', name:'Dr. Ramya Sreenivas', specialty:'General Physician', hospital:'Cloudnine Hospital', location:'Malleshwaram, Bangalore', rating:4.6, experience:9, fee:450, avatar:'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&face', available:true, nextSlot:'12:15 PM Today', qualifications:['MBBS'] },
+{ id:'23', name:'Dr. Naveen Bhat', specialty:'General Physician', hospital:'Aster RV Hospital', location:'JP Nagar, Bangalore', rating:4.8, experience:16, fee:550, avatar:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&face', available:false, nextSlot:'10:00 AM Tomorrow', qualifications:['MBBS','MD'] },
+{ id:'24', name:'Dr. Shruthi Rao', specialty:'General Physician', hospital:'Fortis Hospital', location:'Cunningham Road, Bangalore', rating:4.5, experience:8, fee:400, avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&face', available:true, nextSlot:'03:45 PM Today', qualifications:['MBBS'] },
+{ id:'25', name:'Dr. Nitin Kulkarni', specialty:'General Physician', hospital:'Narayana Clinic', location:'BTM Layout, Bangalore', rating:4.7, experience:12, fee:480, avatar:'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&face', available:true, nextSlot:'01:30 PM Today', qualifications:['MBBS','DNB'] },
+
+{ id:'26', name:'Dr. Raghav Shetty', specialty:'Cardiologist', hospital:'Apollo Hospital', location:'Jayanagar, Bangalore', rating:4.9, experience:18, fee:1400, avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&face', available:true, nextSlot:'02:45 PM Today', qualifications:['MBBS','DM','FACC'] },
+{ id:'27', name:'Dr. Kiran Malhotra', specialty:'Cardiologist', hospital:'Aster CMI Hospital', location:'Hebbal, Bangalore', rating:4.8, experience:15, fee:1300, avatar:'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&face', available:false, nextSlot:'10:00 AM Tomorrow', qualifications:['MBBS','MD','DM Cardio'] },
+{ id:'28', name:'Dr. Shriram V', specialty:'Cardiologist', hospital:'Fortis Hospital', location:'Bannerghatta Road, Bangalore', rating:4.7, experience:12, fee:1200, avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&face', available:true, nextSlot:'04:00 PM Today', qualifications:['MBBS','DM'] },
+{ id:'29', name:'Dr. Devika Raman', specialty:'Cardiologist', hospital:'Narayana Health', location:'Bommasandra, Bangalore', rating:4.9, experience:20, fee:1500, avatar:'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&face', available:true, nextSlot:'11:00 AM Today', qualifications:['MBBS','MD','DM'] },
+{ id:'30', name:'Dr. Anand Gopal', specialty:'Cardiologist', hospital:'Sakra World Hospital', location:'Marathahalli, Bangalore', rating:4.8, experience:17, fee:1350, avatar:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&face', available:true, nextSlot:'01:15 PM Today', qualifications:['MBBS','DM Cardio'] },
+
+{ id:'31', name:'Dr. Varun Chacko', specialty:'Pulmonologist', hospital:'Manipal Hospital', location:'Whitefield, Bangalore', rating:4.6, experience:10, fee:750, avatar:'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&face', available:true, nextSlot:'03:00 PM Today', qualifications:['MBBS','MD Pulmo'] },
+{ id:'32', name:'Dr. Leena Joseph', specialty:'Pulmonologist', hospital:'Aster RV Hospital', location:'JP Nagar, Bangalore', rating:4.7, experience:13, fee:800, avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&face', available:false, nextSlot:'10:30 AM Tomorrow', qualifications:['MBBS','DNB'] },
+{ id:'33', name:'Dr. Girish Hegde', specialty:'Pulmonologist', hospital:'Fortis Hospital', location:'Cunningham Road, Bangalore', rating:4.8, experience:15, fee:900, avatar:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&face', available:true, nextSlot:'12:00 PM Today', qualifications:['MBBS','MD'] },
+{ id:'34', name:'Dr. Prerana Kulal', specialty:'Pulmonologist', hospital:'Columbia Asia Hospital', location:'Hebbal, Bangalore', rating:4.6, experience:9, fee:700, avatar:'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&face', available:true, nextSlot:'04:20 PM Today', qualifications:['MBBS'] },
+{ id:'35', name:'Dr. Satvik Ramesh', specialty:'Pulmonologist', hospital:'Narayana Health City', location:'Bommasandra, Bangalore', rating:4.7, experience:12, fee:850, avatar:'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&face', available:true, nextSlot:'02:00 PM Today', qualifications:['MBBS','MD'] },
+
+{ id: '36', name: 'Dr. Nikhil Shetty', specialty: 'General Physician', hospital: 'Apollo Clinic', location: 'HSR Layout, Bangalore', rating: 4.7, experience: 9, fee: 500, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '11:45 AM Today', qualifications: ['MBBS'] },
+{ id: '37', name: 'Dr. Radhika Prabhu', specialty: 'Dermatologist', hospital: 'Oliva Skin Clinic', location: 'Indiranagar, Bangalore', rating: 4.8, experience: 12, fee: 900, avatar: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '5:20 PM Today', qualifications: ['MBBS', 'MD'] },
+{ id: '38', name: 'Dr. Kiran Desai', specialty: 'Orthopedic', hospital: 'Sakra World Hospital', location: 'Marathahalli, Bangalore', rating: 4.6, experience: 14, fee: 800, avatar: 'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:45 PM Today', qualifications: ['MBBS', 'MS Ortho'] },
+{ id: '39', name: 'Dr. Varsha Iyer', specialty: 'Pediatrician', hospital: 'Rainbow Children’s Hospital', location: 'Bannerghatta Road, Bangalore', rating: 4.9, experience: 10, fee: 750, avatar: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:20 PM Today', qualifications: ['MBBS', 'DCH'] },
+{ id: '40', name: 'Dr. Naveen Rao', specialty: 'ENT Specialist', hospital: 'Aster CMI Hospital', location: 'Hebbal, Bangalore', rating: 4.7, experience: 11, fee: 650, avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '9:40 AM Tomorrow', qualifications: ['MBBS', 'MS ENT'] },
+{ id: '41', name: 'Dr. Smita Kulkarni', specialty: 'General Physician', hospital: 'Cloudnine Hospital', location: 'Jayanagar, Bangalore', rating: 4.8, experience: 13, fee: 550, avatar: 'https://images.unsplash.com/photo-1583912268185-52b859b39a5b?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '1:15 PM Today', qualifications: ['MBBS'] },
+{ id: '42', name: 'Dr. Arjun Nayak', specialty: 'Cardiologist', hospital: 'Fortis Hospital', location: 'Bannerghatta Road, Bangalore', rating: 4.9, experience: 16, fee: 1300, avatar: 'https://images.unsplash.com/photo-1559839735-f1c4e1440ac1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:10 PM Today', qualifications: ['MBBS', 'DM Cardiology'] },
+{ id: '43', name: 'Dr. Sneha Murthy', specialty: 'Gynecologist', hospital: 'Motherhood Hospital', location: 'Sarjapur Road, Bangalore', rating: 4.7, experience: 14, fee: 900, avatar: 'https://images.unsplash.com/photo-1537368910026-7d97f0e4c776?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '10:25 AM Tomorrow', qualifications: ['MBBS', 'MS OBG'] },
+{ id: '44', name: 'Dr. Ajay Kumar', specialty: 'Neurologist', hospital: 'NIMHANS', location: 'Hosur Road, Bangalore', rating: 4.8, experience: 18, fee: 1500, avatar: 'https://images.unsplash.com/photo-1520813792242-3c1e6a96fd2c?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '6:00 PM Today', qualifications: ['MBBS', 'DM Neurology'] },
+{ id: '45', name: 'Dr. Pooja Sen', specialty: 'General Physician', hospital: 'Apollo Clinic', location: 'JP Nagar, Bangalore', rating: 4.6, experience: 8, fee: 450, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '1:50 PM Today', qualifications: ['MBBS'] },
+{ id: '46', name: 'Dr. Manoj Mathur', specialty: 'Psychiatrist', hospital: 'Mindful Health Center', location: 'BTM Layout, Bangalore', rating: 4.8, experience: 15, fee: 900, avatar: 'https://images.unsplash.com/photo-1485217988980-11786ced9454?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '11:10 AM Today', qualifications: ['MBBS', 'MD Psychiatry'] },
+{ id: '47', name: 'Dr. Lavanya Pillai', specialty: 'Dermatologist', hospital: 'Derma Care Clinic', location: 'Malleshwaram, Bangalore', rating: 4.7, experience: 12, fee: 850, avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '5:50 PM Today', qualifications: ['MBBS', 'MD Dermatology'] },
+{ id: '48', name: 'Dr. Rohit Das', specialty: 'Pulmonologist', hospital: 'Manipal Hospital', location: 'Old Airport Road, Bangalore', rating: 4.9, experience: 17, fee: 950, avatar: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:00 PM Today', qualifications: ['MBBS', 'MD Pulmonology'] },
+{ id: '49', name: 'Dr. Harshini K', specialty: 'General Physician', hospital: 'Aster RV Hospital', location: 'JP Nagar, Bangalore', rating: 4.8, experience: 10, fee: 500, avatar: 'https://images.unsplash.com/photo-1583912365583-c44f72f6b3b1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:20 PM Today', qualifications: ['MBBS'] },
+{ id: '50', name: 'Dr. Naveen Raj', specialty: 'Urologist', hospital: 'Columbia Asia Hospital', location: 'Hebbal, Bangalore', rating: 4.6, experience: 13, fee: 1000, avatar: 'https://images.unsplash.com/photo-1520813792241-65c07c44c23b?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:40 PM Today', qualifications: ['MBBS', 'MS Urology'] },
+{ id: '51', name: 'Dr. Swathi Ram', specialty: 'General Physician', hospital: 'Apollo Clinic', location: 'Electronic City, Bangalore', rating: 4.5, experience: 9, fee: 450, avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '10:10 AM Tomorrow', qualifications: ['MBBS'] },
+{ id: '52', name: 'Dr. Parth Subramani', specialty: 'Cardiologist', hospital: 'Aster CMI Hospital', location: 'Hebbal, Bangalore', rating: 4.9, experience: 19, fee: 1400, avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '5:15 PM Today', qualifications: ['MBBS', 'DM Cardiology'] },
+{ id: '53', name: 'Dr. Madhuri Jain', specialty: 'General Physician', hospital: 'Cloudnine Hospital', location: 'Whitefield, Bangalore', rating: 4.7, experience: 11, fee: 500, avatar: 'https://images.unsplash.com/photo-1537368910027-4c6a1c85ee01?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:35 PM Today', qualifications: ['MBBS'] },
+{ id: '54', name: 'Dr. Shashank Rao', specialty: 'Orthopedic', hospital: 'Fortis Hospital', location: 'Rajajinagar, Bangalore', rating: 4.8, experience: 16, fee: 900, avatar: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '11:50 AM Tomorrow', qualifications: ['MBBS', 'MS Ortho'] },
+{ id: '55', name: 'Dr. Kavitha Mohan', specialty: 'General Physician', hospital: 'Motherhood Hospital', location: 'HRBR Layout, Bangalore', rating: 4.6, experience: 8, fee: 400, avatar: 'https://images.unsplash.com/photo-1589558317013-65cc0d47ec86?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:55 PM Today', qualifications: ['MBBS'] },
+{ id: '56', name: 'Dr. Rohan Kulkarni', specialty: 'Neurologist', hospital: 'Manipal Hospital', location: 'Whitefield, Bangalore', rating: 4.9, experience: 21, fee: 1600, avatar: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:55 PM Today', qualifications: ['MBBS', 'DM Neurology'] },
+{ id: '57', name: 'Dr. Aishwarya Rao', specialty: 'Dermatologist', hospital: 'Oliva Clinic', location: 'Indiranagar, Bangalore', rating: 4.8, experience: 13, fee: 850, avatar: 'https://images.unsplash.com/photo-1583912305632-7dbf39357f2b?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '6:10 PM Today', qualifications: ['MBBS', 'MD Dermatology'] },
+{ id: '58', name: 'Dr. Bhargav Reddy', specialty: 'General Physician', hospital: 'Aster RV Hospital', location: 'JP Nagar, Bangalore', rating: 4.7, experience: 12, fee: 550, avatar: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:25 PM Today', qualifications: ['MBBS'] },
+{ id: '59', name: 'Dr. Neha Sundar', specialty: 'General Physician', hospital: 'Narayana Health', location: 'Electronic City, Bangalore', rating: 4.8, experience: 14, fee: 600, avatar: 'https://images.unsplash.com/photo-1583912296106-bd6dfdd504a6?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '9:15 AM Tomorrow', qualifications: ['MBBS'] },
+{ id: '60', name: 'Dr. Suraj Kumar', specialty: 'ENT Specialist', hospital: 'Sagar Hospitals', location: 'Jayanagar, Bangalore', rating: 4.6, experience: 10, fee: 650, avatar: 'https://images.unsplash.com/photo-1583912306137-1ebf7eecca40?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '1:20 PM Today', qualifications: ['MBBS', 'MS ENT'] },
+{ id: '61', name: 'Dr. Reema Dutta', specialty: 'General Physician', hospital: 'Columbia Asia', location: 'Hebbal, Bangalore', rating: 4.7, experience: 13, fee: 550, avatar: 'https://images.unsplash.com/photo-1544005313-5a59fca6b0c1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '11:30 AM Today', qualifications: ['MBBS'] },
+{ id: '62', name: 'Dr. Arvind Sagar', specialty: 'Cardiologist', hospital: 'Sakra World Hospital', location: 'Marathahalli, Bangalore', rating: 4.9, experience: 22, fee: 1400, avatar: 'https://images.unsplash.com/photo-1490135900376-4a36d0cc5d1c?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '3:10 PM Tomorrow', qualifications: ['MBBS', 'DM Cardiology'] },
+{ id: '63', name: 'Dr. Megha Narayan', specialty: 'Pediatrician', hospital: 'Rainbow Children’s Hospital', location: 'Hebbal, Bangalore', rating: 4.8, experience: 12, fee: 700, avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:45 PM Today', qualifications: ['MBBS', 'DCH'] },
+{ id: '64', name: 'Dr. Sudeep Kulal', specialty: 'Orthopedic', hospital: 'Aster CMI Hospital', location: 'Hebbal, Bangalore', rating: 4.7, experience: 15, fee: 850, avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:15 PM Today', qualifications: ['MBBS', 'MS Ortho'] },
+{ id: '65', name: 'Dr. Priya Venkatesh', specialty: 'General Physician', hospital: 'Apollo Clinic', location: 'Indiranagar, Bangalore', rating: 4.8, experience: 9, fee: 500, avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '5:45 PM Today', qualifications: ['MBBS'] },
+{ id: '66', name: 'Dr. Ritesh Babu', specialty: 'Pulmonologist', hospital: 'Manipal Hospital', location: 'Old Airport Road, Bangalore', rating: 4.8, experience: 16, fee: 900, avatar: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:35 PM Today', qualifications: ['MBBS', 'MD Pulmonology'] },
+{ id: '67', name: 'Dr. Shanaya Kapoor', specialty: 'Dermatologist', hospital: 'Derma Zone Clinic', location: 'Koramangala, Bangalore', rating: 4.7, experience: 10, fee: 850, avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '1:05 PM Today', qualifications: ['MBBS', 'MD Dermatology'] },
+{ id: '68', name: 'Dr. Aravind Kishan', specialty: 'General Physician', hospital: 'Fortis Clinic', location: 'HSR Layout, Bangalore', rating: 4.6, experience: 11, fee: 500, avatar: 'https://images.unsplash.com/photo-1520813792242-3c1e6a96fd2c?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '10:55 AM Today', qualifications: ['MBBS'] },
+{ id: '69', name: 'Dr. Sneha Bhat', specialty: 'General Physician', hospital: 'Cloudnine Hospital', location: 'BTM Layout, Bangalore', rating: 4.7, experience: 12, fee: 550, avatar: 'https://images.unsplash.com/photo-1537368910026-7d97f0e4c776?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:15 PM Today', qualifications: ['MBBS'] },
+{ id: '70', name: 'Dr. Yashwant Rao', specialty: 'Cardiologist', hospital: 'Narayana Health', location: 'Bommasandra, Bangalore', rating: 4.9, experience: 20, fee: 1450, avatar: 'https://images.unsplash.com/photo-1583912365583-c44f72f6b3b1?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '3:20 PM Tomorrow', qualifications: ['MBBS', 'DM Cardiology'] },
+{ id: '71', name: 'Dr. Lekha Ramesh', specialty: 'General Physician', hospital: 'St. John’s Hospital', location: 'Koramangala, Bangalore', rating: 4.8, experience: 14, fee: 600, avatar: 'https://images.unsplash.com/photo-1589558317013-65cc0d47ec86?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '1:40 PM Today', qualifications: ['MBBS'] },
+{ id: '72', name: 'Dr. Chandan Rao', specialty: 'Urologist', hospital: 'Apollo Hospital', location: 'Sheshadripuram, Bangalore', rating: 4.7, experience: 15, fee: 1100, avatar: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '4:05 PM Today', qualifications: ['MBBS', 'MS Urology'] },
+{ id: '73', name: 'Dr. Riya Fernandes', specialty: 'General Physician', hospital: 'Aster Clinic', location: 'Malleshwaram, Bangalore', rating: 4.7, experience: 10, fee: 500, avatar: 'https://images.unsplash.com/photo-1485217988980-11786ced9454?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '12:35 PM Today', qualifications: ['MBBS'] },
+{ id: '74', name: 'Dr. Mohan Shastri', specialty: 'General Physician', hospital: 'Columbia Asia Clinic', location: 'Yelahanka, Bangalore', rating: 4.8, experience: 15, fee: 650, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:40 PM Today', qualifications: ['MBBS'] },
+{ id: '75', name: 'Dr. Sandhya Pai', specialty: 'ENT Specialist', hospital: 'Sagar Hospitals', location: 'Jayanagar, Bangalore', rating: 4.6, experience: 9, fee: 600, avatar: 'https://images.unsplash.com/photo-1537368910027-4c6a1c85ee01?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '3:55 PM Today', qualifications: ['MBBS', 'MS ENT'] },
+{ id: '76', name: 'Dr. Tarun Prakash', specialty: 'General Physician', hospital: 'Motherhood Hospital', location: 'Sarjapur Road, Bangalore', rating: 4.7, experience: 12, fee: 500, avatar: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '9:50 AM Tomorrow', qualifications: ['MBBS'] },
+{ id: '77', name: 'Dr. Aditi Salgaonkar', specialty: 'Dermatologist', hospital: 'Oliva Skin Clinic', location: 'Koramangala, Bangalore', rating: 4.8, experience: 10, fee: 900, avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '6:25 PM Today', qualifications: ['MBBS', 'MD Dermatology'] },
+{ id: '78', name: 'Dr. Vinod Patil', specialty: 'Pulmonologist', hospital: 'Aster CMI Hospital', location: 'Hebbal, Bangalore', rating: 4.8, experience: 14, fee: 950, avatar: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '11:20 AM Tomorrow', qualifications: ['MBBS', 'MD Pulmonology'] },
+{ id: '79', name: 'Dr. Neelima Rao', specialty: 'General Physician', hospital: 'Aster Clinic', location: 'HSR Layout, Bangalore', rating: 4.6, experience: 8, fee: 450, avatar: 'https://images.unsplash.com/photo-1583912296106-bd6dfdd504a6?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:05 PM Today', qualifications: ['MBBS'] },
+{ id: '80', name: 'Dr. Rajdeep Menon', specialty: 'Orthopedic', hospital: 'Manipal Hospital', location: 'Old Airport Road, Bangalore', rating: 4.7, experience: 13, fee: 900, avatar: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '5:30 PM Today', qualifications: ['MBBS', 'MS Ortho'] },
+{ id: '81', name: 'Dr. Shreya Pillai', specialty: 'General Physician', hospital: 'Cloudnine Hospital', location: 'Indiranagar, Bangalore', rating: 4.7, experience: 9, fee: 500, avatar: 'https://images.unsplash.com/photo-1583912306137-1ebf7eecca40?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '4:25 PM Today', qualifications: ['MBBS'] },
+{ id: '82', name: 'Dr. Koushik R', specialty: 'Cardiologist', hospital: 'Fortis Hospital', location: 'Hebbal, Bangalore', rating: 4.9, experience: 18, fee: 1500, avatar: 'https://images.unsplash.com/photo-1490135900376-4a36d0cc5d1c?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '6:45 PM Today', qualifications: ['MBBS', 'DM Cardiology'] },
+{ id: '83', name: 'Dr. Anjana S', specialty: 'General Physician', hospital: 'Narayana Health City', location: 'Bommasandra, Bangalore', rating: 4.8, experience: 11, fee: 500, avatar: 'https://images.unsplash.com/photo-1589558317013-65cc0d47ec86?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '2:55 PM Today', qualifications: ['MBBS'] },
+{ id: '84', name: 'Dr. Vinay K', specialty: 'ENT Specialist', hospital: 'Apollo ENT Clinic', location: 'HSR Layout, Bangalore', rating: 4.7, experience: 13, fee: 700, avatar: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=150&h=150&fit=crop&crop=face', available: false, nextSlot: '10:40 AM Tomorrow', qualifications: ['MBBS', 'MS ENT'] },
+{ id: '85', name: 'Dr. Rachana Murali', specialty: 'General Physician', hospital: 'St. Martha’s Hospital', location: 'Shivajinagar, Bangalore', rating: 4.9, experience: 15, fee: 600, avatar: 'https://images.unsplash.com/photo-1559839735-f1c4e1440ac1?w=150&h=150&fit=crop&crop=face', available: true, nextSlot: '12:30 PM Today', qualifications: ['MBBS'] },
+
+    ];
+
+    const medicalRecords = [
+      { id: '1', date: '2024-01-15', doctor: 'Dr. Priya Sharma', hospital: 'Apollo Hospital', diagnosis: 'Seasonal Flu', prescription: ['Paracetamol 500mg', 'Cetirizine 10mg', 'Vitamin C 1000mg'], notes: 'Rest for 3 days. Drink plenty of fluids.', followUp: '2024-01-22' },
+      { id: '2', date: '2023-11-20', doctor: 'Dr. Amit Patel', hospital: 'Fortis Hospital', diagnosis: 'Routine Cardiac Checkup', prescription: ['Aspirin 75mg', 'Atorvastatin 10mg'], notes: 'Heart function normal. Continue medication.', followUp: '2024-05-20' },
+      { id: '3', date: '2023-08-10', doctor: 'Dr. Sunita Reddy', hospital: 'Manipal Hospital', diagnosis: 'Mild Asthma', prescription: ['Salbutamol Inhaler', 'Budesonide Inhaler'], notes: 'Avoid dust and pollution.' },
+      { id: '4', date: '2023-05-05', doctor: 'Dr. Meera Krishnan', hospital: 'Narayana Health', diagnosis: 'Pre-diabetic Condition', prescription: ['Metformin 500mg'], notes: 'Diet control essential. Regular exercise.', followUp: '2023-08-05' }
+    ];
+
+    const medicines = [
+  { id: '1', name: 'Paracetamol 500mg', manufacturer: 'Cipla', price: 25, dosage: '1 tablet every 6 hours', category: 'Pain Relief' },
+  { id: '2', name: 'Metformin 500mg', manufacturer: 'Sun Pharma', price: 45, dosage: '1 tablet twice daily', category: 'Diabetes' },
+  { id: '3', name: 'Salbutamol Inhaler', manufacturer: 'GSK', price: 180, dosage: '1-2 puffs as needed', category: 'Respiratory' },
+  { id: '4', name: 'Atorvastatin 10mg', manufacturer: "Dr. Reddy's", price: 85, dosage: '1 tablet at bedtime', category: 'Cardiovascular' },
+  { id: '5', name: 'Losartan 50mg', manufacturer: 'Sun Pharma', price: 60, dosage: '1 tablet daily', category: 'Hypertension' },
+  { id: '6', name: 'Levothyroxine 50mcg', manufacturer: 'Cipla', price: 35, dosage: '1 tablet every morning', category: 'Thyroid' },
+  { id: '7', name: 'Ibuprofen 400mg', manufacturer: 'Torrent Pharma', price: 30, dosage: '1 tablet every 8 hours', category: 'Pain Relief' },
+  { id: '8', name: 'Omeprazole 20mg', manufacturer: 'GSK', price: 50, dosage: '1 capsule before breakfast', category: 'Gastrointestinal' },
+  { id: '9', name: 'Amlodipine 5mg', manufacturer: 'Sun Pharma', price: 40, dosage: '1 tablet daily', category: 'Cardiovascular' },
+  { id: '10', name: 'Lorazepam 1mg', manufacturer: 'Cipla', price: 70, dosage: '1 tablet at bedtime', category: 'Mental Health' },
+  { id: '11', name: 'Montelukast 10mg', manufacturer: "Dr. Reddy's", price: 55, dosage: '1 tablet daily', category: 'Respiratory' },
+  { id: '12', name: 'Glimepiride 2mg', manufacturer: 'Cipla', price: 50, dosage: '1 tablet daily', category: 'Diabetes' },
+  { id: '13', name: 'Prednisolone 5mg', manufacturer: 'Sun Pharma', price: 65, dosage: '1 tablet daily', category: 'Anti-inflammatory' },
+  { id: '14', name: 'Cetirizine 10mg', manufacturer: 'Cipla', price: 20, dosage: '1 tablet daily', category: 'Allergy' },
+  { id: '15', name: 'Clopidogrel 75mg', manufacturer: "Dr. Reddy's", price: 90, dosage: '1 tablet daily', category: 'Cardiovascular' }
+];
+
+
+    const medicalStores = [
+      { id: '1', name: 'Apollo Pharmacy', address: '45, 1st Main Road, Koramangala', phone: '+91 80 4567 8901', distance: '0.5 km', rating: 4.5, isOpen: true, timing: '24 Hours' },
+      { id: '2', name: 'MedPlus', address: '78, 5th Cross, Indiranagar', phone: '+91 80 4567 8902', distance: '1.2 km', rating: 4.3, isOpen: true, timing: '8 AM - 11 PM' },
+      { id: '3', name: 'Netmeds Store', address: '12, HSR Layout Sector 1', phone: '+91 80 4567 8903', distance: '2.0 km', rating: 4.6, isOpen: false, timing: '9 AM - 10 PM' }
+    ];
+
+    const hospitals = [
+      { id: '1', name: 'Apollo Hospital', address: 'Bannerghatta Road, Bangalore', phone: '+91 80 2630 4050', distance: '3.5 km', rating: 4.8, emergencyAvailable: true, beds: 500, bedsAvailable: 45, specialties: ['Cardiology', 'Neurology', 'Oncology'] },
+      { id: '2', name: 'Fortis Hospital', address: 'Cunningham Road, Bangalore', phone: '+91 80 6621 4444', distance: '5.2 km', rating: 4.7, emergencyAvailable: true, beds: 400, bedsAvailable: 32, specialties: ['Cardiology', 'Gastroenterology'] },
+      { id: '3', name: 'Manipal Hospital', address: 'HAL Airport Road, Bangalore', phone: '+91 80 2502 4444', distance: '4.8 km', rating: 4.6, emergencyAvailable: true, beds: 600, bedsAvailable: 78, specialties: ['Pulmonology', 'Oncology', 'Pediatrics'] }
+    ];
+
+const emergencyTutorials = [
+  {
+    id: '1',
+    title: 'CPR – Step‑by‑Step Guide',
+    category: 'Life Saving',
+    type: 'video',
+    content: 'Learn how to perform CPR correctly to help in cardiac arrest situations.',  
+    videoUrl: 'https://www.youtube.com/embed/ewdKM9NYo1A', // real CPR tutorial :contentReference[oaicite:0]{index=0}
+    thumbnail: 'https://images.pexels.com/photos/4031816/pexels-photo-4031816.jpeg?w=400&h=300&fit=crop',
+    duration: '10 min',
+    steps: ['Check responsiveness','Call emergency services','Chest compressions','Rescue breaths','Continue until help arrives']
+  },
+  {
+    id: '2',
+    title: 'Choking First Aid (Heimlich)',
+    category: 'Life Saving',
+    type: 'video',
+    content: 'What to do if a person of any age is choking.',  
+    videoUrl: 'https://www.youtube.com/embed/HGBBu4zr8sM', // real choking aid video :contentReference[oaicite:1]{index=1}
+    thumbnail: 'https://images.pexels.com/photos/4031819/pexels-photo-4031819.jpeg?w=400&h=300&fit=crop',
+    duration: '4 min',
+    steps: ['Ask if choking','Stand behind person','Perform abdominal thrusts','Repeat until object ejects','Call for help if needed']
+  },
+  {
+    id: '3',
+    title: 'Recovery Position – First Aid',
+    category: 'Life Saving',
+    type: 'video',
+    content: 'How to place an unconscious but breathing person in the safe recovery position.',  
+    videoUrl: 'https://www.youtube.com/embed/GmqXqwSV3bo', // real recovery position video :contentReference[oaicite:2]{index=2}
+    thumbnail: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?w=400&h=300&fit=crop',
+    duration: '4 min',
+    steps: ['Check breathing','Roll onto side carefully','Support head','Check airway','Monitor until help arrives']
+  },
+  {
+    id: '4',
+    title: 'Treating Severe Bleeding',
+    category: 'First Aid',
+    type: 'video',
+    content: 'Steps to handle heavy bleeding and prevent shock.',  
+    videoUrl: 'https://www.youtube.com/embed/jYtJS1PtNq0', // real bleeding control video :contentReference[oaicite:3]{index=3}
+    thumbnail: 'https://images.pexels.com/photos/442748/pexels-photo-442748.jpeg?w=400&h=300&fit=crop',
+    duration: '6 min',
+    steps: ['Apply direct pressure','Use clean cloths','Elevate wound','Do not remove soaked cloths','Call emergency help']
+  },
+  {
+    id: '5',
+    title: 'Poisoning First Aid',
+    category: 'Emergency',
+    type: 'video',
+    content: 'Recognition and care following possible poisoning incidents.',  
+    videoUrl: 'https://www.youtube.com/embed/b2ieb8BZJuY', // real poison first aid :contentReference[oaicite:4]{index=4}
+    thumbnail: 'https://images.pexels.com/photos/40568/pexels-photo-40568.jpeg?w=400&h=300&fit=crop',
+    duration: '5 min',
+    steps: ['Check what was ingested','Call poison control','Do NOT induce vomiting','Stay with person','Get professional help']
+  },
+  {
+    id: '6',
+    title: 'Burns First Aid & Prevention',
+    category: 'First Aid',
+    type: 'video',
+    content: 'How to treat and cool burns safely.',  
+    videoUrl: 'https://www.youtube.com/embed/TLr2qsEhpC8', // real burns aid video :contentReference[oaicite:5]{index=5}
+    thumbnail: 'https://images.pexels.com/photos/4031818/pexels-photo-4031818.jpeg?w=400&h=300&fit=crop',
+    duration: '7 min',
+    steps: ['Cool burn under running water','Remove tight items','Do NOT apply ice','Cover with sterile dressing','Seek medical care if needed']
+  },
+  {
+    id: '7',
+    title: 'Basic First Aid Training Full Guide',
+    category: 'First Aid',
+    type: 'video',
+    content: 'Comprehensive basic first aid skills for common emergencies.',  
+    videoUrl: 'https://www.youtube.com/embed/5OKFljZ2GQE', // basic first aid training :contentReference[oaicite:6]{index=6}
+    thumbnail: 'https://images.pexels.com/photos/339620/pexels-photo-339620.jpeg?w=400&h=300&fit=crop',
+    duration: '15 min',
+    steps: ['Assess scene','Check responsiveness','Control bleeding','CPR basics','Care until help arrives']
+  },
+  {
+    id: '8',
+    title: 'Heimlich Maneuver Tutorial',
+    category: 'Life Saving',
+    type: 'video',
+    content: 'Detailed Heimlich maneuver demonstration.',  
+    videoUrl: 'https://www.youtube.com/embed/ZVYOEMP5sKo', // real Heimlich video :contentReference[oaicite:7]{index=7}
+    thumbnail: 'https://images.pexels.com/photos/4031820/pexels-photo-4031820.jpeg?w=400&h=300&fit=crop',
+    duration: '5 min',
+    steps: ['Stand behind person','Make fist above navel','Perform upward thrusts','Repeat','Call emergency if needed']
+  },
+  {
+    id: '9',
+    title: 'CPR for Adults & Children',
+    category: 'Life Saving',
+    type: 'video',
+    content: 'CPR demonstrated for adults and children.',  
+    videoUrl: 'https://www.youtube.com/embed/-NodDRTsV88', // adult & child CPR :contentReference[oaicite:8]{index=8}
+    thumbnail: 'https://images.pexels.com/photos/4031821/pexels-photo-4031821.jpeg?w=400&h=300&fit=crop',
+    duration: '8 min',
+    steps: ['Assess breathing','Start compressions','Alternate breaths','Continue until help arrives','Reassess frequently']
+  },
+  {
+    id: '10',
+    title: 'Complete First Aid Skills Overview',
+    category: 'First Aid',
+    type: 'video',
+    content: 'Extended first aid guide covering multiple emergencies.',  
+    videoUrl: 'https://www.youtube.com/playlist?list=PLBS-mWyRjp3uQDeHfnNZt3Yuew_6WEu_n', // playlist of multiple skills :contentReference[oaicite:9]{index=9}
+    thumbnail: 'https://images.pexels.com/photos/4031822/pexels-photo-4031822.jpeg?w=400&h=300&fit=crop',
+    duration: 'Variable',
+    steps: ['CPR basics','Treat burns','Stop bleeding','Recovery position','Choking rescue']
+  }
+];
+
+
+   const longTermCarePrograms=[{id:'1',condition:'Diabetes Care',emoji:'🩸',color:'var(--medical-blue-light)',description:'Comprehensive diabetes management.',specialist:doctors[4],programs:[{name:'Diabetes Control Program',duration:'3 months',price:15000,features:['Weekly glucose monitoring','Diet consultation','Exercise plan']},{name:'Annual Diabetes Care',duration:'12 months',price:45000,features:['Quarterly HbA1c tests','Nutrition counseling','24/7 support']}]},{id:'2',condition:'Asthma & Respiratory',emoji:'🫁',color:'var(--medical-purple-light)',description:'Care for chronic respiratory conditions.',specialist:doctors[2],programs:[{name:'Asthma Control Program',duration:'6 months',price:12000,features:['Lung function tests','Inhaler training','Emergency action plan']}]},{id:'3',condition:'Cardiac Care',emoji:'❤️',color:'var(--medical-red-light)',description:'Heart health monitoring.',specialist:doctors[1],programs:[{name:'Heart Health Program',duration:'6 months',price:25000,features:['ECG monitoring','Cholesterol management','Stress tests']}]},{id:'4',condition:'Seizure & Epilepsy',emoji:'🧠',color:'var(--medical-orange-light)',description:'Expert neurological care.',specialist:doctors[3],programs:[{name:'Epilepsy Management',duration:'12 months',price:35000,features:['EEG monitoring','Medication optimization','Emergency protocols']}]},{id:'5',condition:'Arthritis & Joint Care',emoji:'🦴',color:'var(--medical-green-light)',description:'Long-term support for joint pain and mobility issues.',specialist:doctors[6],programs:[{name:'Joint Mobility Program',duration:'6 months',price:18000,features:['Physiotherapy sessions','Joint flexibility plan','Pain monitoring']},{name:'Annual Arthritis Care',duration:'12 months',price:40000,features:['Inflammation tracking','Diet for joint health','Quarterly assessments']}]},{id:'6',condition:'Thyroid & Hormonal Care',emoji:'🧬',color:'var(--medical-indigo-light)',description:'Continuous monitoring for thyroid and hormonal imbalance.',specialist:doctors[7],programs:[{name:'Thyroid Stabilization Plan',duration:'6 months',price:14000,features:['TSH monitoring','Hormonal therapy guidance','Diet support']},{name:'Annual Thyroid Wellness',duration:'12 months',price:36000,features:['Quarterly lab tests','Medication adjustments','Lifestyle coaching']}]},{id:'7',condition:'Hypertension (BP) Care',emoji:'🩺',color:'var(--medical-cyan-light)',description:'Specialized long-term blood pressure management.',specialist:doctors[8],programs:[{name:'BP Control Program',duration:'6 months',price:12500,features:['Weekly BP tracking','Salt-reduction plan','Heart health counseling']},{name:'Annual BP Care Plan',duration:'12 months',price:32000,features:['Quarterly ECG','Dietician sessions','Stress management training']}]},{id:'8',condition:'Sleep Disorder Care',emoji:'😴',color:'var(--medical-teal-light)',description:'Care for insomnia, apnea, and sleep issues.',specialist:doctors[9],programs:[{name:'Sleep Improvement Program',duration:'3 months',price:10000,features:['Sleep schedule training','Sleep cycle analysis','Relaxation therapy']},{name:'Annual Sleep Wellness Plan',duration:'12 months',price:30000,features:['Polysomnography tests','Behavioral therapy','Monthly follow-ups']}]},{id:'9',condition:'Mental Health & Anxiety Care',emoji:'🧘',color:'var(--medical-pink-light)',description:'Long-term emotional and psychological wellness care.',specialist:doctors[10],programs:[{name:'Anxiety Relief Program',duration:'3 months',price:15000,features:['Cognitive therapy','Stress reduction training','Mood tracking']},{name:'Annual Mental Wellness Plan',duration:'12 months',price:50000,features:['Monthly psychiatric review','Behavioral therapy','24/7 emotional support']}]}];
+
+
+    const symptomResponses = {
+      'fever': '<strong>Possible Conditions:</strong><br>• Common Cold/Flu<br>• Viral Infection<br><br><strong>Risk Level:</strong> Low to Moderate<br><br><strong>Recommendations:</strong><br>1. Rest and stay hydrated<br>2. Take Paracetamol for fever<br>3. Monitor temperature<br><br><strong>⚠️ Consult doctor if:</strong> Fever persists beyond 3 days or exceeds 103°F',
+      'headache': '<strong>Possible Conditions:</strong><br>• Tension Headache<br>• Migraine<br>• Dehydration<br><br><strong>Risk Level:</strong> Low<br><br><strong>Recommendations:</strong><br>1. Rest in quiet, dark room<br>2. Stay hydrated<br>3. Take pain relief<br><br><strong>⚠️ Consult doctor if:</strong> Sudden severe headache or with fever',
+      'chest': '<strong>⚠️ IMPORTANT: Chest pain can be serious!</strong><br><br><strong>Risk Level:</strong> High - Requires attention<br><br><strong>Recommendations:</strong><br>1. If severe, call 108 immediately<br>2. Rest and avoid exertion<br><br><strong>🚨 Seek immediate help if:</strong> Pain spreads to arm/jaw, shortness of breath, sweating',
+      'cough': '<strong>Possible Conditions:</strong><br>• Common Cold<br>• Allergies<br>• Bronchitis<br><br><strong>Risk Level:</strong> Low to Moderate<br><br><strong>Recommendations:</strong><br>1. Stay hydrated<br>2. Use honey (adults)<br>3. Avoid smoke<br><br><strong>⚠️ Consult doctor if:</strong> Cough persists beyond 2 weeks',
+      'default': 'Please describe your symptoms in detail. I can help assess:<br>• Fever, headache, body pain<br>• Cough, cold, breathing issues<br>• Stomach pain, nausea<br>• And many more...'
+    };
+
+    const medicineResponses = {
+      'paracetamol': '<strong>Paracetamol (Acetaminophen)</strong><br><br><strong>Uses:</strong> Fever reduction, mild to moderate pain relief<br><br><strong>Dosage:</strong> Adults: 500-1000mg every 4-6 hours<br>Maximum: 4000mg per day<br><br><strong>Side Effects:</strong> Rare - allergic reactions, rash<br><br><strong>Precautions:</strong> Do not exceed dose. Avoid with alcohol.',
+      'aspirin': '<strong>Aspirin (Acetylsalicylic Acid)</strong><br><br><strong>Uses:</strong> Pain relief, fever reduction, blood thinner<br><br><strong>Dosage:</strong> Pain: 325-650mg every 4 hours<br>Heart: 75-100mg daily<br><br><strong>Side Effects:</strong> Stomach irritation, bleeding risk<br><br><strong>Precautions:</strong> Not for children under 16. Take with food.',
+      'metformin': '<strong>Metformin</strong><br><br><strong>Uses:</strong> Control blood sugar in Type 2 Diabetes<br><br><strong>Dosage:</strong> 500mg twice daily with meals<br><br><strong>Side Effects:</strong> Nausea, diarrhea, stomach upset<br><br><strong>Precautions:</strong> Regular blood sugar monitoring required.',
+      'default': 'I can provide information about medicines.<br><br><strong>Please enter a medicine name to know:</strong><br>• What it\'s used for<br>• Proper dosage<br>• Side effects<br>• Precautions<br><br>⚠️ Always follow your doctor\'s prescription.'
+    };
+
+    const features = [
+      { id: 'symptoms', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>', title: 'AI Symptom Assistant', description: 'Get instant symptom analysis', color: 'var(--medical-teal-light)', iconColor: 'var(--medical-teal)' },
+      { id: 'emergency', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>', title: 'Emergency Tutorials', description: 'Life-saving first aid guides', color: 'var(--medical-red-light)', iconColor: 'var(--medical-red)' },
+      { id: 'appointments', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>', title: 'Book Appointment', description: 'Schedule doctor consultations', color: 'var(--medical-blue-light)', iconColor: 'var(--medical-blue)' },
+      { id: 'stores', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>', title: 'Medical Stores', description: 'Find pharmacies nearby', color: 'var(--medical-green-light)', iconColor: 'var(--medical-green)' },
+      { id: 'hospitals', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>', title: 'Hospitals Nearby', description: 'Locate hospitals with beds', color: 'var(--medical-orange-light)', iconColor: 'var(--medical-orange)' },
+      { id: 'longterm', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>', title: 'Long-term Care', description: 'Chronic condition care', color: 'var(--medical-purple-light)', iconColor: 'var(--medical-purple)' },
+      { id: 'delivery', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>', title: 'Home Delivery', description: 'Medicines at your doorstep', color: 'var(--medical-teal-light)', iconColor: 'var(--medical-teal)' },
+      { id: 'medicine', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>', title: 'Medicine Info', description: 'Learn about medications', color: 'var(--medical-blue-light)', iconColor: 'var(--medical-blue)' },
+      { id: 'history', icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', title: 'Medical History', description: 'View your health records', color: 'var(--medical-green-light)', iconColor: 'var(--medical-green)' }
+    ];
+
+    // ==================== STATE ====================
+    let isLoggedIn = false;
+    let loginStep = 'aadhaar';
+    let currentPage = 'dashboard';
+    let cart = [];
+    let symptomMessages = [];
+    let medicineMessages = [];
+
+    // ==================== UTILITIES ====================
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatDay(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long' });
+    }
+
+    function getCurrentDate() {
+      return new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function formatAadhaar(value) {
+      const numbers = value.replace(/\D/g, '');
+      const parts = numbers.match(/.{1,4}/g);
+      return parts ? parts.join('-').substring(0, 14) : '';
+    }
+
+    // ==================== LOGIN ====================
+    function handleLogin(e) {
+      e.preventDefault();
+      
+      if (loginStep === 'aadhaar') {
+        const aadhaar = document.getElementById('aadhaar').value.replace(/-/g, '');
+        if (aadhaar.length !== 12) {
+          showToast('Please enter a valid 12-digit Aadhaar number', 'error');
+          return;
+        }
+        loginStep = 'otp';
+        document.getElementById('aadhaar-step').classList.add('hidden');
+        document.getElementById('otp-step').classList.remove('hidden');
+        document.getElementById('btn-text').textContent = 'Verify & Login';
+        document.getElementById('change-aadhaar-btn').classList.remove('hidden');
+        showToast('OTP sent to registered mobile number');
+      } else {
+        const otp = document.getElementById('otp').value;
+        if (otp !== '123456') {
+          showToast('Invalid OTP. Use 123456', 'error');
+          return;
+        }
+        isLoggedIn = true;
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('dashboard-page').classList.remove('hidden');
+        initDashboard();
+        showToast('Login successful!');
+      }
+    }
+
+    function changeAadhaar() {
+      loginStep = 'aadhaar';
+      document.getElementById('aadhaar-step').classList.remove('hidden');
+      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('btn-text').textContent = 'Send OTP';
+      document.getElementById('change-aadhaar-btn').classList.add('hidden');
+      document.getElementById('otp').value = '';
+    }
+
+    function logout() {
+      isLoggedIn = false;
+      loginStep = 'aadhaar';
+      document.getElementById('dashboard-page').classList.add('hidden');
+      document.getElementById('login-page').classList.remove('hidden');
+      document.getElementById('aadhaar-step').classList.remove('hidden');
+      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('btn-text').textContent = 'Send OTP';
+      document.getElementById('change-aadhaar-btn').classList.add('hidden');
+      document.getElementById('aadhaar').value = '';
+      document.getElementById('otp').value = '';
+      closeSidebar();
+      showToast('Logged out successfully');
+    }
+
+    // ==================== NAVIGATION ====================
+    function navigateTo(page) {
+      currentPage = page;
+      document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`page-${page}`).classList.remove('hidden');
+      document.querySelectorAll('.sidebar-nav-link').forEach(l => l.classList.remove('active'));
+      document.querySelector(`[data-page="${page}"]`).classList.add('active');
+      closeSidebar();
+      
+      // Initialize page-specific content
+      if (page === 'appointments') initDoctors();
+      if (page === 'stores') initStores();
+      if (page === 'hospitals') initHospitals();
+      if (page === 'emergency') initTutorials();
+      if (page === 'longterm') initCarePrograms();
+      if (page === 'delivery') initMedicines();
+      if (page === 'history') initHistory();
+      if (page === 'symptoms') initSymptomChat();
+      if (page === 'medicine') initMedicineChat();
+    }
+
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebar-overlay').classList.add('open');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('open');
+    }
+
+    // ==================== DASHBOARD ====================
+    function initDashboard() {
+      document.getElementById('current-date').textContent = getCurrentDate();
+      
+      const featuresGrid = document.getElementById('features-grid');
+      featuresGrid.innerHTML = features.map(f => `
+        <div class="medical-card feature-card" onclick="navigateTo('${f.id}')">
+          <div class="feature-icon" style="background: ${f.color}; color: ${f.iconColor};">${f.icon}</div>
+          <div class="feature-card-content">
+            <h3>${f.title}</h3>
+            <p>${f.description}</p>
+          </div>
+          <div class="feature-arrow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+      `).join('');
+    }
+
+    // ==================== SYMPTOM CHAT ====================
+    function initSymptomChat() {
+      if (symptomMessages.length === 0) {
+        symptomMessages = [{ role: 'assistant', content: 'Hello! I\'m your AI Health Assistant. Describe your symptoms and I\'ll provide risk assessment.<br><br><strong>Important:</strong> This is not a diagnosis. Consult a doctor for proper evaluation.', time: new Date() }];
+      }
+      renderSymptomMessages();
+    }
+
+    function renderSymptomMessages() {
+      const container = document.getElementById('symptom-messages');
+      container.innerHTML = symptomMessages.map(m => `
+        <div class="chat-message ${m.role}">
+          <div class="chat-avatar" style="background: ${m.role === 'assistant' ? 'var(--primary)' : 'var(--muted)'};">
+            ${m.role === 'assistant' ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>'}
+          </div>
+          <div class="chat-bubble">${m.content}<span class="chat-time">${m.time.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span></div>
+        </div>
+      `).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function setSymptomInput(text) {
+      document.getElementById('symptom-input').value = text;
+    }
+
+    function sendSymptomMessage() {
+      const input = document.getElementById('symptom-input');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      symptomMessages.push({ role: 'user', content: text, time: new Date() });
+      input.value = '';
+      renderSymptomMessages();
+      
+      setTimeout(() => {
+        const lower = text.toLowerCase();
+        let response = symptomResponses.default;
+        if (lower.includes('fever') || lower.includes('temperature')) response = symptomResponses.fever;
+        else if (lower.includes('headache') || lower.includes('head pain')) response = symptomResponses.headache;
+        else if (lower.includes('chest')) response = symptomResponses.chest;
+        else if (lower.includes('cough') || lower.includes('cold')) response = symptomResponses.cough;
+        
+        symptomMessages.push({ role: 'assistant', content: response, time: new Date() });
+        renderSymptomMessages();
+      }, 1000);
+    }
+
+    // ==================== MEDICINE CHAT ====================
+    function initMedicineChat() {
+      if (medicineMessages.length === 0) {
+        medicineMessages = [{ role: 'assistant', content: 'Hello! I\'m your Medicine Information Assistant.<br><br>Type any medicine name to learn about its uses, dosage, and precautions.<br><br><strong>⚠️ Note:</strong> I only provide medicine information and will not respond to other queries.', time: new Date() }];
+      }
+      renderMedicineMessages();
+    }
+
+    function renderMedicineMessages() {
+      const container = document.getElementById('medicine-messages');
+      container.innerHTML = medicineMessages.map(m => `
+        <div class="chat-message ${m.role}">
+          <div class="chat-avatar" style="background: ${m.role === 'assistant' ? 'var(--medical-blue)' : 'var(--muted)'};">
+            ${m.role === 'assistant' ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>'}
+          </div>
+          <div class="chat-bubble">${m.content}<span class="chat-time">${m.time.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span></div>
+        </div>
+      `).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function setMedicineInput(text) {
+      document.getElementById('medicine-input').value = text;
+    }
+
+    function sendMedicineMessage() {
+      const input = document.getElementById('medicine-input');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      medicineMessages.push({ role: 'user', content: text, time: new Date() });
+      input.value = '';
+      renderMedicineMessages();
+      
+      setTimeout(() => {
+        const lower = text.toLowerCase();
+        let response = medicineResponses.default;
+        
+        const nonMedical = ['hello', 'hi', 'weather', 'news', 'joke', 'how are'];
+        if (nonMedical.some(t => lower.includes(t))) {
+          response = 'I can only provide medicine information. Please ask about a specific medicine like Paracetamol, Aspirin, or Metformin.';
+        } else if (lower.includes('paracetamol') || lower.includes('acetaminophen')) {
+          response = medicineResponses.paracetamol;
+        } else if (lower.includes('aspirin')) {
+          response = medicineResponses.aspirin;
+        } else if (lower.includes('metformin')) {
+          response = medicineResponses.metformin;
+        }
+        
+        medicineMessages.push({ role: 'assistant', content: response, time: new Date() });
+        renderMedicineMessages();
+      }, 1000);
+    }
+
+    // ==================== EMERGENCY TUTORIALS ====================
+    function initTutorials(filter = 'all') {
+      const grid = document.getElementById('tutorials-grid');
+      const filtered = filter === 'all' ? emergencyTutorials : emergencyTutorials.filter(t => t.type === filter);
+      
+      grid.innerHTML = filtered.map(t => `
+        <div class="medical-card tutorial-card" onclick="showTutorial('${t.id}')">
+          <div class="tutorial-thumbnail">
+            <img src="${t.thumbnail}" alt="${t.title}">
+            <span class="tutorial-badge ${t.type}">${t.type === 'video' ? 'Video' : 'Article'}</span>
+            ${t.duration ? `<span class="tutorial-duration"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${t.duration}</span>` : ''}
+          </div>
+          <span class="tutorial-category">${t.category}</span>
+          <h3 class="tutorial-title">${t.title}</h3>
+          <p class="tutorial-desc">${t.content}</p>
+          <div class="tutorial-link">${t.type === 'video' ? 'Watch Now' : 'Read Guide'}<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+      `).join('');
+    }
+
+    function filterTutorials(type) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      initTutorials(type);
+    }
+
+    function showTutorial(id) {
+      const t = emergencyTutorials.find(x => x.id === id);
+      document.getElementById('modal-container').innerHTML = `
+        <div class="modal-overlay" onclick="closeModal()">
+          <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+              <h2>${t.title}</h2>
+              <button class="modal-close" onclick="closeModal()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            </div>
+            <div class="modal-body">
+              ${t.type === 'video' && t.videoUrl ? `<div style="aspect-ratio: 16/9; background: black; border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem;"><iframe src="${t.videoUrl}" style="width: 100%; height: 100%;" allow="accelerometer; autoplay; clipboard-write; encrypted-media" allowfullscreen></iframe></div>` : ''}
+              <p style="color: var(--muted-foreground); margin-bottom: 1rem;">${t.content}</p>
+              ${t.steps ? `<h4 style="font-weight: 600; margin-bottom: 0.75rem;">Step-by-Step Guide</h4><div style="display: flex; flex-direction: column; gap: 0.5rem;">${t.steps.map((s, i) => `<div style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; background: var(--muted); border-radius: var(--radius);"><span style="width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--primary); color: white; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">${i+1}</span><span style="flex: 1;">${s}</span></div>`).join('')}</div>` : ''}
+              <div style="margin-top: 1rem; padding: 0.75rem; background: var(--medical-red-light); border-radius: var(--radius);"><p style="font-size: 0.875rem; color: var(--medical-red);">⚠️ In emergency, always call 108 immediately.</p></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function closeModal() {
+      document.getElementById('modal-container').innerHTML = '';
+    }
+
+    // ==================== DOCTORS ====================
+    function initDoctors() {
+      const specialties = ['all', ...new Set(doctors.map(d => d.specialty))];
+      document.getElementById('specialty-filters').innerHTML = specialties.map(s => `
+        <button class="filter-tab ${s === 'all' ? 'active' : ''}" onclick="filterDoctors('${s}')">${s === 'all' ? 'All Specialties' : s}</button>
+      `).join('');
+      renderDoctors(doctors);
+    }
+
+    function filterDoctors(specialty) {
+      document.querySelectorAll('#specialty-filters .filter-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      const filtered = specialty === 'all' ? doctors : doctors.filter(d => d.specialty === specialty);
+      renderDoctors(filtered);
+    }
+
+    function renderDoctors(list) {
+      document.getElementById('doctors-list').innerHTML = list.map(d => `
+        <div class="medical-card doctor-card" style="margin-bottom: 1rem; ${!d.available ? 'opacity: 0.6;' : ''}">
+          <div class="doctor-info">
+            <img src="${d.avatar}" alt="${d.name}" class="doctor-avatar">
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <h3>${d.name}</h3>
+                  <p class="doctor-specialty">${d.specialty}</p>
+                  <div class="doctor-qualifications">${d.qualifications.map(q => `<span class="doctor-qual">${q}</span>`).join('')}</div>
+                </div>
+                <div style="text-align: right;">
+                  <div class="doctor-rating"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>${d.rating}</span></div>
+                  <span class="status-badge ${d.available ? 'status-available' : 'status-busy'}" style="margin-top: 0.5rem;">${d.available ? 'Available' : 'Busy'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-meta">
+            <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>${d.hospital}, ${d.location}</span>
+            <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${d.experience} years exp.</span>
+          </div>
+          <div class="doctor-footer">
+            <div class="doctor-fee">₹${d.fee}<span>per consultation</span></div>
+            <div class="doctor-booking">
+              <p class="doctor-slot"><span>Next: </span>${d.nextSlot}</p>
+              <button class="btn btn-medical" onclick="bookAppointment('${d.id}')" ${!d.available ? 'disabled' : ''}>Book Now</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function bookAppointment(id) {
+      const d = doctors.find(x => x.id === id);
+      showToast(`Appointment booked with ${d.name}!`);
+    }
+
+    // ==================== STORES ====================
+    function initStores() {
+      document.getElementById('stores-list').innerHTML = `<div style="display: flex; flex-direction: column; gap: 1rem;">${medicalStores.map(s => `
+        <div class="medical-card location-card">
+          <div class="location-header">
+            <div class="location-header-left">
+              <div class="location-icon" style="background: ${s.isOpen ? 'var(--medical-green-light)' : 'var(--medical-orange-light)'};">
+                <svg style="color: ${s.isOpen ? 'var(--medical-green)' : 'var(--medical-orange)'};" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg>
+              </div>
+              <div>
+                <h3 class="location-name">${s.name}</h3>
+                <div class="location-rating"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${s.rating}<span> • ${s.distance}</span></div>
+              </div>
+            </div>
+            <span class="status-badge ${s.isOpen ? 'status-available' : 'status-busy'}">${s.isOpen ? 'Open' : 'Closed'}</span>
+          </div>
+          <div class="location-meta">
+            <p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>${s.address}</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${s.timing}</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${s.phone}</p>
+          </div>
+          <div class="location-actions">
+            <button class="btn btn-outline" onclick="window.open('tel:${s.phone}')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</button>
+            <button class="btn btn-medical" onclick="showToast('Opening directions...')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Directions</button>
+          </div>
+        </div>
+      `).join('')}</div>`;
+    }
+
+    // ==================== HOSPITALS ====================
+    function initHospitals() {
+      document.getElementById('hospitals-list').innerHTML = `<div style="display: flex; flex-direction: column; gap: 1rem;">${hospitals.map(h => {
+        const pct = (h.bedsAvailable / h.beds) * 100;
+        const bedColor = pct > 30 ? 'var(--medical-green)' : pct > 10 ? 'var(--medical-orange)' : 'var(--medical-red)';
+        return `
+        <div class="medical-card location-card">
+          <div class="location-header">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <h3 class="location-name">${h.name}</h3>
+                ${h.emergencyAvailable ? '<span class="status-badge status-emergency"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>ER</span>' : ''}
+              </div>
+              <div class="location-rating"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${h.rating}<span> • ${h.distance}</span></div>
+            </div>
+            <div class="bed-availability">
+              <div class="bed-count" style="color: ${bedColor};"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg><strong>${h.bedsAvailable}</strong><span>/ ${h.beds}</span></div>
+              <p class="bed-label">beds available</p>
+            </div>
+          </div>
+          <div class="location-meta">
+            <p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>${h.address}</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${h.phone}</p>
+          </div>
+          <div class="specialties">${h.specialties.map(s => `<span class="specialty-tag">${s}</span>`).join('')}</div>
+          <div class="location-actions">
+            <button class="btn btn-outline" onclick="window.open('tel:${h.phone}')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</button>
+            <button class="btn btn-medical" onclick="showToast('Opening directions...')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Directions</button>
+          </div>
+        </div>
+      `}).join('')}</div>`;
+    }
+
+    // ==================== LONG TERM CARE ====================
+    function initCarePrograms() {
+      document.getElementById('care-programs-grid').innerHTML = longTermCarePrograms.map(c => `
+        <div class="medical-card care-card">
+          <div class="care-header">
+            <div class="care-emoji" style="background: ${c.color};">${c.emoji}</div>
+            <div style="flex: 1;">
+              <h3 class="care-title">${c.condition}</h3>
+              <p class="care-desc">${c.description}</p>
+            </div>
+          </div>
+          <div class="care-specialist">
+            <img src="${c.specialist.avatar}" alt="${c.specialist.name}">
+            <div style="flex: 1;">
+              <h4>${c.specialist.name}</h4>
+              <p>${c.specialist.specialty}</p>
+            </div>
+            <div class="location-rating"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${c.specialist.rating}</div>
+          </div>
+          <h4 class="care-programs-title">Available Programs</h4>
+          ${c.programs.map(p => `
+            <button class="care-program" onclick="showToast('Enrollment request submitted for ${p.name}')">
+              <div class="care-program-header">
+                <h5>${p.name}</h5>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+              </div>
+              <div class="care-program-meta">
+                <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${p.duration}</span>
+                <span class="price">₹${p.price.toLocaleString()}</span>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    // ==================== HOME DELIVERY ====================
+    function initMedicines() {
+      updateCartUI();
+      document.getElementById('medicines-grid').innerHTML = medicines.map(m => {
+        const inCart = cart.find(c => c.id === m.id);
+        return `
+        <div class="medical-card medicine-card">
+          <div class="medicine-header">
+            <div>
+              <span class="medicine-category">${m.category}</span>
+              <h3 class="medicine-name">${m.name}</h3>
+              <p class="medicine-manufacturer">${m.manufacturer}</p>
+            </div>
+            <p class="medicine-price">₹${m.price}</p>
+          </div>
+          <p class="medicine-dosage">${m.dosage}</p>
+          ${inCart ? `
+            <div class="cart-controls">
+              <button class="cart-btn" onclick="updateCart('${m.id}', -1)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+              <span class="cart-qty">${inCart.qty} in cart</span>
+              <button class="cart-btn" onclick="updateCart('${m.id}', 1)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+            </div>
+          ` : `
+            <button class="btn btn-outline w-full" onclick="addToCart('${m.id}')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add to Cart</button>
+          `}
+        </div>
+      `}).join('');
+    }
+
+    function addToCart(id) {
+      const m = medicines.find(x => x.id === id);
+      cart.push({ id: m.id, name: m.name, price: m.price, qty: 1 });
+      showToast(`${m.name} added to cart`);
+      initMedicines();
+    }
+
+    function updateCart(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+      }
+      initMedicines();
+    }
+
+    function updateCartUI() {
+      const floatingCart = document.getElementById('floating-cart');
+      const cartCount = document.getElementById('cart-count');
+      if (cart.length > 0) {
+        floatingCart.classList.remove('hidden');
+        cartCount.textContent = cart.length;
+      } else {
+        floatingCart.classList.add('hidden');
+      }
+    }
+
+    function showCart() {
+      const total = cart.reduce((sum, c) => sum + (c.price * c.qty), 0) + 40;
+      document.getElementById('modal-container').innerHTML = `
+        <div class="modal-overlay" onclick="closeModal()">
+          <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+              <h2>Your Cart (${cart.length})</h2>
+              <button class="modal-close" onclick="closeModal()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            </div>
+            <div class="modal-body">
+              ${cart.map(c => `<div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: var(--muted); border-radius: var(--radius); margin-bottom: 0.5rem;"><div style="flex: 1;"><p style="font-weight: 500;">${c.name}</p><p style="font-size: 0.875rem; color: var(--muted-foreground);">₹${c.price} × ${c.qty}</p></div><p style="font-weight: 500;">₹${c.price * c.qty}</p></div>`).join('')}
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--muted); border-radius: var(--radius);">
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.5rem;"><span style="color: var(--muted-foreground);">Subtotal</span><span>₹${cart.reduce((s,c) => s + c.price * c.qty, 0)}</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.5rem;"><span style="color: var(--muted-foreground);">Delivery</span><span>₹40</span></div>
+                <div style="display: flex; justify-content: space-between; font-weight: 700; padding-top: 0.5rem; border-top: 1px solid var(--border);"><span>Total</span><span style="color: var(--primary);">₹${total}</span></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-medical w-full" onclick="placeOrder()">Place Order - ₹${total}</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function placeOrder() {
+      cart = [];
+      closeModal();
+      initMedicines();
+      showToast('Order placed successfully!');
+    }
+
+    // ==================== MEDICAL HISTORY ====================
+    function initHistory() {
+      document.getElementById('history-timeline').innerHTML = medicalRecords.map((r, i) => `
+        <div class="medical-card history-item">
+          <div class="history-marker">
+            <div class="history-marker-icon ${i === 0 ? 'active' : 'inactive'}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg></div>
+            ${i < medicalRecords.length - 1 ? '<div class="history-line"></div>' : ''}
+          </div>
+          <div class="history-content">
+            <div class="history-header">
+              <div>
+                <h3 class="history-diagnosis">${r.diagnosis}</h3>
+                <div class="history-doctor"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>${r.doctor}</div>
+              </div>
+              <div class="history-date">
+                <p class="date">${formatDate(r.date)}</p>
+                <p class="day">${formatDay(r.date)}</p>
+              </div>
+            </div>
+            <p class="history-hospital">${r.hospital}</p>
+            <div class="history-prescription">
+              <div class="history-prescription-header"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/></svg><span>Prescription</span></div>
+              <div class="history-meds">${r.prescription.map(p => `<span class="history-med">${p}</span>`).join('')}</div>
+            </div>
+            <p class="history-notes">"${r.notes}"</p>
+            ${r.followUp ? `<div class="history-followup"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Follow-up: ${formatDate(r.followUp)}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    document.getElementById('login-form').addEventListener('submit', handleLogin);
+    document.getElementById('change-aadhaar-btn').addEventListener('click', changeAadhaar);
+    document.getElementById('aadhaar').addEventListener('input', (e) => {
+      e.target.value = formatAadhaar(e.target.value);
+    });
+    document.getElementById('symptom-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendSymptomMessage();
+    });
+    document.getElementById('medicine-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMedicineMessage();
+    });
+  </script>
+</body>
+</html>

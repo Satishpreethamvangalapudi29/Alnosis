@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AINOSIS – Intelligent Healthcare Ecosystem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AINOSIS – Intelligent Healthcare Ecosystem for rural and underserved communities." />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f7fb;
+      --bg-alt: #ffffff;
+      --bg-section: #f9fcff;
+      --primary: #0ea5e9;
+      --primary-soft: #e0f2ff;
+      --primary-strong: #0369a1;
+      --accent-green: #16a34a;
+      --accent-purple: #8b5cf6;
+      --border-subtle: #dde7f3;
+      --border-strong: #bed4f3;
+      --text-main: #0f172a;
+      --text-soft: #64748b;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 18px 35px rgba(15, 23, 42, 0.07);
+      --shadow-card: 0 10px 30px rgba(148, 163, 184, 0.16);
+      --nav-height: 72px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top left, #e0f2ff 0, #f3f7fb 40%, #f9fafb 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px 32px;
+    }
+
+    /* Top Navigation */
+    .nav {
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 30%, #e0f2ff, #22c55e 40%, #0ea5e9 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.06),
+        0 10px 24px rgba(15, 23, 42, 0.16);
+    }
+
+    .nav-logo-icon {
+      width: 23px;
+      height: 23px;
+      border-radius: 9px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-title {
+      font-family: 'Poppins', system-ui;
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-title span.brand-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.8);
+    }
+
+    .nav-subtitle {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-soft);
+      box-shadow: 0 6px 16px rgba(148, 163, 184, 0.18);
+    }
+
+    .nav-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px rgba(22, 163, 74, 0.8);
+    }
+
+    .nav-cta {
+      padding: 8px 15px;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: radial-gradient(circle at 0 0, #e0f2ff, #bae6fd 35%, #7dd3fc 90%);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--primary-strong);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.7),
+        0 14px 26px rgba(37, 99, 235, 0.2);
+      transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 0 1px rgba(191, 219, 254, 1),
+        0 18px 34px rgba(30, 64, 175, 0.24);
+    }
+
+    /* Hero section (full width) */
+    .hero {
+      background: linear-gradient(145deg, #f5fbff 0, #ffffff 55%, #e0f2ff 100%);
+      border-radius: 26px;
+      padding: 22px 20px 22px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-decoration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 0, rgba(56, 189, 248, 0.25), transparent 60%),
+        radial-gradient(circle at 90% 14%, rgba(56, 189, 248, 0.18), transparent 60%);
+      opacity: 0.9;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .hero-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      font-size: 11px;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-pill-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .hero-title {
+      font-family: 'Poppins', system-ui;
+      font-size: clamp(24px, 3vw + 8px, 32px);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(120deg, #0ea5e9, #14b8a6, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--text-soft);
+      max-width: 760px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hero-stat-card {
+      min-width: 160px;
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      margin-bottom: 1px;
+    }
+
+    .hero-stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .hero-stat-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #f9fafb;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.6),
+        0 14px 30px rgba(37, 99, 235, 0.27);
+      transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 0 1px rgba(129, 230, 217, 0.7),
+        0 18px 36px rgba(30, 64, 175, 0.32);
+    }
+
+    .btn-ghost {
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-soft);
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      transition: background 140ms ease-out, border-color 140ms ease-out, color 140ms ease-out;
+    }
+
+    .btn-ghost:hover {
+      background: #eef4ff;
+      border-color: #cbd5f5;
+      color: var(--primary-strong);
+    }
+
+    .hero-footnote {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .hero-footnote-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary-strong);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* SECTION WRAPPER */
+    .section {
+      background: var(--bg-section);
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Poppins', system-ui;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+
+    .section-title-pill {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 8px rgba(14, 165, 233, 0.9);
+    }
+
+    .section-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-soft);
+    }
+
+    .section-body {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.55;
+    }
+
+    .section-body p + p {
+      margin-top: 6px;
+    }
+
+    /* Challenges grid (single flow, but 2 columns on desktop) */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .challenge-card {
+      border-radius: 16px;
+      padding: 10px 10px 9px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.14);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .challenge-icon.blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .challenge-icon.green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .challenge-icon.purple {
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+
+    .challenge-icon.red {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .challenge-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .challenge-text {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .challenge-tag {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    /* Technologies */
+    .tech-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tech-pill {
+      border-radius: 999px;
+      padding: 7px 10px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .tech-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--primary);
+    }
+
+    .tech-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .tech-primary {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .tech-mini {
+      border-radius: 14px;
+      padding: 9px 9px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 8px 20px rgba(148, 163, 184, 0.16);
+      font-size: 12px;
+    }
+
+    .tech-mini-label {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .tech-mini-caption {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    /* Dashboard Links */
+    .dash-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .dash-link-card {
+      border-radius: 18px;
+      padding: 11px 11px 10px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 14px 30px rgba(148, 163, 184, 0.18);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms ease-out;
+    }
+
+    .dash-link-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow:
+        0 0 0 1px rgba(191, 219, 254, 0.9),
+        0 18px 38px rgba(30, 64, 175, 0.32);
+    }
+
+    .dash-link-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dash-link-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .dash-link-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .dash-link-subtitle {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .dash-link-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 10px;
+    }
+
+    .dash-link-chip {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    .dash-link-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary-strong);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .footer span.highlight {
+      color: var(--primary-strong);
+      font-weight: 500;
+    }
+
+    /* Simple fade-in */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 220ms ease-out, transform 220ms ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .challenge-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .tech-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .dash-links-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-subtitle {
+        display: none;
+      }
+      .nav-pill {
+        display: none;
+      }
+      .hero {
+        padding: 18px 14px 16px;
+      }
+      .hero-stats {
+        flex-direction: column;
+      }
+      .tech-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-shell {
+        padding-inline: 14px;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-primary,
+      .btn-ghost {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <!-- Top Navigation -->
+    <header class="nav">
+      <div class="nav-left">
+        <div class="nav-logo">
+          <div class="nav-logo-icon">AI</div>
+        </div>
+        <div class="nav-title-group">
+          <div class="nav-title">
+            AINOSIS
+            <span class="brand-dot"></span>
+          </div>
+          <div class="nav-subtitle">Intelligent Healthcare Ecosystem</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-pill">
+          <span class="nav-pill-dot"></span>
+          <span>Clinical-grade medical platform</span>
+        </div>
+        <button class="nav-cta" id="navExploreBtn">
+          Explore care stack
+          <span>↗</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section (full width) -->
+    <section class="hero fade-in" id="heroSection">
+      <div class="hero-decoration"></div>
+      <div class="hero-inner">
+        <div class="hero-top">
+          <div class="hero-pill">
+            <span class="hero-pill-badge">Healthcare • AI • Rural</span>
+            <span>Designed with doctors, labs, and pharmacies in mind</span>
+          </div>
+        </div>
+
+        <h1 class="hero-title">
+          AINOSIS – <span class="highlight">Intelligent Healthcare Ecosystem</span>
+        </h1>
+        <p class="hero-subtitle">
+          Empowering rural healthcare through AI, automation, and intelligent diagnostics, so every village can reach doctors, labs, and medicines in real time without leaving their community.
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-icon">🏥</div>
+            <div>
+              <div class="hero-stat-label">Villages served</div>
+              <div class="hero-stat-value">100+</div>
+              <div class="hero-stat-sub">Primary & community centers</div>
+            </div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-icon">🩺</div>
+            <div>
+              <div class="hero-stat-label">Clinician response</div>
+              <div class="hero-stat-value">5× faster</div>
+              <div class="hero-stat-sub">AI triage & routing</div>
+            </div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-icon">🔬</div>
+            <div>
+              <div class="hero-stat-label">Diagnostics</div>
+              <div class="hero-stat-value">−40%</div>
+              <div class="hero-stat-sub">Lab turnaround time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-primary" id="getStartedBtn">
+            <span>⚡</span>
+            Launch unified dashboards
+          </button>
+          <button class="btn-ghost" id="viewChallengesBtn">
+            <span>See healthcare gaps we solve</span>
+          </button>
+        </div>
+
+        <div class="hero-footnote">
+          <div class="hero-footnote-badge">
+            <span>✓</span>
+            AI triage
+          </div>
+          <div class="hero-footnote-badge">
+            <span>✓</span>
+            Tele-consult orchestration
+          </div>
+          <div class="hero-footnote-badge">
+            <span>✓</span>
+            Medicine & lab visibility
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Description -->
+    <section class="section fade-in" id="descriptionSection">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-title-pill"></span>
+          Project Description
+        </div>
+        <div class="section-chip">AINOSIS overview</div>
+      </div>
+      <div class="section-body">
+        <p>
+          AINOSIS is a unified AI-powered digital health ecosystem designed to help villages and underserved communities get instant access to medical services, doctors, labs, and medicine availability in real time.
+        </p>
+        <p>
+          The platform connects village health workers, primary care centers, doctors, diagnostic laboratories, and medical stores into a single continuum of care, powered by intelligent triage, remote consultations, and real-time inventory awareness.
+        </p>
+      </div>
+    </section>
+
+    <!-- Challenges Solved -->
+    <section class="section fade-in" id="challengesSection">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-title-pill"></span>
+          Healthcare Challenges Solved
+        </div>
+        <div class="section-chip">Problem → Medical solution</div>
+      </div>
+      <div class="section-body">
+        <p>
+          AINOSIS targets real-world public health constraints in rural and underserved areas, from limited clinician availability to fragmented patient data and long travel journeys for treatment.
+        </p>
+        <div class="challenge-grid">
+          <div class="challenge-card">
+            <div class="challenge-icon red">👨‍⚕️</div>
+            <div>
+              <div class="challenge-title">Doctor scarcity</div>
+              <div class="challenge-text">
+                Many regions have only 20 doctors for every 100 villages, causing overburdened outpatient departments and delayed clinical decisions.
+              </div>
+            </div>
+            <div class="challenge-tag">AI triage & panels</div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-icon blue">📡</div>
+            <div>
+              <div class="challenge-title">Lack of real-time expertise</div>
+              <div class="challenge-text">
+                Villagers struggle to reach qualified medical experts in time, especially for acute and emergent complaints.
+              </div>
+            </div>
+            <div class="challenge-tag">Telemedicine hubs</div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-icon green">🧪</div>
+            <div>
+              <div class="challenge-title">Slow diagnostics & lab access</div>
+              <div class="challenge-text">
+                Diagnostic tests are delayed due to scattered labs, manual reporting, and no digital hand-off to prescribing doctors.
+              </div>
+            </div>
+            <div class="challenge-tag">Lab workflow engine</div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-icon purple">💊</div>
+            <div>
+              <div class="challenge-title">Limited medicines & facilities</div>
+              <div class="challenge-text">
+                Patients often travel without knowing which medical store or facility has the required medicines and services in stock.
+              </div>
+            </div>
+            <div class="challenge-tag">Live inventory view</div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-icon green">📁</div>
+            <div>
+              <div class="challenge-title">No unified patient data</div>
+              <div class="challenge-text">
+                Clinical notes, prescriptions, lab reports, and follow-ups live on paper or in siloed systems, making continuity of care difficult.
+              </div>
+            </div>
+            <div class="challenge-tag">Longitudinal record</div>
+          </div>
+
+          <div class="challenge-card">
+            <div class="challenge-icon.red">🚌</div>
+            <div>
+              <div class="challenge-title">Transport & access barriers</div>
+              <div class="challenge-text">
+                Villagers travel long distances without clarity on which facility, route, or time slot will actually provide the care they need.
+              </div>
+            </div>
+            <div class="challenge-tag">Route-aware guidance</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technologies Used -->
+    <section class="section fade-in" id="techSection">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-title-pill"></span>
+          Technologies Used
+        </div>
+        <div class="section-chip">Clinical-grade tech stack</div>
+      </div>
+      <div class="section-body">
+        <p>
+          AINOSIS uses an AI-native medical architecture that keeps clinical safety, privacy, and reliability at the core while enabling automation and decision support for the entire care team.
+        </p>
+        <div class="tech-pill-row">
+          <div class="tech-pill">
+            <span class="tech-dot"></span>
+            <div>
+              <div class="tech-label">Core intelligence</div>
+              <div class="tech-primary">Artificial Intelligence</div>
+            </div>
+          </div>
+          <div class="tech-pill">
+            <span class="tech-dot"></span>
+            <div>
+              <div class="tech-label">Diagnostics & risk</div>
+              <div class="tech-primary">Deep Learning</div>
+            </div>
+          </div>
+          <div class="tech-pill">
+            <span class="tech-dot"></span>
+            <div>
+              <div class="tech-label">Data integrity & audit</div>
+              <div class="tech-primary">Blockchain</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-mini">
+            <div class="tech-mini-label">Cloud & edge care nodes</div>
+            <div class="tech-mini-caption">
+              Hybrid deployment that runs in secure cloud while keeping critical services closer to village clinics on edge devices.
+            </div>
+          </div>
+          <div class="tech-mini">
+            <div class="tech-mini-label">Analytics & automation</div>
+            <div class="tech-mini-caption">
+              Real-time dashboards show consult volumes, medicine stock, and diagnostic timelines with automated alerts.
+            </div>
+          </div>
+          <div class="tech-mini">
+            <div class="tech-mini-label">Secure health record fabric</div>
+            <div class="tech-mini-caption">
+              Role-based access control, encryption, and consent trails for clinicians, labs, and pharmacies sharing patient data.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Links -->
+    <section class="section fade-in" id="dashLinksSection">
+      <div class="section-header">
+        <div class="section-title">
+          <span class="section-title-pill"></span>
+          Unified Dashboards
+        </div>
+        <div class="section-chip">Open modules</div>
+      </div>
+      <div class="section-body">
+        <p style="margin-bottom: 8px;">
+          Launch dedicated dashboards for patients, clinicians, medical stores, and laboratories — all stitched together through the AINOSIS health backbone.
+        </p>
+        <div class="dash-links-grid">
+          <!-- User Dashboard -->
+          <a href="User/index.html" target="_blank" class="dash-link-card">
+            <div class="dash-link-header">
+              <div class="dash-link-icon" style="background:#e0f2fe;color:#0f766e;">👤</div>
+              <div>
+                <div class="dash-link-title">User Dashboard</div>
+                <div class="dash-link-subtitle">
+                  Patient and village health worker portal for triage, bookings, and follow-ups.
+                </div>
+              </div>
+            </div>
+            <div class="dash-link-footer">
+              <span class="dash-link-chip">Patients & field staff</span>
+              <span class="dash-link-cta">Open ↗</span>
+            </div>
+          </a>
+
+          <!-- Doctor Dashboard -->
+          <a href="Doctor/index.html" target="_blank" class="dash-link-card">
+            <div class="dash-link-header">
+              <div class="dash-link-icon" style="background:#dcfce7;color:#166534;">🩺</div>
+              <div>
+                <div class="dash-link-title">Doctor Dashboard</div>
+                <div class="dash-link-subtitle">
+                  Clinical cockpit with longitudinal records, AI insights, and tele-consult queue.
+                </div>
+              </div>
+            </div>
+            <div class="dash-link-footer">
+              <span class="dash-link-chip">Clinicians & specialists</span>
+              <span class="dash-link-cta">Open ↗</span>
+            </div>
+          </a>
+
+          <!-- Medical Store Dashboard -->
+          <a href="Medical Store/index.html" target="_blank" class="dash-link-card">
+            <div class="dash-link-header">
+              <div class="dash-link-icon" style="background:#fff7ed;color:#c2410c;">💊</div>
+              <div>
+                <div class="dash-link-title">Medical Store Dashboard</div>
+                <div class="dash-link-subtitle">
+                  Prescription dispensing, inventory tracking, and AI-guided therapeutic alternatives.
+                </div>
+              </div>
+            </div>
+            <div class="dash-link-footer">
+              <span class="dash-link-chip">Pharmacies</span>
+              <span class="dash-link-cta">Open ↗</span>
+            </div>
+          </a>
+
+          <!-- Laboratory Dashboard -->
+          <a href="Laboratory/index.html" target="_blank" class="dash-link-card">
+            <div class="dash-link-header">
+              <div class="dash-link-icon" style="background:#f3e8ff;color:#6d28d9;">🧪</div>
+              <div>
+                <div class="dash-link-title">Laboratory Dashboard</div>
+                <div class="dash-link-subtitle">
+                  End-to-end lab workflow with sample tracking, result release, and clinician feedback.
+                </div>
+              </div>
+            </div>
+            <div class="dash-link-footer">
+              <span class="dash-link-chip">Diagnostics & labs</span>
+              <span class="dash-link-cta">Open ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        © 2025 <span class="highlight">AINOSIS</span> — AI-Driven Healthcare Automation
+      </div>
+      <div>
+        Built for rural, primary care, and distributed medical networks.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function smoothScrollToSection(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const offset = window.scrollY + rect.top - 70;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+
+    document.getElementById('viewChallengesBtn')?.addEventListener('click', function () {
+      smoothScrollToSection('challengesSection');
+    });
+
+    document.getElementById('getStartedBtn')?.addEventListener('click', function () {
+      smoothScrollToSection('dashLinksSection');
+    });
+
+    document.getElementById('navExploreBtn')?.addEventListener('click', function () {
+      smoothScrollToSection('descriptionSection');
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AInosis - Medical Store Dashboard</title>
+  <meta name="description" content="AInosis Medical Store Dashboard - Prescription Management & Drug Dispensing">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --background: hsl(200, 20%, 98%);
+      --foreground: hsl(210, 40%, 15%);
+      --card: hsl(0, 0%, 100%);
+      --card-foreground: hsl(210, 40%, 15%);
+      --primary: hsl(142, 72%, 40%);
+      --primary-foreground: hsl(0, 0%, 100%);
+      --secondary: hsl(200, 25%, 94%);
+      --secondary-foreground: hsl(210, 40%, 20%);
+      --muted: hsl(200, 20%, 96%);
+      --muted-foreground: hsl(215, 15%, 50%);
+      --accent: hsl(142, 60%, 45%);
+      --border: hsl(200, 20%, 90%);
+      --destructive: hsl(0, 72%, 55%);
+      --medical-teal: hsl(174, 72%, 40%);
+      --medical-teal-light: hsl(174, 72%, 95%);
+      --medical-blue: hsl(210, 80%, 50%);
+      --medical-blue-light: hsl(210, 80%, 95%);
+      --medical-green: hsl(142, 60%, 45%);
+      --medical-green-light: hsl(142, 60%, 95%);
+      --medical-orange: hsl(30, 90%, 55%);
+      --medical-orange-light: hsl(30, 90%, 95%);
+      --medical-red: hsl(0, 72%, 55%);
+      --medical-red-light: hsl(0, 72%, 95%);
+      --medical-purple: hsl(270, 60%, 55%);
+      --medical-purple-light: hsl(270, 60%, 95%);
+      --radius: 0.75rem;
+      --shadow-sm: 0 1px 2px 0 hsla(210, 40%, 15%, 0.05);
+      --shadow-md: 0 4px 6px -1px hsla(210, 40%, 15%, 0.07), 0 2px 4px -2px hsla(210, 40%, 15%, 0.05);
+      --shadow-lg: 0 10px 15px -3px hsla(210, 40%, 15%, 0.08), 0 4px 6px -4px hsla(210, 40%, 15%, 0.05);
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--background); color: var(--foreground); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .flex-1 { flex: 1; }
+    .w-full { width: 100%; }
+    .text-center { text-align: center; }
+    .text-sm { font-size: 0.875rem; }
+    .text-xs { font-size: 0.75rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-6 { padding: 1.5rem; }
+    .rounded-lg { border-radius: var(--radius); }
+    .rounded-xl { border-radius: calc(var(--radius) + 4px); }
+    .rounded-full { border-radius: 9999px; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-y-auto { overflow-y: auto; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .medical-card {
+      background: var(--card);
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+    .medical-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      outline: none;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+    .btn-primary:hover:not(:disabled) { background: hsl(142, 72%, 35%); }
+    .btn-medical { background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); color: white; box-shadow: var(--shadow-md); }
+    .btn-medical:hover:not(:disabled) { box-shadow: var(--shadow-lg); transform: scale(0.98); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--foreground); }
+    .btn-outline:hover:not(:disabled) { background: var(--muted); }
+    .btn-ghost { background: transparent; color: var(--muted-foreground); }
+    .btn-ghost:hover { background: var(--muted); color: var(--foreground); }
+    .btn-danger { background: var(--medical-red); color: white; }
+    .btn-danger:hover:not(:disabled) { background: hsl(0, 72%, 45%); }
+
+    .input {
+      width: 100%;
+      height: 2.75rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--background);
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px hsla(142, 72%, 40%, 0.1); }
+    .textarea { min-height: 100px; resize: vertical; padding: 0.75rem 1rem; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .status-available { background: var(--medical-green-light); color: var(--medical-green); }
+    .status-pending { background: var(--medical-orange-light); color: var(--medical-orange); }
+    .status-urgent { background: var(--medical-red-light); color: var(--medical-red); }
+    .status-dispensed { background: var(--medical-blue-light); color: var(--medical-blue); }
+
+    .login-container { min-height: 100vh; display: flex; }
+    .login-left {
+      display: none;
+      width: 50%;
+      background: linear-gradient(135deg, hsl(142deg 100% 27.77%) 0%, hsl(174deg 41.86% 40.54%) 100%);
+      padding: 3rem;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      color: white;
+    }
+    .login-left::before { content: ''; position: absolute; top: 5rem; right: 5rem; width: 16rem; height: 16rem; border: 0px solid rgba(255,255,255,0.2); border-radius: 50%; }
+    .login-left::after { content: ''; position: absolute; bottom: 10rem; left: 2rem; width: 24rem; height: 24rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; }
+    .login-logo { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 1; }
+    .login-logo-icon { width: 3.5rem; height: 3.5rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 1rem; display: flex; align-items: center; justify-content: center; }
+    .login-logo-icon svg { width: 2rem; height: 2rem; }
+    .login-logo h1 { font-size: 1.875rem; font-weight: 700; }
+    .login-logo p { font-size: 0.875rem; opacity: 0.8; }
+    .login-content { position: relative; z-index: 1; }
+    .login-content h2 { font-size: 2.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .login-content p { font-size: 1.125rem; opacity: 0.8; max-width: 28rem; }
+    .login-features { margin-top: 2rem; }
+    .login-feature { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; opacity: 0.9; }
+    .login-feature-icon { width: 1.5rem; height: 1.5rem; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .login-feature-icon svg { width: 1rem; height: 1rem; }
+    .login-footer { font-size: 0.875rem; opacity: 0.6; position: relative; z-index: 1; }
+    .login-right { width: 100%; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .login-form-container { width: 100%; max-width: 28rem; }
+    .login-mobile-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 2rem; }
+    .login-mobile-logo .logo-icon { width: 3rem; height: 3rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px hsla(142, 72%, 40%, 0.3); }
+    .login-mobile-logo .logo-icon svg { width: 1.75rem; height: 1.75rem; color: white; }
+    .login-mobile-logo h1 { font-size: 1.5rem; font-weight: 700; }
+    .login-mobile-logo p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .login-form-header { text-align: center; margin-bottom: 2rem; }
+    .login-form-header h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .login-form-header p { color: var(--muted-foreground); }
+    .login-security-badge { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--muted); border-radius: calc(var(--radius) + 4px); margin-bottom: 1.5rem; }
+    .login-security-icon { width: 3rem; height: 3rem; background: hsla(142, 72%, 40%, 0.1); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .login-security-icon svg { width: 1.5rem; height: 1.5rem; color: var(--primary); }
+    .login-security-text h4 { font-size: 0.875rem; font-weight: 500; }
+    .login-security-text p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .login-form label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .login-form .help-text { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem; }
+    .login-terms { text-align: center; font-size: 0.75rem; color: var(--muted-foreground); margin-top: 1rem; }
+    .login-terms a { color: var(--primary); text-decoration: none; }
+
+    .dashboard-container { min-height: 100vh; background: var(--background); }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 18rem;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay { position: fixed; inset: 0; background: hsla(210, 40%, 15%, 0.5); z-index: 40; display: none; }
+    .sidebar-overlay.open { display: block; }
+    .sidebar-header { height: 4rem; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; }
+    .sidebar-logo-icon { width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); }
+    .sidebar-logo-icon svg { width: 1.5rem; height: 1.5rem; color: white; }
+    .sidebar-logo h1 { font-size: 1.25rem; font-weight: 700; }
+    .sidebar-logo p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .sidebar-close { display: block; padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .sidebar-close:hover { background: var(--muted); }
+    .sidebar-close svg { width: 1.25rem; height: 1.25rem; }
+    .sidebar-user { padding: 1rem; border-bottom: 1px solid var(--border); }
+    .sidebar-user-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--muted); border-radius: calc(var(--radius) + 4px); }
+    .sidebar-user-card img { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; }
+    .sidebar-user-card h4 { font-size: 0.875rem; font-weight: 500; }
+    .sidebar-user-card p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 1rem; }
+    .sidebar-nav ul { list-style: none; }
+    .sidebar-nav-item { margin-bottom: 0.25rem; }
+    .sidebar-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: calc(var(--radius) + 4px);
+      text-decoration: none;
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .sidebar-nav-link.active { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+    .sidebar-nav-link svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+    .sidebar-footer { padding: 1rem; border-top: 1px solid var(--border); }
+
+    .mobile-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      z-index: 30;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mobile-header-btn { padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .mobile-header-btn:hover { background: var(--muted); }
+    .mobile-header-btn svg { width: 1.5rem; height: 1.5rem; }
+    .mobile-header-logo { display: flex; align-items: center; gap: 0.5rem; }
+    .mobile-header-logo .logo-icon { width: 2rem; height: 2rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; }
+    .mobile-header-logo .logo-icon svg { width: 1.25rem; height: 1.25rem; color: white; }
+    .mobile-header-logo span { font-weight: 700; font-size: 1.125rem; }
+
+    .main-content { padding-top: 4rem; min-height: 100vh; }
+    .main-content-inner { padding: 1rem; }
+
+    .welcome-card { background: linear-gradient(135deg, hsl(142, 72%, 35%) 0%, hsl(174, 72%, 40%) 100%); color: white; position: relative; overflow: hidden; }
+    .welcome-card::before { content: ''; position: absolute; top: 0; right: 0; width: 16rem; height: 16rem; background: rgba(255,255,255,0.1); border-radius: 50%; transform: translate(50%, -50%); }
+    .welcome-content { position: relative; z-index: 1; }
+    .welcome-date { font-size: 0.875rem; opacity: 0.8; margin-bottom: 0.25rem; }
+    .welcome-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .welcome-subtitle { opacity: 0.8; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    .stat-card { display: flex; align-items: center; gap: 0.75rem; }
+    .stat-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .stat-icon svg { width: 1.5rem; height: 1.5rem; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; }
+    .stat-label { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .page-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .page-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .page-icon svg { width: 1.5rem; height: 1.5rem; }
+    .page-header h1 { font-size: 1.25rem; font-weight: 700; }
+    .page-header p { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .search-section { margin-bottom: 1.5rem; }
+    .search-box { display: flex; gap: 0.75rem; }
+    .search-box .input { flex: 1; }
+
+    .prescription-card { margin-bottom: 1rem; }
+    .prescription-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .patient-info { display: flex; gap: 1rem; }
+    .patient-avatar { width: 4rem; height: 4rem; border-radius: calc(var(--radius) + 4px); object-fit: cover; background: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .patient-avatar svg { width: 2rem; height: 2rem; color: var(--muted-foreground); }
+    .patient-details h3 { font-weight: 600; font-size: 1.125rem; }
+    .patient-details p { font-size: 0.875rem; color: var(--muted-foreground); }
+    .patient-meta { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.75rem; }
+    .patient-meta span { display: flex; align-items: center; gap: 0.25rem; background: var(--muted); padding: 0.25rem 0.5rem; border-radius: 0.25rem; }
+
+    .doctor-info-card { background: var(--medical-blue-light); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem; }
+    .doctor-info-card h4 { font-size: 0.875rem; font-weight: 600; color: var(--medical-blue); margin-bottom: 0.5rem; }
+    .doctor-info-card p { font-size: 0.875rem; color: var(--foreground); }
+
+    .medicine-list { margin-top: 1rem; }
+    .medicine-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--muted); border-radius: var(--radius); margin-bottom: 0.5rem; }
+    .medicine-item:last-child { margin-bottom: 0; }
+    .medicine-name { font-weight: 500; }
+    .medicine-dosage { font-size: 0.875rem; color: var(--muted-foreground); }
+    .medicine-actions { display: flex; gap: 0.5rem; }
+
+    .chat-container { height: calc(100vh - 12rem); display: flex; flex-direction: column; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; }
+    .chat-message { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .chat-message.user { flex-direction: row-reverse; }
+    .chat-avatar { width: 2rem; height: 2rem; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chat-avatar svg { width: 1.25rem; height: 1.25rem; color: white; }
+    .chat-bubble { padding: 0.75rem 1rem; border-radius: 1rem; max-width: 80%; }
+    .chat-message.assistant .chat-bubble { background: var(--secondary); color: var(--secondary-foreground); border-bottom-left-radius: 0.25rem; }
+    .chat-message.user .chat-bubble { background: var(--primary); color: var(--primary-foreground); border-bottom-right-radius: 0.25rem; }
+    .chat-input-area { padding: 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; }
+
+    .map-container { height: 20rem; border-radius: calc(var(--radius) + 4px); overflow: hidden; border: 1px solid var(--border); background: linear-gradient(135deg, hsl(200, 30%, 95%) 0%, hsl(210, 25%, 92%) 100%); position: relative; display: flex; align-items: center; justify-content: center; }
+    .map-placeholder { text-align: center; }
+    .map-placeholder-icon { width: 5rem; height: 5rem; margin: 0 auto 1rem; background: hsla(142, 72%, 40%, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .map-placeholder-icon svg { width: 2.5rem; height: 2.5rem; color: var(--primary); }
+
+    .location-card { cursor: pointer; transition: all 0.3s ease; margin-bottom: 1rem; }
+    .location-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px hsla(142, 72%, 40%, 0.1); }
+    .location-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+    .location-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .location-icon svg { width: 1.5rem; height: 1.5rem; }
+
+    .emergency-banner { background: var(--medical-red); color: white; }
+    .emergency-icon { width: 3.5rem; height: 3.5rem; background: rgba(255,255,255,0.2); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .emergency-icon svg { width: 2rem; height: 2rem; }
+
+    .tutorial-card { cursor: pointer; margin-bottom: 1rem; }
+    .tutorial-thumbnail { position: relative; margin-bottom: 1rem; border-radius: calc(var(--radius) + 4px); overflow: hidden; height: 10rem; background: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .tutorial-thumbnail svg { width: 3rem; height: 3rem; color: var(--muted-foreground); }
+    .tutorial-badge { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; color: white; }
+    .tutorial-badge.video { background: var(--medical-red); }
+    .tutorial-badge.article { background: var(--medical-blue); }
+
+    .alternative-drug { background: var(--medical-green-light); padding: 0.75rem; border-radius: var(--radius); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .alternative-drug h5 { font-weight: 500; color: var(--medical-green); }
+    .alternative-drug p { font-size: 0.75rem; color: var(--muted-foreground); }
+
+    .modal-overlay { position: fixed; inset: 0; background: hsla(210, 40%, 15%, 0.6); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal { background: var(--card); border-radius: calc(var(--radius) + 8px); max-width: 32rem; width: 100%; max-height: 90vh; overflow: hidden; box-shadow: 0 25px 50px -12px hsla(210, 40%, 15%, 0.25); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .modal-header h2 { font-weight: 700; font-size: 1.125rem; }
+    .modal-close { padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .modal-close:hover { background: var(--muted); }
+    .modal-body { padding: 1.5rem; overflow-y: auto; max-height: calc(90vh - 8rem); }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+    .toast-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 200; }
+    .toast { padding: 1rem 1.5rem; background: var(--foreground); color: var(--background); border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .toast.success { background: var(--medical-green); color: white; }
+    .toast.error { background: var(--medical-red); color: white; }
+
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab { padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: none; background: var(--muted); color: var(--foreground); }
+    .tab.active { background: var(--primary); color: var(--primary-foreground); }
+    .tab:hover:not(.active) { background: var(--secondary); }
+
+    @media (min-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+      .grid-cols-md-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-cols-md-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .login-left { display: flex; }
+      .login-right { width: 50%; }
+      .login-mobile-logo { display: none; }
+      .sidebar { transform: translateX(0); }
+      .sidebar-close { display: none; }
+      .mobile-header { display: none; }
+      .main-content { margin-left: 18rem; padding-top: 0; }
+      .main-content-inner { padding: 2rem; }
+    }
+  </style>
+</head> -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AInosis - Medical Store Dashboard</title>
+  <meta name="description" content="AInosis Medical Store Dashboard - Prescription Management & Drug Dispensing">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --background: hsl(200, 20%, 98%);
+      --foreground: hsl(210, 40%, 15%);
+      --card: hsl(0, 0%, 100%);
+      --card-foreground: hsl(210, 40%, 15%);
+      --primary: hsl(142, 72%, 40%);
+      --primary-foreground: hsl(0, 0%, 100%);
+      --secondary: hsl(200, 25%, 94%);
+      --secondary-foreground: hsl(210, 40%, 20%);
+      --muted: hsl(200, 20%, 96%);
+      --muted-foreground: hsl(215, 15%, 50%);
+      --accent: hsl(142, 60%, 45%);
+      --border: hsl(200, 20%, 90%);
+      --destructive: hsl(0, 72%, 55%);
+      --medical-teal: hsl(174, 72%, 40%);
+      --medical-teal-light: hsl(174, 72%, 95%);
+      --medical-blue: hsl(210, 80%, 50%);
+      --medical-blue-light: hsl(210, 80%, 95%);
+      --medical-green: hsl(142, 60%, 45%);
+      --medical-green-light: hsl(142, 60%, 95%);
+      --medical-orange: hsl(30, 90%, 55%);
+      --medical-orange-light: hsl(30, 90%, 95%);
+      --medical-red: hsl(0, 72%, 55%);
+      --medical-red-light: hsl(0, 72%, 95%);
+      --medical-purple: hsl(270, 60%, 55%);
+      --medical-purple-light: hsl(270, 60%, 95%);
+      --radius: 0.75rem;
+      --shadow-sm: 0 1px 2px 0 hsla(210, 40%, 15%, 0.05);
+      --shadow-md: 0 4px 6px -1px hsla(210, 40%, 15%, 0.07), 0 2px 4px -2px hsla(210, 40%, 15%, 0.05);
+      --shadow-lg: 0 10px 15px -3px hsla(210, 40%, 15%, 0.08), 0 4px 6px -4px hsla(210, 40%, 15%, 0.05);
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--background); color: var(--foreground); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .flex-1 { flex: 1; }
+    .w-full { width: 100%; }
+    .text-center { text-align: center; }
+    .text-sm { font-size: 0.875rem; }
+    .text-xs { font-size: 0.75rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-6 { padding: 1.5rem; }
+    .rounded-lg { border-radius: var(--radius); }
+    .rounded-xl { border-radius: calc(var(--radius) + 4px); }
+    .rounded-full { border-radius: 9999px; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-y-auto { overflow-y: auto; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .medical-card {
+      background: var(--card);
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+    .medical-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      outline: none;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+    .btn-primary:hover:not(:disabled) { background: hsl(142, 72%, 35%); }
+    .btn-medical { background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); color: white; box-shadow: var(--shadow-md); }
+    .btn-medical:hover:not(:disabled) { box-shadow: var(--shadow-lg); transform: scale(0.98); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--foreground); }
+    .btn-outline:hover:not(:disabled) { background: var(--muted); }
+    .btn-ghost { background: transparent; color: var(--muted-foreground); }
+    .btn-ghost:hover { background: var(--muted); color: var(--foreground); }
+    .btn-danger { background: var(--medical-red); color: white; }
+    .btn-danger:hover:not(:disabled) { background: hsl(0, 72%, 45%); }
+
+    .input {
+      width: 100%;
+      height: 2.75rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--background);
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px hsla(142, 72%, 40%, 0.1); }
+    .textarea { min-height: 100px; resize: vertical; padding: 0.75rem 1rem; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .status-available { background: var(--medical-green-light); color: var(--medical-green); }
+    .status-pending { background: var(--medical-orange-light); color: var(--medical-orange); }
+    .status-urgent { background: var(--medical-red-light); color: var(--medical-red); }
+    .status-dispensed { background: var(--medical-blue-light); color: var(--medical-blue); }
+
+    .login-container { min-height: 100vh; display: flex; }
+    .login-left {
+      display: none;
+      width: 50%;
+      background: linear-gradient(135deg, hsl(142deg 100% 27.77%) 0%, hsl(174deg 41.86% 40.54%) 100%);
+      padding: 3rem;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      color: white;
+    }
+    .login-left::before { content: ''; position: absolute; top: 5rem; right: 5rem; width: 16rem; height: 16rem; border: 0px solid rgba(255,255,255,0.2); border-radius: 50%; }
+    .login-left::after { content: ''; position: absolute; bottom: 10rem; left: 2rem; width: 24rem; height: 24rem; border: 0px solid rgba(255,255,255,0.2); border-radius: 50%; }
+    .login-logo { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 1; }
+    .login-logo-icon { width: 3.5rem; height: 3.5rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 1rem; display: flex; align-items: center; justify-content: center; }
+    .login-logo-icon svg { width: 2rem; height: 2rem; }
+    .login-logo h1 { font-size: 1.875rem; font-weight: 700; }
+    .login-logo p { font-size: 0.875rem; opacity: 0.8; }
+    .login-content { position: relative; z-index: 1; }
+    .login-content h2 { font-size: 2.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .login-content p { font-size: 1.125rem; opacity: 0.8; max-width: 28rem; }
+    .login-features { margin-top: 2rem; }
+    .login-feature { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; opacity: 0.9; }
+    .login-feature-icon { width: 1.5rem; height: 1.5rem; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .login-feature-icon svg { width: 1rem; height: 1rem; }
+    .login-footer { font-size: 0.875rem; opacity: 0.6; position: relative; z-index: 1; }
+    .login-right { width: 100%; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .login-form-container { width: 100%; max-width: 28rem; }
+    .login-mobile-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 2rem; }
+    .login-mobile-logo .logo-icon { width: 3rem; height: 3rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px hsla(142, 72%, 40%, 0.3); }
+    .login-mobile-logo .logo-icon svg { width: 1.75rem; height: 1.75rem; color: white; }
+    .login-mobile-logo h1 { font-size: 1.5rem; font-weight: 700; }
+    .login-mobile-logo p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .login-form-header { text-align: center; margin-bottom: 2rem; }
+    .login-form-header h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .login-form-header p { color: var(--muted-foreground); }
+    .login-security-badge { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--muted); border-radius: calc(var(--radius) + 4px); margin-bottom: 1.5rem; }
+    .login-security-icon { width: 3rem; height: 3rem; background: hsla(142, 72%, 40%, 0.1); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .login-security-icon svg { width: 1.5rem; height: 1.5rem; color: var(--primary); }
+    .login-security-text h4 { font-size: 0.875rem; font-weight: 500; }
+    .login-security-text p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .login-form label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .login-form .help-text { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.5rem; }
+    .login-terms { text-align: center; font-size: 0.75rem; color: var(--muted-foreground); margin-top: 1rem; }
+    .login-terms a { color: var(--primary); text-decoration: none; }
+
+    .dashboard-container { min-height: 100vh; background: var(--background); }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 18rem;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay { position: fixed; inset: 0; background: hsla(210, 40%, 15%, 0.5); z-index: 40; display: none; }
+    .sidebar-overlay.open { display: block; }
+    .sidebar-header { height: 4rem; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; }
+    .sidebar-logo-icon { width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); }
+    .sidebar-logo-icon svg { width: 1.5rem; height: 1.5rem; color: white; }
+    .sidebar-logo h1 { font-size: 1.25rem; font-weight: 700; }
+    .sidebar-logo p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .sidebar-close { display: block; padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .sidebar-close:hover { background: var(--muted); }
+    .sidebar-close svg { width: 1.25rem; height: 1.25rem; }
+    .sidebar-user { padding: 1rem; border-bottom: 1px solid var(--border); }
+    .sidebar-user-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--muted); border-radius: calc(var(--radius) + 4px); }
+    .sidebar-user-card img { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; }
+    .sidebar-user-card h4 { font-size: 0.875rem; font-weight: 500; }
+    .sidebar-user-card p { font-size: 0.75rem; color: var(--muted-foreground); }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 1rem; }
+    .sidebar-nav ul { list-style: none; }
+    .sidebar-nav-item { margin-bottom: 0.25rem; }
+    .sidebar-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: calc(var(--radius) + 4px);
+      text-decoration: none;
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-nav-link:hover { background: var(--muted); color: var(--foreground); }
+    .sidebar-nav-link.active { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--shadow-md); }
+    .sidebar-nav-link svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+    .sidebar-footer { padding: 1rem; border-top: 1px solid var(--border); }
+
+    .mobile-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      z-index: 30;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mobile-header-btn { padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .mobile-header-btn:hover { background: var(--muted); }
+    .mobile-header-btn svg { width: 1.5rem; height: 1.5rem; }
+    .mobile-header-logo { display: flex; align-items: center; gap: 0.5rem; }
+    .mobile-header-logo .logo-icon { width: 2rem; height: 2rem; background: linear-gradient(135deg, var(--medical-green) 0%, var(--medical-teal) 100%); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; }
+    .mobile-header-logo .logo-icon svg { width: 1.25rem; height: 1.25rem; color: white; }
+    .mobile-header-logo span { font-weight: 700; font-size: 1.125rem; }
+
+    .main-content { padding-top: 4rem; min-height: 100vh; }
+    .main-content-inner { padding: 1rem; }
+
+    .welcome-card { background: linear-gradient(135deg, hsl(142, 72%, 35%) 0%, hsl(174, 72%, 40%) 100%); color: white; position: relative; overflow: hidden; }
+    .welcome-card::before { content: ''; position: absolute; top: 0; right: 0; width: 16rem; height: 16rem; background: rgba(255,255,255,0.1); border-radius: 50%; transform: translate(50%, -50%); }
+    .welcome-content { position: relative; z-index: 1; }
+    .welcome-date { font-size: 0.875rem; opacity: 0.8; margin-bottom: 0.25rem; }
+    .welcome-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .welcome-subtitle { opacity: 0.8; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    .stat-card { display: flex; align-items: center; gap: 0.75rem; }
+    .stat-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .stat-icon svg { width: 1.5rem; height: 1.5rem; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; }
+    .stat-label { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .page-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .page-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .page-icon svg { width: 1.5rem; height: 1.5rem; }
+    .page-header h1 { font-size: 1.25rem; font-weight: 700; }
+    .page-header p { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .search-section { margin-bottom: 1.5rem; }
+    .search-box { display: flex; gap: 0.75rem; }
+    .search-box .input { flex: 1; }
+
+    .prescription-card { margin-bottom: 1rem; }
+    .prescription-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .patient-info { display: flex; gap: 1rem; }
+    .patient-avatar { width: 4rem; height: 4rem; border-radius: calc(var(--radius) + 4px); object-fit: cover; background: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .patient-avatar svg { width: 2rem; height: 2rem; color: var(--muted-foreground); }
+    .patient-details h3 { font-weight: 600; font-size: 1.125rem; }
+    .patient-details p { font-size: 0.875rem; color: var(--muted-foreground); }
+    .patient-meta { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.75rem; }
+    .patient-meta span { display: flex; align-items: center; gap: 0.25rem; background: var(--muted); padding: 0.25rem 0.5rem; border-radius: 0.25rem; }
+
+    .doctor-info-card { background: var(--medical-blue-light); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem; }
+    .doctor-info-card h4 { font-size: 0.875rem; font-weight: 600; color: var(--medical-blue); margin-bottom: 0.5rem; }
+    .doctor-info-card p { font-size: 0.875rem; color: var(--foreground); }
+
+    .medicine-list { margin-top: 1rem; }
+    .medicine-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--muted); border-radius: var(--radius); margin-bottom: 0.5rem; }
+    .medicine-item:last-child { margin-bottom: 0; }
+    .medicine-name { font-weight: 500; }
+    .medicine-dosage { font-size: 0.875rem; color: var(--muted-foreground); }
+    .medicine-actions { display: flex; gap: 0.5rem; }
+
+    .chat-container { height: calc(100vh - 12rem); display: flex; flex-direction: column; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; }
+    .chat-message { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .chat-message.user { flex-direction: row-reverse; }
+    .chat-avatar { width: 2rem; height: 2rem; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chat-avatar svg { width: 1.25rem; height: 1.25rem; color: white; }
+    .chat-bubble { padding: 0.75rem 1rem; border-radius: 1rem; max-width: 80%; }
+    .chat-message.assistant .chat-bubble { background: var(--secondary); color: var(--secondary-foreground); border-bottom-left-radius: 0.25rem; }
+    .chat-message.user .chat-bubble { background: var(--primary); color: var(--primary-foreground); border-bottom-right-radius: 0.25rem; }
+    .chat-input-area { padding: 1rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; }
+
+    .map-container { height: 20rem; border-radius: calc(var(--radius) + 4px); overflow: hidden; border: 1px solid var(--border); background: linear-gradient(135deg, hsl(200, 30%, 95%) 0%, hsl(210, 25%, 92%) 100%); position: relative; display: flex; align-items: center; justify-content: center; }
+    .map-placeholder { text-align: center; }
+    .map-placeholder-icon { width: 5rem; height: 5rem; margin: 0 auto 1rem; background: hsla(142, 72%, 40%, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .map-placeholder-icon svg { width: 2.5rem; height: 2.5rem; color: var(--primary); }
+
+    .location-card { cursor: pointer; transition: all 0.3s ease; margin-bottom: 1rem; }
+    .location-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px hsla(142, 72%, 40%, 0.1); }
+    .location-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+    .location-icon { width: 3rem; height: 3rem; border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .location-icon svg { width: 1.5rem; height: 1.5rem; }
+
+    .emergency-banner { background: var(--medical-red); color: white; }
+    .emergency-icon { width: 3.5rem; height: 3.5rem; background: rgba(255,255,255,0.2); border-radius: calc(var(--radius) + 4px); display: flex; align-items: center; justify-content: center; }
+    .emergency-icon svg { width: 2rem; height: 2rem; }
+
+    .tutorial-card { cursor: pointer; margin-bottom: 1rem; }
+    .tutorial-thumbnail { position: relative; margin-bottom: 1rem; border-radius: calc(var(--radius) + 4px); overflow: hidden; height: 10rem; background: var(--muted); display: flex; align-items: center; justify-content: center; }
+    .tutorial-thumbnail svg { width: 3rem; height: 3rem; color: var(--muted-foreground); }
+    .tutorial-badge { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; color: white; }
+    .tutorial-badge.video { background: var(--medical-red); }
+    .tutorial-badge.article { background: var(--medical-blue); }
+
+    .alternative-drug { background: var(--medical-green-light); padding: 0.75rem; border-radius: var(--radius); margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .alternative-drug h5 { font-weight: 500; color: var(--medical-green); }
+    .alternative-drug p { font-size: 0.75rem; color: var(--muted-foreground); }
+
+    .modal-overlay { position: fixed; inset: 0; background: hsla(210, 40%, 15%, 0.6); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal { background: var(--card); border-radius: calc(var(--radius) + 8px); max-width: 32rem; width: 100%; max-height: 90vh; overflow: hidden; box-shadow: 0 25px 50px -12px hsla(210, 40%, 15%, 0.25); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .modal-header h2 { font-weight: 700; font-size: 1.125rem; }
+    .modal-close { padding: 0.5rem; background: transparent; border: none; cursor: pointer; border-radius: var(--radius); }
+    .modal-close:hover { background: var(--muted); }
+    .modal-body { padding: 1.5rem; overflow-y: auto; max-height: calc(90vh - 8rem); }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+    .toast-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 200; }
+    .toast { padding: 1rem 1.5rem; background: var(--foreground); color: var(--background); border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+    .toast.success { background: var(--medical-green); color: white; }
+    .toast.error { background: var(--medical-red); color: white; }
+
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab { padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: none; background: var(--muted); color: var(--foreground); }
+    .tab.active { background: var(--primary); color: var(--primary-foreground); }
+    .tab:hover:not(.active) { background: var(--secondary); }
+
+    @media (min-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+      .grid-cols-md-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-cols-md-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .login-left { display: flex; }
+      .login-right { width: 50%; }
+      .login-mobile-logo { display: none; }
+      .sidebar { transform: translateX(0); }
+      .sidebar-close { display: none; }
+      .mobile-header { display: none; }
+      .main-content { margin-left: 18rem; padding-top: 0; }
+      .main-content-inner { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // ==================== SAMPLE DATA ====================
+    const sampleData = {
+      store: {
+        id: "MED-STORE-2024-001",
+        name: "HealthCare Pharmacy",
+        pan: "ABCDE1234F",
+        address: "123 Medical Street, Healthcare City",
+        phone: "+91 9876543210",
+        license: "DL-2024-MED-001"
+      },
+      patients: [
+        {
+          id: "P001",
+          aadhaar: "1234-5678-9012",
+          name: "Rajesh Kumar",
+          age: 45,
+          gender: "Male",
+          phone: "+91 9876543211",
+          bloodGroup: "O+",
+          address: "45 Green Park, New Delhi",
+          photo: null
+        },
+        {
+          id: "P002",
+          aadhaar: "2345-6789-0123",
+          name: "Priya Sharma",
+          age: 32,
+          gender: "Female",
+          phone: "+91 9876543212",
+          bloodGroup: "A+",
+          address: "78 Blue Avenue, Mumbai",
+          photo: null
+        },
+        {
+          id: "P003",
+          aadhaar: "3456-7890-1234",
+          name: "Amit Patel",
+          age: 58,
+          gender: "Male",
+          phone: "+91 9876543213",
+          bloodGroup: "B+",
+          address: "12 Rose Garden, Ahmedabad",
+          photo: null
+        }
+      ],
+      prescriptions: [
+        {
+          id: "RX001",
+          patientAadhaar: "1234-5678-9012",
+          patientName: "Rajesh Kumar",
+          doctorName: "Dr. Anil Kapoor",
+          doctorSpecialty: "General Physician",
+          doctorPhone: "+91 9876500001",
+          doctorHospital: "City General Hospital",
+          date: "2024-01-15",
+          problem: "Seasonal Flu with Fever",
+          diagnosis: "Viral Infection with Upper Respiratory Tract Infection",
+          medicines: [
+            { name: "Paracetamol 500mg", dosage: "1 tablet", frequency: "3 times daily", duration: "5 days", instructions: "After meals" },
+            { name: "Cetirizine 10mg", dosage: "1 tablet", frequency: "Once daily", duration: "7 days", instructions: "Before bed" },
+            { name: "Azithromycin 500mg", dosage: "1 tablet", frequency: "Once daily", duration: "3 days", instructions: "After breakfast" }
+          ],
+          notes: "Complete bed rest for 3 days. Drink plenty of fluids.",
+          status: "pending",
+          dispensed: false
+        },
+        {
+          id: "RX002",
+          patientAadhaar: "2345-6789-0123",
+          patientName: "Priya Sharma",
+          doctorName: "Dr. Sunita Reddy",
+          doctorSpecialty: "Gynecologist",
+          doctorPhone: "+91 9876500002",
+          doctorHospital: "Women's Care Hospital",
+          date: "2024-01-14",
+          problem: "Iron Deficiency Anemia",
+          diagnosis: "Moderate Iron Deficiency Anemia",
+          medicines: [
+            { name: "Ferrous Sulfate 200mg", dosage: "1 tablet", frequency: "2 times daily", duration: "30 days", instructions: "With vitamin C rich food" },
+            { name: "Folic Acid 5mg", dosage: "1 tablet", frequency: "Once daily", duration: "30 days", instructions: "After breakfast" },
+            { name: "Vitamin B12 1500mcg", dosage: "1 tablet", frequency: "Once daily", duration: "30 days", instructions: "Any time" }
+          ],
+          notes: "Include iron-rich foods like spinach, dates, and beetroot in diet.",
+          status: "dispensed",
+          dispensed: true
+        },
+        {
+          id: "RX003",
+          patientAadhaar: "3456-7890-1234",
+          patientName: "Amit Patel",
+          doctorName: "Dr. Vikram Singh",
+          doctorSpecialty: "Cardiologist",
+          doctorPhone: "+91 9876500003",
+          doctorHospital: "Heart Care Institute",
+          date: "2024-01-13",
+          problem: "Hypertension",
+          diagnosis: "Stage 2 Hypertension",
+          medicines: [
+            { name: "Amlodipine 5mg", dosage: "1 tablet", frequency: "Once daily", duration: "30 days", instructions: "Morning, empty stomach" },
+            { name: "Losartan 50mg", dosage: "1 tablet", frequency: "Once daily", duration: "30 days", instructions: "Evening" },
+            { name: "Aspirin 75mg", dosage: "1 tablet", frequency: "Once daily", duration: "30 days", instructions: "After lunch" }
+          ],
+          notes: "Reduce salt intake. Regular BP monitoring. Avoid stress.",
+          status: "urgent",
+          dispensed: false
+        }
+      ],
+      medicalHistory: [
+        {
+          id: "MH001",
+          patientAadhaar: "1234-5678-9012",
+          date: "2023-12-20",
+          doctorName: "Dr. Ramesh Gupta",
+          hospital: "City General Hospital",
+          problem: "Gastritis",
+          diagnosis: "Acute Gastritis with mild inflammation",
+          prescription: ["Omeprazole 20mg", "Antacid Gel", "Domperidone 10mg"],
+          conclusion: "Patient recovered after 7 days of treatment",
+          notes: "Avoid spicy food and alcohol"
+        },
+        {
+          id: "MH002",
+          patientAadhaar: "1234-5678-9012",
+          date: "2023-10-15",
+          doctorName: "Dr. Anil Kapoor",
+          hospital: "City General Hospital",
+          problem: "Dengue Fever",
+          diagnosis: "Confirmed Dengue with low platelet count",
+          prescription: ["Paracetamol 500mg", "ORS Solution", "Papaya Leaf Extract"],
+          conclusion: "Complete recovery after 10 days. Platelet count normalized.",
+          notes: "Adequate hydration and rest were key to recovery"
+        },
+        {
+          id: "MH003",
+          patientAadhaar: "2345-6789-0123",
+          date: "2023-11-08",
+          doctorName: "Dr. Sunita Reddy",
+          hospital: "Women's Care Hospital",
+          problem: "PCOD",
+          diagnosis: "Polycystic Ovarian Disease",
+          prescription: ["Metformin 500mg", "Vitamin D3 60000IU", "Myo-Inositol"],
+          conclusion: "Ongoing treatment. Symptoms improving with lifestyle changes.",
+          notes: "Regular exercise and weight management recommended"
+        }
+      ],
+      drugAlternatives: {
+        "Paracetamol 500mg": [
+          { name: "Crocin 500mg", manufacturer: "GSK", price: "₹25" },
+          { name: "Dolo 500mg", manufacturer: "Micro Labs", price: "₹28" },
+          { name: "Calpol 500mg", manufacturer: "GSK", price: "₹22" }
+        ],
+        "Azithromycin 500mg": [
+          { name: "Azee 500mg", manufacturer: "Cipla", price: "₹95" },
+          { name: "Zithromax 500mg", manufacturer: "Pfizer", price: "₹150" },
+          { name: "Azithral 500mg", manufacturer: "Alembic", price: "₹85" }
+        ],
+        "Amlodipine 5mg": [
+          { name: "Amlong 5mg", manufacturer: "Micro Labs", price: "₹45" },
+          { name: "Norvasc 5mg", manufacturer: "Pfizer", price: "₹120" },
+          { name: "Amloz 5mg", manufacturer: "Zydus", price: "₹38" }
+        ]
+      },
+      nearbyLocations: [
+        { id: 1, name: "City General Hospital", type: "Hospital", distance: "0.5 km", rating: 4.5, address: "Main Road, Healthcare City" },
+        { id: 2, name: "Apollo Pharmacy", type: "Medical Store", distance: "0.3 km", rating: 4.2, address: "Market Street, Healthcare City" },
+        { id: 3, name: "LifeCare Diagnostics", type: "Lab", distance: "0.8 km", rating: 4.7, address: "Tech Park Road, Healthcare City" },
+        { id: 4, name: "MedPlus Store", type: "Medical Store", distance: "1.2 km", rating: 4.0, address: "Ring Road, Healthcare City" }
+      ],
+      emergencyTutorials: [
+        { id: 1, title: "CPR Basics", category: "First Aid", type: "video", duration: "5 min", description: "Learn the basics of cardiopulmonary resuscitation" },
+        { id: 2, title: "Choking Relief", category: "First Aid", type: "video", duration: "3 min", description: "How to help someone who is choking" },
+        { id: 3, title: "Burn Treatment", category: "First Aid", type: "article", duration: "4 min read", description: "Proper treatment for different types of burns" },
+        { id: 4, title: "Snake Bite First Aid", category: "Emergency", type: "article", duration: "5 min read", description: "What to do in case of a snake bite" }
+      ],
+      emergencyDrugs: [
+        { name: "Adrenaline Injection", use: "Anaphylaxis", dosage: "0.5ml IM" },
+        { name: "Glucose Solution", use: "Hypoglycemia", dosage: "25-50ml IV" },
+        { name: "Diazepam", use: "Seizures", dosage: "5-10mg IV/IM" },
+        { name: "Atropine", use: "Bradycardia", dosage: "0.5-1mg IV" }
+      ]
+    };
+
+    // ==================== APP STATE ====================
+    let state = {
+      isLoggedIn: false,
+      currentPage: 'dashboard',
+      sidebarOpen: false,
+      searchAadhaar: '',
+      currentPrescription: null,
+      currentHistory: null,
+      chatMessages: [
+        { role: 'assistant', content: 'Hello! I\'m your AI pharmacy assistant. I can help you with drug information, dosages, interactions, and alternatives. How can I assist you today?' }
+      ]
+    };
+
+    // ==================== ICONS ====================
+    const icons = {
+      store: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>',
+      menu: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>',
+      x: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+      home: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      prescription: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>',
+      history: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>',
+      edit: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>',
+      doctor: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg>',
+      map: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>',
+      emergency: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+      bot: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>',
+      search: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+      user: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      logout: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
+      shield: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
+      check: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+      pill: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>',
+      phone: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+      send: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>',
+      play: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+      hospital: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg>',
+      star: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      arrowRight: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>',
+      plus: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+      refresh: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>'
+    };
+
+    // ==================== RENDER FUNCTIONS ====================
+    function render() {
+      const app = document.getElementById('app');
+      if (!state.isLoggedIn) {
+        app.innerHTML = renderLoginPage();
+      } else {
+        app.innerHTML = renderDashboard();
+      }
+      attachEventListeners();
+    }
+
+    function renderLoginPage() {
+      return `
+        <div class="login-container">
+          <div class="login-left">
+            <div class="login-logo">
+              <div class="login-logo-icon">${icons.store}</div>
+              <div>
+                <h1>AInosis</h1>
+                <p>Medical Store Portal</p>
+              </div>
+            </div>
+            <div class="login-content">
+              <h2>Pharmacy Ecosystem</h2>
+              <p>Access prescriptions, dispense medicines, and provide the best pharmaceutical care to your customers.</p>
+              <div class="login-features">
+                <div class="login-feature">
+                  <div class="login-feature-icon">${icons.check}</div>
+                  <span>Retrieve prescriptions via Aadhaar</span>
+                </div>
+                <div class="login-feature">
+                  <div class="login-feature-icon">${icons.check}</div>
+                  <span>Drug alternatives & interactions</span>
+                </div>
+                <div class="login-feature">
+                  <div class="login-feature-icon">${icons.check}</div>
+                  <span>AI-powered drug information</span>
+                </div>
+                <div class="login-feature">
+                  <div class="login-feature-icon">${icons.check}</div>
+                  <span>Emergency drug protocols</span>
+                </div>
+              </div>
+            </div>
+            <div class="login-footer">
+              Use the right Panel for Login and Registration
+            </div>
+          </div>
+          <div class="login-right">
+            <div class="login-form-container">
+              <div class="login-mobile-logo">
+                <div class="logo-icon">${icons.store}</div>
+                <div>
+                  <h1>AInosis</h1>
+                  <p>Medical Store Portal</p>
+                </div>
+              </div>
+              <div class="login-form-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to your pharmacy account</p>
+              </div>
+              <div class="login-security-badge">
+                <div class="login-security-icon">${icons.shield}</div>
+                <div class="login-security-text">
+                  <h4>Secure Authentication</h4>
+                  <p>Your data is protected with end-to-end encryption</p>
+                </div>
+              </div>
+              <form class="login-form" id="loginForm">
+                <div>
+                  <label>PAN Number</label>
+                  <input type="text" class="input" id="panNumber" placeholder="ABCDE1234F" value="ABCDE1234F" required>
+                  <p class="help-text">Enter your 10-character PAN number</p>
+                </div>
+                <div>
+                  <label>Medical Store ID</label>
+                  <input type="text" class="input" id="storeId" placeholder="MED-STORE-XXXX-XXX" value="MED-STORE-2024-001" required>
+                  <p class="help-text">Your registered pharmacy ID</p>
+                </div>
+                <div>
+                  <label>Password</label>
+                  <input type="password" class="input" id="password" placeholder="Enter password" value="demo123" required>
+                </div>
+                <button type="submit" class="btn btn-medical w-full">
+                  ${icons.store}
+                  Sign In to Pharmacy
+                </button>
+              </form>
+              <p class="login-terms">
+                By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDashboard() {
+      return `
+        <div class="dashboard-container">
+          <div class="sidebar-overlay ${state.sidebarOpen ? 'open' : ''}" id="sidebarOverlay"></div>
+          <aside class="sidebar ${state.sidebarOpen ? 'open' : ''}" id="sidebar">
+            <div class="sidebar-header">
+              <a href="#" class="sidebar-logo">
+                <div class="sidebar-logo-icon">${icons.store}</div>
+                <div>
+                  <h1>AInosis</h1>
+                  <p>Medical Store</p>
+                </div>
+              </a>
+              <button class="sidebar-close" id="closeSidebar">${icons.x}</button>
+            </div>
+            <div class="sidebar-user">
+              <div class="sidebar-user-card">
+                <div style="width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--medical-green-light); display: flex; align-items: center; justify-content: center;">
+                  ${icons.store}
+                </div>
+                <div>
+                  <h4>${sampleData.store.name}</h4>
+                  <p>${sampleData.store.id}</p>
+                </div>
+              </div>
+            </div>
+            <nav class="sidebar-nav">
+              <ul>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'dashboard' ? 'active' : ''}" data-page="dashboard">
+                    ${icons.home} Dashboard
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'prescriptions' ? 'active' : ''}" data-page="prescriptions">
+                    ${icons.prescription} Prescriptions
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'history' ? 'active' : ''}" data-page="history">
+                    ${icons.history} Medical History
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'update' ? 'active' : ''}" data-page="update">
+                    ${icons.edit} Update Prescription
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'doctor' ? 'active' : ''}" data-page="doctor">
+                    ${icons.doctor} Doctor Details
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'nearby' ? 'active' : ''}" data-page="nearby">
+                    ${icons.map} Nearby Services
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'emergency' ? 'active' : ''}" data-page="emergency">
+                    ${icons.emergency} Emergency
+                  </button>
+                </li>
+                <li class="sidebar-nav-item">
+                  <button class="sidebar-nav-link ${state.currentPage === 'assistant' ? 'active' : ''}" data-page="assistant">
+                    ${icons.bot} AI Assistant
+                  </button>
+                </li>
+              </ul>
+            </nav>
+            <div class="sidebar-footer">
+              <button class="btn btn-outline w-full" id="logoutBtn">
+                ${icons.logout} Sign Out
+              </button>
+            </div>
+          </aside>
+          <header class="mobile-header">
+            <button class="mobile-header-btn" id="openSidebar">${icons.menu}</button>
+            <div class="mobile-header-logo">
+              <div class="logo-icon">${icons.store}</div>
+              <span>AInosis</span>
+            </div>
+            <button class="mobile-header-btn">${icons.user}</button>
+          </header>
+          <main class="main-content">
+            <div class="main-content-inner">
+              ${renderCurrentPage()}
+            </div>
+          </main>
+        </div>
+      `;
+    }
+
+    function renderCurrentPage() {
+      switch(state.currentPage) {
+        case 'dashboard': return renderDashboardHome();
+        case 'prescriptions': return renderPrescriptionsPage();
+        case 'history': return renderHistoryPage();
+        case 'update': return renderUpdatePage();
+        case 'doctor': return renderDoctorPage();
+        case 'nearby': return renderNearbyPage();
+        case 'emergency': return renderEmergencyPage();
+        case 'assistant': return renderAssistantPage();
+        default: return renderDashboardHome();
+      }
+    }
+
+    function renderDashboardHome() {
+      const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const pendingCount = sampleData.prescriptions.filter(p => !p.dispensed).length;
+      const dispensedCount = sampleData.prescriptions.filter(p => p.dispensed).length;
+      
+      return `
+        <div class="medical-card welcome-card mb-6">
+          <div class="welcome-content">
+            <p class="welcome-date">${today}</p>
+            <h1 class="welcome-title">Welcome, ${sampleData.store.name}</h1>
+            <p class="welcome-subtitle">Manage prescriptions and provide quality pharmaceutical care</p>
+          </div>
+        </div>
+        
+        <div class="medical-card mb-6">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--medical-orange-light); color: var(--medical-orange);">${icons.prescription}</div>
+              <div>
+                <div class="stat-value">${pendingCount}</div>
+                <div class="stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--medical-green-light); color: var(--medical-green);">${icons.check}</div>
+              <div>
+                <div class="stat-value">${dispensedCount}</div>
+                <div class="stat-label">Dispensed</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--medical-blue-light); color: var(--medical-blue);">${icons.user}</div>
+              <div>
+                <div class="stat-value">${sampleData.patients.length}</div>
+                <div class="stat-label">Patients</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--medical-purple-light); color: var(--medical-purple);">${icons.pill}</div>
+              <div>
+                <div class="stat-value">150+</div>
+                <div class="stat-label">Medicines</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h2 class="font-bold text-lg mb-4">Recent Prescriptions</h2>
+        <div class="grid gap-4">
+          ${sampleData.prescriptions.slice(0, 3).map(rx => `
+            <div class="medical-card prescription-card">
+              <div class="prescription-header">
+                <div class="patient-info">
+                  <div class="patient-avatar">${icons.user}</div>
+                  <div class="patient-details">
+                    <h3>${rx.patientName}</h3>
+                    <p>Aadhaar: ${rx.patientAadhaar}</p>
+                    <div class="patient-meta">
+                      <span>${rx.date}</span>
+                      <span>${rx.problem}</span>
+                    </div>
+                  </div>
+                </div>
+                <span class="status-badge ${rx.dispensed ? 'status-dispensed' : rx.status === 'urgent' ? 'status-urgent' : 'status-pending'}">
+                  ${rx.dispensed ? 'Dispensed' : rx.status === 'urgent' ? 'Urgent' : 'Pending'}
+                </span>
+              </div>
+              <div class="doctor-info-card">
+                <h4>Prescribed by</h4>
+                <p><strong>${rx.doctorName}</strong> - ${rx.doctorSpecialty}</p>
+                <p>${rx.doctorHospital}</p>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn btn-primary flex-1" onclick="viewPrescription('${rx.id}')">View Details</button>
+                ${!rx.dispensed ? `<button class="btn btn-medical" onclick="dispensePrescription('${rx.id}')">Dispense</button>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderPrescriptionsPage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-blue-light); color: var(--medical-blue);">${icons.prescription}</div>
+          <div>
+            <h1>Retrieve Prescriptions</h1>
+            <p>Search patient prescriptions using Aadhaar number</p>
+          </div>
+        </div>
+        
+        <div class="search-section">
+          <div class="search-box">
+            <input type="text" class="input" id="searchAadhaar" placeholder="Enter Aadhaar Number (e.g., 1234-5678-9012)" value="${state.searchAadhaar}">
+            <button class="btn btn-primary" onclick="searchPrescription()">${icons.search} Search</button>
+          </div>
+        </div>
+        
+        <div id="prescriptionResults">
+          ${state.currentPrescription ? renderPrescriptionDetails(state.currentPrescription) : `
+            <div class="medical-card text-center p-6">
+              <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; background: var(--muted); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                ${icons.search}
+              </div>
+              <h3 class="font-bold mb-2">Search for Prescriptions</h3>
+              <p class="text-sm" style="color: var(--muted-foreground);">Enter a patient's Aadhaar number to retrieve their prescriptions</p>
+              <div class="mt-4">
+                <p class="text-xs" style="color: var(--muted-foreground);">Try: 1234-5678-9012, 2345-6789-0123, or 3456-7890-1234</p>
+              </div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderPrescriptionDetails(rx) {
+      const patient = sampleData.patients.find(p => p.aadhaar === rx.patientAadhaar);
+      return `
+        <div class="medical-card mb-4">
+          <div class="prescription-header">
+            <div class="patient-info">
+              <div class="patient-avatar">${icons.user}</div>
+              <div class="patient-details">
+                <h3>${rx.patientName}</h3>
+                <p>Aadhaar: ${rx.patientAadhaar}</p>
+                <div class="patient-meta">
+                  <span>Age: ${patient?.age || 'N/A'}</span>
+                  <span>Gender: ${patient?.gender || 'N/A'}</span>
+                  <span>Blood: ${patient?.bloodGroup || 'N/A'}</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge ${rx.dispensed ? 'status-dispensed' : rx.status === 'urgent' ? 'status-urgent' : 'status-pending'}">
+              ${rx.dispensed ? 'Dispensed' : rx.status === 'urgent' ? 'Urgent' : 'Pending'}
+            </span>
+          </div>
+          
+          <div class="doctor-info-card">
+            <h4>Prescribing Doctor</h4>
+            <p><strong>${rx.doctorName}</strong> - ${rx.doctorSpecialty}</p>
+            <p>${rx.doctorHospital}</p>
+            <p>Contact: ${rx.doctorPhone}</p>
+          </div>
+          
+          <div class="mb-4">
+            <h4 class="font-semibold mb-2">Diagnosis</h4>
+            <p class="text-sm" style="color: var(--muted-foreground);">${rx.diagnosis}</p>
+          </div>
+          
+          <div class="medicine-list">
+            <h4 class="font-semibold mb-3">Prescribed Medicines</h4>
+            ${rx.medicines.map(med => `
+              <div class="medicine-item">
+                <div>
+                  <div class="medicine-name">${med.name}</div>
+                  <div class="medicine-dosage">${med.dosage} | ${med.frequency} | ${med.duration}</div>
+                  <div class="text-xs" style="color: var(--primary);">${med.instructions}</div>
+                </div>
+                <div class="medicine-actions">
+                  <button class="btn btn-ghost btn-sm" onclick="showAlternatives('${med.name}')">${icons.refresh}</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="mt-4 p-3 rounded-lg" style="background: var(--muted);">
+            <h4 class="font-semibold mb-2">Doctor's Notes</h4>
+            <p class="text-sm">${rx.notes}</p>
+          </div>
+          
+          <div class="flex gap-2 mt-4">
+            ${!rx.dispensed ? `<button class="btn btn-medical flex-1" onclick="dispensePrescription('${rx.id}')">Mark as Dispensed</button>` : ''}
+            <button class="btn btn-outline" onclick="printPrescription('${rx.id}')">${icons.prescription} Print</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderHistoryPage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-purple-light); color: var(--medical-purple);">${icons.history}</div>
+          <div>
+            <h1>Medical History</h1>
+            <p>Retrieve patient's past medical records</p>
+          </div>
+        </div>
+        
+        <div class="search-section">
+          <div class="search-box">
+            <input type="text" class="input" id="searchHistoryAadhaar" placeholder="Enter Aadhaar Number" value="${state.searchAadhaar}">
+            <button class="btn btn-primary" onclick="searchHistory()">${icons.search} Search</button>
+          </div>
+        </div>
+        
+        <div id="historyResults">
+          ${state.currentHistory ? renderHistoryResults() : `
+            <div class="medical-card text-center p-6">
+              <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; background: var(--muted); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                ${icons.history}
+              </div>
+              <h3 class="font-bold mb-2">Search Medical History</h3>
+              <p class="text-sm" style="color: var(--muted-foreground);">Enter a patient's Aadhaar to view their complete medical history</p>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderHistoryResults() {
+      const history = sampleData.medicalHistory.filter(h => h.patientAadhaar === state.searchAadhaar);
+      const patient = sampleData.patients.find(p => p.aadhaar === state.searchAadhaar);
+      
+      if (!history.length) {
+        return `<div class="medical-card text-center p-6"><p>No medical history found for this Aadhaar number.</p></div>`;
+      }
+      
+      return `
+        ${patient ? `
+          <div class="medical-card mb-4">
+            <div class="patient-info">
+              <div class="patient-avatar">${icons.user}</div>
+              <div class="patient-details">
+                <h3>${patient.name}</h3>
+                <p>Aadhaar: ${patient.aadhaar}</p>
+                <div class="patient-meta">
+                  <span>Age: ${patient.age}</span>
+                  <span>Gender: ${patient.gender}</span>
+                  <span>Blood: ${patient.bloodGroup}</span>
+                  <span>Phone: ${patient.phone}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+        
+        <h3 class="font-bold mb-4">Medical History (${history.length} records)</h3>
+        
+        ${history.map(record => `
+          <div class="medical-card mb-4">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h4 class="font-bold">${record.problem}</h4>
+                <p class="text-sm" style="color: var(--muted-foreground);">${record.date}</p>
+              </div>
+            </div>
+            
+            <div class="doctor-info-card">
+              <h4>Treating Doctor</h4>
+              <p><strong>${record.doctorName}</strong></p>
+              <p>${record.hospital}</p>
+            </div>
+            
+            <div class="mb-3">
+              <h5 class="font-semibold text-sm mb-2">Diagnosis</h5>
+              <p class="text-sm">${record.diagnosis}</p>
+            </div>
+            
+            <div class="mb-3">
+              <h5 class="font-semibold text-sm mb-2">Prescription</h5>
+              <div class="flex flex-wrap gap-2">
+                ${record.prescription.map(med => `<span class="status-badge status-available">${med}</span>`).join('')}
+              </div>
+            </div>
+            
+            <div class="p-3 rounded-lg" style="background: var(--medical-green-light);">
+              <h5 class="font-semibold text-sm mb-1" style="color: var(--medical-green);">Conclusion</h5>
+              <p class="text-sm">${record.conclusion}</p>
+            </div>
+            
+            ${record.notes ? `<p class="text-sm mt-3" style="color: var(--muted-foreground);"><em>Notes: ${record.notes}</em></p>` : ''}
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function renderUpdatePage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-orange-light); color: var(--medical-orange);">${icons.edit}</div>
+          <div>
+            <h1>Update Prescription</h1>
+            <p>Add drugs, alternatives, and updates to prescriptions</p>
+          </div>
+        </div>
+        
+        <div class="search-section">
+          <div class="search-box">
+            <input type="text" class="input" id="updateAadhaar" placeholder="Enter Aadhaar Number">
+            <button class="btn btn-primary" onclick="searchForUpdate()">${icons.search} Search</button>
+          </div>
+        </div>
+        
+        <div id="updateResults">
+          <div class="medical-card">
+            <h3 class="font-bold mb-4">Drug Alternatives Database</h3>
+            <p class="text-sm mb-4" style="color: var(--muted-foreground);">Search for drug alternatives and substitutes</p>
+            
+            <div class="search-box mb-4">
+              <input type="text" class="input" id="drugSearch" placeholder="Search drug name (e.g., Paracetamol 500mg)">
+              <button class="btn btn-outline" onclick="searchDrugAlternatives()">${icons.search}</button>
+            </div>
+            
+            <div id="alternativesResults">
+              <h4 class="font-semibold mb-3">Popular Drug Alternatives</h4>
+              ${Object.entries(sampleData.drugAlternatives).slice(0, 2).map(([drug, alts]) => `
+                <div class="mb-4">
+                  <h5 class="font-medium mb-2">${drug}</h5>
+                  ${alts.map(alt => `
+                    <div class="alternative-drug">
+                      <div>
+                        <h5>${alt.name}</h5>
+                        <p>${alt.manufacturer}</p>
+                      </div>
+                      <span class="font-bold" style="color: var(--medical-green);">${alt.price}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDoctorPage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-teal-light); color: var(--medical-teal);">${icons.doctor}</div>
+          <div>
+            <h1>Doctor Details</h1>
+            <p>Contact prescribing doctors for clarification</p>
+          </div>
+        </div>
+        
+        <div class="search-section">
+          <div class="search-box">
+            <input type="text" class="input" id="doctorAadhaar" placeholder="Enter Patient Aadhaar to find their doctor">
+            <button class="btn btn-primary" onclick="searchDoctor()">${icons.search} Search</button>
+          </div>
+        </div>
+        
+        <h3 class="font-bold mb-4">Recent Prescribing Doctors</h3>
+        
+        <div class="grid gap-4">
+          ${[...new Map(sampleData.prescriptions.map(p => [p.doctorName, p])).values()].map(rx => `
+            <div class="medical-card">
+              <div class="flex gap-4 mb-4">
+                <div style="width: 4rem; height: 4rem; border-radius: 50%; background: var(--medical-teal-light); display: flex; align-items: center; justify-content: center;">
+                  ${icons.doctor}
+                </div>
+                <div>
+                  <h3 class="font-bold">${rx.doctorName}</h3>
+                  <p class="text-sm" style="color: var(--muted-foreground);">${rx.doctorSpecialty}</p>
+                  <p class="text-sm">${rx.doctorHospital}</p>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <a href="tel:${rx.doctorPhone}" class="btn btn-primary flex-1">
+                  ${icons.phone} Call Doctor
+                </a>
+                <button class="btn btn-outline">View Prescriptions</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderNearbyPage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-blue-light); color: var(--medical-blue);">${icons.map}</div>
+          <div>
+            <h1>Nearby Healthcare Services</h1>
+            <p>Find hospitals, pharmacies, clinics, and labs nearby</p>
+          </div>
+        </div>
+        
+        <div class="medical-card mb-4">
+          <div class="flex gap-3 items-center mb-3">
+            <input type="text" class="input flex-1" id="mapSearchInput" placeholder="Search place (city, area, address)" />
+            <input type="number" class="input" id="mapRadiusInput" style="width: 100px;" min="500" step="500" value="3000" placeholder="Radius" />
+            <button class="btn btn-primary" onclick="searchHealthcareServices()">${icons.search} Search</button>
+          </div>
+          <div style="font-size: 12px; color: var(--muted-foreground);">
+            <span id="mapRadius">3000</span> meters radius
+          </div>
+        </div>
+
+        <div class="medical-card mb-4 p-3">
+          <div class="flex gap-2 flex-wrap" id="mapCategoryFilters"></div>
+        </div>
+        
+        <div style="height: 500px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 1.5rem;" id="healthcareMap"></div>
+        
+        <div id="mapLoadingIndicator" class="hidden medical-card text-center p-4">
+          <p>🔄 Loading healthcare services...</p>
+        </div>
+      `;
+    }
+
+    function renderEmergencyPage() {
+      return `
+        <div class="medical-card emergency-banner mb-6">
+          <div class="flex items-center gap-4">
+            <div class="emergency-icon">${icons.emergency}</div>
+            <div>
+              <h2 class="font-bold text-xl">Emergency Resources</h2>
+              <p>First aid, emergency drugs, and quick tutorials</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tabs">
+          <button class="tab active" data-tab="firstaid">First Aid</button>
+          <button class="tab" data-tab="drugs">Emergency Drugs</button>
+          <button class="tab" data-tab="tutorials">Tutorials</button>
+        </div>
+        
+        <div id="emergencyContent">
+          <h3 class="font-bold mb-4">Emergency Drugs Reference</h3>
+          <div class="grid gap-4">
+            ${sampleData.emergencyDrugs.map(drug => `
+              <div class="medical-card">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-bold" style="color: var(--medical-red);">${drug.name}</h4>
+                    <p class="text-sm" style="color: var(--muted-foreground);">Use: ${drug.use}</p>
+                  </div>
+                  <span class="status-badge status-urgent">${drug.dosage}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <h3 class="font-bold mb-4 mt-6">Emergency Tutorials</h3>
+          <div class="grid gap-4">
+            ${sampleData.emergencyTutorials.map(tutorial => `
+              <div class="medical-card tutorial-card">
+                <div class="tutorial-thumbnail">
+                  ${icons.play}
+                  <span class="tutorial-badge ${tutorial.type}">${tutorial.type}</span>
+                </div>
+                <span class="text-xs" style="color: var(--muted-foreground);">${tutorial.category} • ${tutorial.duration}</span>
+                <h4 class="font-bold mt-1">${tutorial.title}</h4>
+                <p class="text-sm" style="color: var(--muted-foreground);">${tutorial.description}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAssistantPage() {
+      return `
+        <div class="page-header">
+          <div class="page-icon" style="background: var(--medical-purple-light); color: var(--medical-purple);">${icons.bot}</div>
+          <div>
+            <h1>AI Drug Assistant</h1>
+            <p>Get information about drugs, dosages, and interactions</p>
+          </div>
+        </div>
+        
+        <div class="medical-card p-3 mb-4" style="background: var(--medical-orange-light); border-color: var(--medical-orange);">
+          <div class="flex items-start gap-3">
+            ${icons.emergency}
+            <p class="text-sm"><strong>Disclaimer:</strong> This AI provides general drug information. Always verify with official sources and consult healthcare professionals for medical decisions.</p>
+          </div>
+        </div>
+        
+        <div class="medical-card chat-container">
+          <div class="chat-messages" id="chatMessages">
+            ${state.chatMessages.map(msg => `
+              <div class="chat-message ${msg.role}">
+                <div class="chat-avatar" style="background: ${msg.role === 'assistant' ? 'var(--medical-purple)' : 'var(--primary)'};">
+                  ${msg.role === 'assistant' ? icons.bot : icons.user}
+                </div>
+                <div class="chat-bubble">
+                  <p>${msg.content}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="p-3" style="border-top: 1px solid var(--border);">
+            <p class="text-xs mb-2" style="color: var(--muted-foreground);">Quick questions:</p>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <button class="btn btn-ghost text-xs" onclick="askQuestion('What is the dosage of Paracetamol?')">Paracetamol dosage</button>
+              <button class="btn btn-ghost text-xs" onclick="askQuestion('Drug interactions with Aspirin?')">Aspirin interactions</button>
+              <button class="btn btn-ghost text-xs" onclick="askQuestion('Side effects of Metformin?')">Metformin side effects</button>
+            </div>
+          </div>
+          
+          <div class="chat-input-area">
+            <input type="text" class="input" id="chatInput" placeholder="Ask about drugs, dosages, or interactions...">
+            <button class="btn btn-primary" onclick="sendMessage()">${icons.send}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== EVENT HANDLERS ====================
+    function attachEventListeners() {
+      // Login form
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          state.isLoggedIn = true;
+          render();
+        });
+      }
+
+      // Sidebar navigation
+      document.querySelectorAll('.sidebar-nav-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.currentPage = btn.dataset.page;
+          state.sidebarOpen = false;
+          state.currentPrescription = null;
+          state.currentHistory = null;
+          render();
+        });
+      });
+
+      // Mobile sidebar
+      const openSidebar = document.getElementById('openSidebar');
+      const closeSidebar = document.getElementById('closeSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      if (openSidebar) openSidebar.addEventListener('click', () => { state.sidebarOpen = true; render(); });
+      if (closeSidebar) closeSidebar.addEventListener('click', () => { state.sidebarOpen = false; render(); });
+      if (sidebarOverlay) sidebarOverlay.addEventListener('click', () => { state.sidebarOpen = false; render(); });
+
+      // Logout
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          state.isLoggedIn = false;
+          state.currentPage = 'dashboard';
+          render();
+        });
+      }
+
+      // Chat input
+      const chatInput = document.getElementById('chatInput');
+      if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') sendMessage();
+        });
+      }
+      // Initialize map when on nearby page
+      if (state.currentPage === 'nearby') {
+        setTimeout(initHealthcareMap, 100);
+      }
+
+      // Map radius input update
+      const mapRadiusInput = document.getElementById('mapRadiusInput');
+      if (mapRadiusInput) {
+        mapRadiusInput.addEventListener('input', (e) => {
+          const radiusDisplay = document.getElementById('mapRadius');
+          if (radiusDisplay) radiusDisplay.textContent = e.target.value;
+        });
+      }
+
+      // Map search input enter key
+      const mapSearchInput = document.getElementById('mapSearchInput');
+      if (mapSearchInput) {
+        mapSearchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') searchHealthcareServices();
+        });
+      }
+          }
+
+    // ==================== GLOBAL FUNCTIONS ====================
+    window.searchPrescription = function() {
+      const aadhaar = document.getElementById('searchAadhaar').value;
+      state.searchAadhaar = aadhaar;
+      const rx = sampleData.prescriptions.find(p => p.patientAadhaar === aadhaar);
+      state.currentPrescription = rx || null;
+      render();
+      if (!rx) showToast('No prescription found for this Aadhaar', 'error');
+    };
+
+    window.searchHistory = function() {
+      const aadhaar = document.getElementById('searchHistoryAadhaar').value;
+      state.searchAadhaar = aadhaar;
+      state.currentHistory = true;
+      render();
+    };
+
+    window.viewPrescription = function(id) {
+      const rx = sampleData.prescriptions.find(p => p.id === id);
+      if (rx) {
+        state.searchAadhaar = rx.patientAadhaar;
+        state.currentPrescription = rx;
+        state.currentPage = 'prescriptions';
+        render();
+      }
+    };
+
+    window.dispensePrescription = function(id) {
+      const rx = sampleData.prescriptions.find(p => p.id === id);
+      if (rx) {
+        rx.dispensed = true;
+        rx.status = 'dispensed';
+        showToast('Prescription marked as dispensed!', 'success');
+        render();
+      }
+    };
+
+    window.showAlternatives = function(drugName) {
+      const alternatives = sampleData.drugAlternatives[drugName];
+      if (alternatives) {
+        alert(`Alternatives for ${drugName}:\n\n${alternatives.map(a => `${a.name} (${a.manufacturer}) - ${a.price}`).join('\n')}`);
+      } else {
+        alert('No alternatives found for this drug.');
+      }
+    };
+
+    window.searchForUpdate = function() {
+      const aadhaar = document.getElementById('updateAadhaar').value;
+      window.searchPrescription.call(null);
+    };
+
+    window.searchDrugAlternatives = function() {
+      const drug = document.getElementById('drugSearch').value;
+      showToast(`Searching for alternatives to ${drug}...`, 'success');
+    };
+
+    window.searchDoctor = function() {
+      const aadhaar = document.getElementById('doctorAadhaar').value;
+      const rx = sampleData.prescriptions.find(p => p.patientAadhaar === aadhaar);
+      if (rx) {
+        showToast(`Doctor found: ${rx.doctorName}`, 'success');
+      } else {
+        showToast('No prescription found for this Aadhaar', 'error');
+      }
+    };
+
+    window.filterLocations = function(type) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+    };
+
+    window.askQuestion = function(question) {
+      document.getElementById('chatInput').value = question;
+      sendMessage();
+    };
+
+    window.sendMessage = function() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      state.chatMessages.push({ role: 'user', content: message });
+      
+      // Simulate AI response
+      setTimeout(() => {
+        const responses = {
+          'paracetamol': 'Paracetamol (Acetaminophen) is typically dosed at 500-1000mg every 4-6 hours for adults, with a maximum of 4g per day. For children, dosage is based on weight (10-15mg/kg). It\'s used for pain relief and fever reduction. Avoid with liver disease.',
+          'aspirin': 'Aspirin can interact with blood thinners (warfarin), NSAIDs, and some blood pressure medications. It may increase bleeding risk. Avoid combining with ibuprofen as it can reduce aspirin\'s cardioprotective effect.',
+          'metformin': 'Common side effects of Metformin include: gastrointestinal issues (nausea, diarrhea, stomach pain), metallic taste, and vitamin B12 deficiency with long-term use. Rare but serious: lactic acidosis. Take with food to reduce GI effects.',
+          'default': 'I can help you with drug information, dosages, side effects, and interactions. Please ask a specific question about a medication, and I\'ll provide detailed information. Remember to always verify with official pharmaceutical resources.'
+        };
+        
+        let response = responses.default;
+        const lowerMsg = message.toLowerCase();
+        if (lowerMsg.includes('paracetamol') || lowerMsg.includes('dosage')) response = responses.paracetamol;
+        else if (lowerMsg.includes('aspirin') || lowerMsg.includes('interaction')) response = responses.aspirin;
+        else if (lowerMsg.includes('metformin') || lowerMsg.includes('side effect')) response = responses.metformin;
+        
+        state.chatMessages.push({ role: 'assistant', content: response });
+        render();
+        
+        const chatMessages = document.getElementById('chatMessages');
+        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
+      
+      input.value = '';
+      render();
+    };
+
+    window.printPrescription = function(id) {
+      showToast('Preparing prescription for printing...', 'success');
+    };
+
+    function showToast(message, type = 'success') {
+      const existing = document.querySelector('.toast-container');
+      if (existing) existing.remove();
+      
+      const container = document.createElement('div');
+      container.className = 'toast-container';
+      container.innerHTML = `<div class="toast ${type}">${message}</div>`;
+      document.body.appendChild(container);
+      
+      setTimeout(() => container.remove(), 3000);
+    }
+
+
+    // Healthcare Map Functions
+    let healthcareMap = null;
+    let healthcareMarkers = [];
+    let mapCenterMarker = null;
+    let mapRadiusCircle = null;
+
+    const healthcareCategories = [
+      { amenity: "hospital", label: "Hospitals", color: "#dc2626", emoji: "🏥", active: true },
+      { amenity: "dentist", label: "Dentists", color: "#2563eb", emoji: "🦷", active: true },
+      { amenity: "clinic", label: "Clinics", color: "#ea580c", emoji: "🧪", active: true },
+      { amenity: "pharmacy", label: "Pharmacies", color: "#16a34a", emoji: "💊", active: true },
+      { amenity: "doctors", label: "Doctors", color: "#7c3aed", emoji: "👨‍⚕️", active: true }
+    ];
+
+    function initHealthcareMap() {
+      if (healthcareMap) return;
+      
+      const mapEl = document.getElementById('healthcareMap');
+      if (!mapEl) return;
+
+      healthcareMap = L.map('healthcareMap').setView([17.6868, 83.2185], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(healthcareMap);
+
+      createMapCategoryFilters();
+      
+      // Try to get user location
+      if (navigator.geolocation) {
+        healthcareMap.locate({ setView: false, maxZoom: 16 });
+        healthcareMap.on('locationfound', (e) => {
+          healthcareMap.setView(e.latlng, 14);
+        });
+      }
+    }
+
+    function createMapCategoryFilters() {
+      const container = document.getElementById('mapCategoryFilters');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      healthcareCategories.forEach((cat, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-ghost text-xs';
+        btn.style.borderColor = cat.color;
+        if (cat.active) {
+          btn.style.backgroundColor = cat.color;
+          btn.style.color = 'white';
+        }
+        btn.innerHTML = `${cat.emoji} ${cat.label}`;
+        btn.onclick = () => toggleMapCategory(idx);
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleMapCategory(idx) {
+      healthcareCategories[idx].active = !healthcareCategories[idx].active;
+      createMapCategoryFilters();
+      
+      healthcareMarkers.forEach(m => {
+        const cat = healthcareCategories.find(c => c.amenity === m.options.categoryType);
+        if (cat) {
+          if (cat.active) {
+            healthcareMap.addLayer(m);
+          } else {
+            healthcareMap.removeLayer(m);
+          }
+        }
+      });
+    }
+
+    function createHealthcareIcon(label, color, emoji) {
+      return L.divIcon({
+        className: "custom-marker",
+        html: `
+          <div style="display: flex; flex-direction: column; align-items: center; transform: translateY(-20px);">
+            <div style="width: 34px; height: 34px; background: ${color}; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.4); position: relative;">
+              <div style="position: absolute; transform: rotate(45deg) translate(7px, -2px); font-size: 20px;">${emoji}</div>
+            </div>
+            <div style="background: white; padding: 3px 8px; font-size: 14px; font-weight: 600; margin-top: 5px; border-radius: 4px; white-space: nowrap; box-shadow: 0 0 4px rgba(0,0,0,0.2); max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${label}</div>
+          </div>
+        `,
+        iconSize: [80, 80],
+        iconAnchor: [40, 80]
+      });
+    }
+
+    async function fetchHealthcareFromOverpass(lat, lon, radiusMeters, amenity) {
+      const query = `
+    [out:json][timeout:25];
+    (
+      node["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+      way["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+      relation["amenity"="${amenity}"](around:${radiusMeters},${lat},${lon});
+    );
+    out center;
+      `.trim();
+
+      try {
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'data=' + encodeURIComponent(query)
+        });
+
+        if (!res.ok) throw new Error(`Overpass API error: ${res.status}`);
+        const data = await res.json();
+        return data.elements || [];
+      } catch (error) {
+        console.error(`Error fetching ${amenity}:`, error);
+        return [];
+      }
+    }
+
+    async function geocodeHealthcarePlace(query) {
+      const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+      
+      try {
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'HealthcareFinder/1.0' }
+        });
+        
+        if (!res.ok) throw new Error(`Geocoding error: ${res.status}`);
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        console.error('Geocoding error:', error);
+        throw new Error('Failed to find location.');
+      }
+    }
+
+    function clearHealthcareResults() {
+      healthcareMarkers.forEach(m => healthcareMap.removeLayer(m));
+      healthcareMarkers = [];
+      if (mapCenterMarker) {
+        healthcareMap.removeLayer(mapCenterMarker);
+        mapCenterMarker = null;
+      }
+      if (mapRadiusCircle) {
+        healthcareMap.removeLayer(mapRadiusCircle);
+        mapRadiusCircle = null;
+      }
+    }
+
+    function showHealthcareOnMap(elements, category) {
+      elements.forEach(el => {
+        let lat = el.lat;
+        let lon = el.lon;
+        
+        if (!lat && el.center) {
+          lat = el.center.lat;
+          lon = el.center.lon;
+        }
+        
+        if (!lat || !lon) return;
+
+        const name = (el.tags && (el.tags.name || el.tags['name:en'])) || category.label;
+        const marker = L.marker([lat, lon], { 
+          icon: createHealthcareIcon(name, category.color, category.emoji),
+          categoryType: category.amenity
+        });
+
+        const addrParts = [];
+        if (el.tags) {
+          if (el.tags['addr:housenumber']) addrParts.push(el.tags['addr:housenumber']);
+          if (el.tags['addr:street']) addrParts.push(el.tags['addr:street']);
+          if (el.tags['addr:city']) addrParts.push(el.tags['addr:city']);
+        }
+        const addr = addrParts.length ? addrParts.join(', ') : 'Address not available';
+
+        const popupHtml = `
+          <div style="font-weight:700;margin-bottom:6px;font-size:15px;color:${category.color};">${category.emoji} ${name}</div>
+          <div style="font-size:13px;margin-bottom:6px;"><strong>Type:</strong> ${category.label}</div>
+          <div style="font-size:13px;margin-bottom:6px;">${addr}</div>
+          ${el.tags && el.tags.phone ? `<div style="margin-top:8px;"><strong>Phone:</strong> <a href="tel:${el.tags.phone}">${el.tags.phone}</a></div>` : ''}
+          ${el.tags && el.tags.opening_hours ? `<div style="margin-top:4px;font-size:12px;"><strong>Hours:</strong> ${el.tags.opening_hours}</div>` : ''}
+        `;
+        
+        marker.bindPopup(popupHtml);
+        
+        if (category.active) {
+          marker.addTo(healthcareMap);
+        }
+        
+        healthcareMarkers.push(marker);
+      });
+    }
+
+    window.searchHealthcareServices = async function() {
+      const query = document.getElementById('mapSearchInput').value.trim();
+      const radius = parseInt(document.getElementById('mapRadiusInput').value) || 3000;
+      
+      if (!query) {
+        showToast('Please enter a location to search', 'error');
+        return;
+      }
+
+      const indicator = document.getElementById('mapLoadingIndicator');
+      if (indicator) indicator.classList.remove('hidden');
+
+      try {
+        const places = await geocodeHealthcarePlace(query);
+        if (!places || places.length === 0) {
+          showToast('Location not found', 'error');
+          if (indicator) indicator.classList.add('hidden');
+          return;
+        }
+
+        const place = places[0];
+        const lat = parseFloat(place.lat);
+        const lon = parseFloat(place.lon);
+
+        clearHealthcareResults();
+
+        const zoom = Math.min(16, Math.max(13, Math.round(16 - Math.log(radius) / Math.log(2))));
+        healthcareMap.setView([lat, lon], zoom);
+
+        mapCenterMarker = L.marker([lat, lon], {
+          icon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          })
+        }).addTo(healthcareMap).bindPopup(`<strong>📍 Search Center</strong><br>${place.display_name}`).openPopup();
+
+        mapRadiusCircle = L.circle([lat, lon], {
+          radius: radius,
+          color: '#2d7bff',
+          fill: false,
+          weight: 2,
+          dashArray: '6 6'
+        }).addTo(healthcareMap);
+
+        let totalFound = 0;
+        for (const category of healthcareCategories) {
+          const elements = await fetchHealthcareFromOverpass(lat, lon, radius, category.amenity);
+          if (elements && elements.length > 0) {
+            showHealthcareOnMap(elements, category);
+            totalFound += elements.length;
+          }
+        }
+
+        if (totalFound === 0) {
+          showToast(`No healthcare services found within ${radius}m`, 'error');
+        } else {
+          showToast(`Found ${totalFound} healthcare services`, 'success');
+          const group = L.featureGroup([mapRadiusCircle, ...healthcareMarkers.filter(m => healthcareMap.hasLayer(m))]);
+          healthcareMap.fitBounds(group.getBounds(), { padding: [60, 60] });
+        }
+
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+      } finally {
+        if (indicator) indicator.classList.add('hidden');
+      }
+    };
+    // Initialize
+    render();
+  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>
